@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { PlanBuilder, TreatmentPlanData } from '@/components/clinical/plan-builder';
 import { CephViewer } from '@/components/clinical/ceph-viewer';
 import { ToothChart } from '@/components/clinical/tooth-chart';
@@ -8,7 +9,7 @@ import { PanoramicViewer } from '@/components/clinical/panoramic-viewer';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { getMockPatients } from '@/lib/db/mock-data';
+import { getStoredPatients, StoredPatient } from '@/lib/patients-store';
 import { 
   Sparkles, 
   UserCheck, 
@@ -18,24 +19,31 @@ import {
   CheckCircle2, 
   Edit3, 
   UserPlus, 
-  SlidersHorizontal 
+  SlidersHorizontal,
+  Plus,
+  Zap
 } from 'lucide-react';
+import Link from 'next/link';
 
-export default function GeneratePlanPage() {
-  const patients = getMockPatients();
-  const [selectedPatientId, setSelectedPatientId] = useState(patients[0].id);
+function GeneratePlanContent() {
+  const searchParams = useSearchParams();
+  const urlPatientId = searchParams.get('patientId');
+
+  const [patients, setPatients] = useState<StoredPatient[]>([]);
+  const [selectedPatientId, setSelectedPatientId] = useState<string>('');
   const [isCustomMode, setIsCustomMode] = useState(false);
 
-  // Custom patient input state
+  // Custom patient input state matching user test case
   const [customPatient, setCustomPatient] = useState({
-    name: 'Dr. Osama Custom Patient',
-    age: 16,
-    gender: 'female',
-    chiefComplaint: 'Severe underbite and crowded lower teeth',
+    name: 'Dr. Osama Test Patient',
+    age: 15,
+    gender: 'male',
+    chiefComplaint: 'Severe underbite and lower teeth in front of upper teeth',
     angleClass: 'Class III',
-    overjet: -3.5,
+    overjet: -4.0,
     overbite: 1.0,
-    crowdingUpper: 'moderate'
+    crowdingUpper: 'moderate',
+    impa: 86
   });
 
   const [experienceLevel, setExperienceLevel] = useState<'beginner' | 'expert'>('beginner');
@@ -44,11 +52,27 @@ export default function GeneratePlanPage() {
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [generatedPlan, setGeneratedPlan] = useState<TreatmentPlanData | undefined>(undefined);
 
+  // Load patients from storage on mount
+  useEffect(() => {
+    const list = getStoredPatients();
+    setPatients(list);
+    if (urlPatientId && list.some(p => p.id === urlPatientId)) {
+      setSelectedPatientId(urlPatientId);
+      setIsCustomMode(false);
+    } else if (list.length > 0) {
+      setSelectedPatientId(list[0].id);
+    }
+  }, [urlPatientId]);
+
   const activePatient = patients.find(p => p.id === selectedPatientId) || patients[0];
 
   // Derive Ceph preset case from patient Angle Class
-  const currentAngle = isCustomMode ? customPatient.angleClass : (activePatient.clinicalRecords[0]?.angleClass || 'Class II');
-  const currentOverjet = isCustomMode ? customPatient.overjet : ((activePatient.clinicalRecords[0] as any)?.overjet ?? 2);
+  const currentAngle = isCustomMode 
+    ? customPatient.angleClass 
+    : (activePatient?.clinicalRecords?.[0]?.angleClass || 'Class II');
+  const currentOverjet = isCustomMode 
+    ? customPatient.overjet 
+    : ((activePatient?.clinicalRecords?.[0] as any)?.overjet ?? 2);
 
   const cephPresetCase: 'class1' | 'class2' | 'class3' = 
     currentAngle.toLowerCase().includes('iii') || currentOverjet < 0
@@ -59,8 +83,62 @@ export default function GeneratePlanPage() {
 
   // Auto-generate initial plan when patient changes
   useEffect(() => {
-    handleGenerate(false);
+    if (activePatient || isCustomMode) {
+      handleGenerate(false);
+    }
   }, [selectedPatientId, isCustomMode, modality, experienceLevel]);
+
+  const applyCustomPreset = (preset: 'class3' | 'class2' | 'bimax' | 'openbite') => {
+    if (preset === 'class3') {
+      setCustomPatient({
+        name: 'Dr. Osama Test Patient',
+        age: 15,
+        gender: 'male',
+        chiefComplaint: 'Severe underbite and lower teeth in front of upper teeth',
+        angleClass: 'Class III',
+        overjet: -4.0,
+        overbite: 1.0,
+        crowdingUpper: 'moderate',
+        impa: 86
+      });
+    } else if (preset === 'class2') {
+      setCustomPatient({
+        name: 'Sarah Severe Class II',
+        age: 14,
+        gender: 'female',
+        chiefComplaint: 'Severe overjet, upper teeth stick out significantly',
+        angleClass: 'Class II div 1',
+        overjet: 8.5,
+        overbite: 5.0,
+        crowdingUpper: 'severe',
+        impa: 102
+      });
+    } else if (preset === 'bimax') {
+      setCustomPatient({
+        name: 'Adam Bimaxillary Case',
+        age: 22,
+        gender: 'male',
+        chiefComplaint: 'Protruding lips and crowded teeth',
+        angleClass: 'Class I',
+        overjet: 6.0,
+        overbite: 3.0,
+        crowdingUpper: 'severe',
+        impa: 104
+      });
+    } else if (preset === 'openbite') {
+      setCustomPatient({
+        name: 'Elena Open Bite',
+        age: 18,
+        gender: 'female',
+        chiefComplaint: 'Front teeth do not touch when biting',
+        angleClass: 'Class I',
+        overjet: 2.5,
+        overbite: -4.5,
+        crowdingUpper: 'mild',
+        impa: 96
+      });
+    }
+  };
 
   const handleGenerate = async (showPipelineAnimation: boolean = true) => {
     setIsGenerating(true);
@@ -97,13 +175,13 @@ export default function GeneratePlanPage() {
         modality
       } : {
         patientData: {
-          name: `${activePatient.firstName} ${activePatient.lastName}`,
-          age: 14,
-          gender: activePatient.gender,
-          chiefComplaint: activePatient.chiefComplaint,
-          clinicalFindings: activePatient.clinicalRecords[0]
+          name: activePatient ? `${activePatient.firstName} ${activePatient.lastName}` : 'Patient',
+          age: activePatient?.age || 15,
+          gender: activePatient?.gender || 'male',
+          chiefComplaint: activePatient?.chiefComplaint || 'Orthodontic checkup',
+          clinicalFindings: activePatient?.clinicalRecords?.[0]
         },
-        clinicalFindings: activePatient.clinicalRecords[0],
+        clinicalFindings: activePatient?.clinicalRecords?.[0],
         experienceLevel,
         modality
       };
@@ -160,6 +238,11 @@ export default function GeneratePlanPage() {
         </div>
 
         <div className="flex items-center gap-3">
+          <Link href="/patients/new">
+            <Button variant="outline" className="text-xs font-semibold gap-1.5 border-slate-300">
+              <Plus className="w-3.5 h-3.5 text-blue-600" /> New Patient Intake
+            </Button>
+          </Link>
           <Button 
             onClick={() => handleGenerate(true)} 
             disabled={isGenerating}
@@ -225,15 +308,15 @@ export default function GeneratePlanPage() {
           <div className="flex items-center gap-1.5 p-1 bg-slate-200 rounded-lg text-xs">
             <button
               onClick={() => setIsCustomMode(false)}
-              className={`px-3 py-1 rounded text-xs font-semibold transition-all ${
+              className={`px-3 py-1 rounded text-xs font-semibold transition-all cursor-pointer ${
                 !isCustomMode ? 'bg-white text-blue-700 shadow-xs' : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              Preset Cases
+              Select Patient Case
             </button>
             <button
               onClick={() => setIsCustomMode(true)}
-              className={`px-3 py-1 rounded text-xs font-semibold transition-all ${
+              className={`px-3 py-1 rounded text-xs font-semibold transition-all cursor-pointer ${
                 isCustomMode ? 'bg-white text-blue-700 shadow-xs' : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -247,9 +330,14 @@ export default function GeneratePlanPage() {
             /* Mode A: Preset Patients Selector */
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
-                  <UserCheck className="w-3.5 h-3.5 text-blue-600" />
-                  Select Patient Case
+                <label className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center justify-between">
+                  <span className="flex items-center gap-1.5">
+                    <UserCheck className="w-3.5 h-3.5 text-blue-600" />
+                    Patient Record
+                  </span>
+                  <Link href="/patients/new" className="text-[11px] text-blue-600 hover:underline flex items-center gap-0.5">
+                    <Plus className="w-3 h-3" /> Add New
+                  </Link>
                 </label>
                 <select 
                   value={selectedPatientId} 
@@ -258,7 +346,7 @@ export default function GeneratePlanPage() {
                 >
                   {patients.map(p => (
                     <option key={p.id} value={p.id}>
-                      {p.firstName} {p.lastName} — {p.chiefComplaint} ({p.clinicalRecords[0]?.angleClass || 'Class I'})
+                      {p.firstName} {p.lastName} — {p.chiefComplaint} ({p.clinicalRecords?.[0]?.angleClass || 'Class I'})
                     </option>
                   ))}
                 </select>
@@ -315,6 +403,43 @@ export default function GeneratePlanPage() {
           ) : (
             /* Mode B: Custom Patient Clinical Findings Form */
             <div className="space-y-4">
+              {/* Quick Preset Buttons in Custom Form */}
+              <div className="flex flex-wrap items-center justify-between gap-2 p-2.5 bg-blue-50/70 rounded-lg border border-blue-200">
+                <span className="text-xs font-bold text-blue-900 flex items-center gap-1">
+                  <Zap className="w-3.5 h-3.5 text-amber-500" /> Load Preset Numbers:
+                </span>
+                <div className="flex flex-wrap gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => applyCustomPreset('class3')}
+                    className="px-2.5 py-1 text-xs font-semibold bg-white text-blue-700 border border-blue-300 rounded-md hover:bg-blue-100 transition-all cursor-pointer shadow-xs"
+                  >
+                    Dr. Osama Class III (-4mm Underbite)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => applyCustomPreset('class2')}
+                    className="px-2.5 py-1 text-xs font-semibold bg-white text-blue-700 border border-blue-300 rounded-md hover:bg-blue-100 transition-all cursor-pointer shadow-xs"
+                  >
+                    Severe Class II (+8.5mm Overjet)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => applyCustomPreset('bimax')}
+                    className="px-2.5 py-1 text-xs font-semibold bg-white text-blue-700 border border-blue-300 rounded-md hover:bg-blue-100 transition-all cursor-pointer shadow-xs"
+                  >
+                    Bimaxillary Protrusion (+6mm)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => applyCustomPreset('openbite')}
+                    className="px-2.5 py-1 text-xs font-semibold bg-white text-blue-700 border border-blue-300 rounded-md hover:bg-blue-100 transition-all cursor-pointer shadow-xs"
+                  >
+                    Open Bite (-4.5mm)
+                  </button>
+                </div>
+              </div>
+
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
                 <div>
                   <label className="font-bold text-slate-700 block mb-1">Patient Name</label>
@@ -341,8 +466,8 @@ export default function GeneratePlanPage() {
                       onChange={(e) => setCustomPatient({ ...customPatient, gender: e.target.value })}
                       className="border rounded-lg p-2 bg-slate-50 font-medium"
                     >
-                      <option value="female">Female</option>
                       <option value="male">Male</option>
+                      <option value="female">Female</option>
                     </select>
                   </div>
                 </div>
@@ -430,5 +555,13 @@ export default function GeneratePlanPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function GeneratePlanPage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center text-slate-500">Loading Treatment Planning Studio...</div>}>
+      <GeneratePlanContent />
+    </Suspense>
   );
 }

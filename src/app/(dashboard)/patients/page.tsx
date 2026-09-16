@@ -1,21 +1,25 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { getMockPatients } from '@/lib/db/mock-data';
+import { getStoredPatients, StoredPatient } from '@/lib/patients-store';
 import { Search, Plus, Sparkles, FileText, ArrowRight, UserCheck } from 'lucide-react';
 import Link from 'next/link';
 
 export default function PatientsPage() {
   const [searchQuery, setSearchQuery] = useState('');
-  const allPatients = getMockPatients();
+  const [allPatients, setAllPatients] = useState<StoredPatient[]>([]);
+
+  useEffect(() => {
+    setAllPatients(getStoredPatients());
+  }, []);
 
   const filteredPatients = allPatients.filter(p => 
     `${p.firstName} ${p.lastName}`.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    p.chiefComplaint.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    p.clinicalRecords[0]?.angleClass?.toLowerCase().includes(searchQuery.toLowerCase())
+    (p.chiefComplaint || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (p.clinicalRecords?.[0]?.angleClass || '').toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -73,24 +77,26 @@ export default function PatientsPage() {
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {filteredPatients.map(p => {
-                  const cr = p.clinicalRecords[0];
+                  const cr = p.clinicalRecords?.[0];
                   return (
                     <tr key={p.id} className="hover:bg-slate-50/80 transition-colors">
                       <td className="px-6 py-4 font-bold text-slate-900">
                         <div className="flex items-center gap-2.5">
                           <div className="w-8 h-8 rounded-full bg-blue-100 text-blue-700 font-bold flex items-center justify-center text-xs">
-                            {p.firstName[0]}{p.lastName[0]}
+                            {p.firstName?.[0] || 'P'}{p.lastName?.[0] || ''}
                           </div>
                           <div>
-                            <span className="text-blue-600 hover:underline cursor-pointer block text-xs">
-                              {p.firstName} {p.lastName}
-                            </span>
-                            <span className="text-[10px] text-slate-400 font-normal">{p.phone}</span>
+                            <Link href={`/plans/generate?patientId=${p.id}`}>
+                              <span className="text-blue-600 hover:underline cursor-pointer block text-xs">
+                                {p.firstName} {p.lastName}
+                              </span>
+                            </Link>
+                            <span className="text-[10px] text-slate-400 font-normal">{p.phone || 'N/A'}</span>
                           </div>
                         </div>
                       </td>
                       <td className="px-6 py-4 text-slate-600 font-medium capitalize">
-                        {p.gender}, 14 yrs
+                        {p.gender}, {p.age || 15} yrs
                       </td>
                       <td className="px-6 py-4">
                         <span className="px-2.5 py-1 bg-slate-100 text-slate-800 rounded font-semibold text-[11px] border border-slate-200">
@@ -109,7 +115,7 @@ export default function PatientsPage() {
                         </span>
                       </td>
                       <td className="px-6 py-4 text-right">
-                        <Link href={`/plans/generate`}>
+                        <Link href={`/plans/generate?patientId=${p.id}`}>
                           <Button size="sm" variant="outline" className="h-7 text-xs gap-1 text-blue-600 hover:text-blue-700 hover:bg-blue-50">
                             <Sparkles className="w-3 h-3" />
                             Plan Studio
