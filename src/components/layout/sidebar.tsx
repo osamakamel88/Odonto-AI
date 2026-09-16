@@ -18,9 +18,9 @@ export function Sidebar() {
   const pathname = usePathname();
 
   const navItems = [
-    { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-    { label: 'Treatment Studio', href: '/plans/generate', icon: Sparkles, badge: 'AI' },
+    { label: 'Treatment Studio', href: '/plans/generate', icon: Sparkles, badge: 'Main' },
     { label: 'Patients', href: '/patients', icon: Users },
+    { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
     { label: 'Treatment Plans', href: '/plans', icon: FileText },
     { label: 'Comparison Studio', href: '/compare', icon: Scale },
     { label: 'Knowledge Base', href: '/knowledge', icon: BookOpen },

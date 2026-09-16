@@ -21,7 +21,13 @@ import {
   UserPlus, 
   SlidersHorizontal,
   Plus,
-  Zap
+  Zap,
+  HelpCircle,
+  X,
+  ChevronRight,
+  ChevronLeft,
+  Info,
+  Layers
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -32,6 +38,10 @@ function GeneratePlanContent() {
   const [patients, setPatients] = useState<StoredPatient[]>([]);
   const [selectedPatientId, setSelectedPatientId] = useState<string>('');
   const [isCustomMode, setIsCustomMode] = useState(false);
+
+  // 3-Step Interactive Tour State
+  const [showTour, setShowTour] = useState<boolean>(true);
+  const [tourStep, setTourStep] = useState<number>(1);
 
   // Custom patient input state matching user test case
   const [customPatient, setCustomPatient] = useState({
@@ -89,6 +99,7 @@ function GeneratePlanContent() {
   }, [selectedPatientId, isCustomMode, modality, experienceLevel]);
 
   const applyCustomPreset = (preset: 'class3' | 'class2' | 'bimax' | 'openbite') => {
+    setIsCustomMode(true);
     if (preset === 'class3') {
       setCustomPatient({
         name: 'Dr. Osama Test Patient',
@@ -222,7 +233,7 @@ function GeneratePlanContent() {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-7xl mx-auto pb-12">
       {/* Page Header */}
       <div className="flex flex-wrap justify-between items-center gap-4 bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
         <div>
@@ -237,16 +248,26 @@ function GeneratePlanContent() {
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
+          <Button 
+            variant="outline" 
+            onClick={() => setShowTour(!showTour)} 
+            className="text-xs font-semibold gap-1.5 border-blue-200 text-blue-700 bg-blue-50/60 hover:bg-blue-100 cursor-pointer"
+          >
+            <HelpCircle className="w-3.5 h-3.5 text-blue-600" />
+            {showTour ? 'Hide 3-Step Guide' : '💡 3-Step Quick Guide'}
+          </Button>
+
           <Link href="/patients/new">
-            <Button variant="outline" className="text-xs font-semibold gap-1.5 border-slate-300">
+            <Button variant="outline" className="text-xs font-semibold gap-1.5 border-slate-300 cursor-pointer">
               <Plus className="w-3.5 h-3.5 text-blue-600" /> New Patient Intake
             </Button>
           </Link>
+
           <Button 
             onClick={() => handleGenerate(true)} 
             disabled={isGenerating}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold gap-2 shadow-md shadow-blue-500/20 px-5 transition-all"
+            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold gap-2 shadow-md shadow-blue-500/20 px-5 transition-all cursor-pointer"
           >
             {isGenerating ? (
               <>
@@ -262,6 +283,168 @@ function GeneratePlanContent() {
           </Button>
         </div>
       </div>
+
+      {/* Interactive Skippable 3-Step Brief Guide */}
+      {showTour && (
+        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-blue-900 via-indigo-900 to-slate-900 text-white p-6 shadow-xl border border-blue-700/80 animate-in fade-in slide-in-from-top-3">
+          {/* Header row of Tour */}
+          <div className="flex items-center justify-between border-b border-blue-800/80 pb-3 mb-4">
+            <div className="flex items-center gap-2">
+              <span className="p-1 bg-amber-400/20 text-amber-300 rounded-md font-bold text-xs flex items-center gap-1">
+                <Zap className="w-3.5 h-3.5 text-amber-400" /> Quick Start
+              </span>
+              <span className="text-sm font-bold text-white tracking-wide">How to Generate an Orthodontic Treatment Plan</span>
+            </div>
+
+            <div className="flex items-center gap-3">
+              {/* Step indicator dots */}
+              <div className="flex items-center gap-1.5">
+                {[1, 2, 3].map((stepNum) => (
+                  <button
+                    key={stepNum}
+                    onClick={() => setTourStep(stepNum)}
+                    className={`h-2 rounded-full transition-all cursor-pointer ${
+                      tourStep === stepNum ? 'w-6 bg-amber-400' : 'w-2 bg-blue-700 hover:bg-blue-600'
+                    }`}
+                    title={`Go to Step ${stepNum}`}
+                  />
+                ))}
+              </div>
+
+              <span className="text-xs text-blue-300 font-semibold">Step {tourStep} of 3</span>
+
+              <button 
+                onClick={() => setShowTour(false)}
+                className="text-blue-300 hover:text-white p-1 rounded-md hover:bg-white/10 transition-colors cursor-pointer"
+                title="Skip and close guide"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+
+          {/* Tour Step Content Area */}
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+            {/* Left Description Column */}
+            <div className="md:col-span-8 space-y-3">
+              {tourStep === 1 && (
+                <div>
+                  <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blue-500/30 text-blue-200 text-xs font-semibold mb-2">
+                    <UserCheck className="w-3.5 h-3.5" /> Step 1: Select Case or Enter Custom Patient
+                  </div>
+                  <h3 className="text-lg font-bold text-white">
+                    Choose an existing clinical case or enter custom measurements
+                  </h3>
+                  <p className="text-xs text-blue-200/90 leading-relaxed mt-1">
+                    Select from 8 pre-validated patient records (Emma Johnson, Lucas Brown) or click 
+                    <strong className="text-amber-300"> "Custom Patient Form"</strong> to input your patient's exact 
+                    <strong> Overjet</strong> (- for underbites, + for severe protrusion), <strong>Overbite</strong>, and <strong>Arch Crowding</strong> in millimeters.
+                  </p>
+                  <div className="flex flex-wrap items-center gap-2 mt-3">
+                    <span className="text-[11px] text-blue-300">Quick Test:</span>
+                    <button
+                      type="button"
+                      onClick={() => applyCustomPreset('class3')}
+                      className="px-2.5 py-1 text-xs font-semibold bg-blue-800 hover:bg-blue-700 text-white rounded-md border border-blue-600 cursor-pointer"
+                    >
+                      Load Class III Underbite (-4mm)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => applyCustomPreset('class2')}
+                      className="px-2.5 py-1 text-xs font-semibold bg-blue-800 hover:bg-blue-700 text-white rounded-md border border-blue-600 cursor-pointer"
+                    >
+                      Load Class II Severe Overjet (+8.5mm)
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {tourStep === 2 && (
+                <div>
+                  <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-indigo-500/30 text-indigo-200 text-xs font-semibold mb-2">
+                    <Sliders className="w-3.5 h-3.5" /> Step 2: Set Modality & Clinician Level
+                  </div>
+                  <h3 className="text-lg font-bold text-white">
+                    Choose appliance system and explanation depth
+                  </h3>
+                  <p className="text-xs text-blue-200/90 leading-relaxed mt-1">
+                    Select your preferred treatment appliance: <strong>Fixed MBT 0.022" Appliances</strong>, <strong>Clear Aligners</strong>, <strong>Functional Orthopedics</strong>, or <strong>Orthognathic Surgery</strong>. Toggle <strong>"Fresh Graduate"</strong> for comprehensive biomechanical chain-of-thought rationale, or <strong>"Specialist"</strong> for concise clinical staging.
+                  </p>
+                  <div className="flex items-center gap-2 mt-3">
+                    <span className="text-[11px] text-blue-300">Target Modality:</span>
+                    <span className="px-2 py-0.5 bg-indigo-800/80 rounded text-xs text-indigo-200 border border-indigo-600 font-medium">
+                      Fixed MBT / Aligners / Functional
+                    </span>
+                  </div>
+                </div>
+              )}
+
+              {tourStep === 3 && (
+                <div>
+                  <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/30 text-emerald-200 text-xs font-semibold mb-2">
+                    <Layers className="w-3.5 h-3.5" /> Step 3: Run the 7-Layer AI Pipeline
+                  </div>
+                  <h3 className="text-lg font-bold text-white">
+                    Synthesize plan and inspect staged mechanics
+                  </h3>
+                  <p className="text-xs text-blue-200/90 leading-relaxed mt-1">
+                    Click the blue <strong className="text-white">"Synthesize Plan with AI"</strong> button. The engine evaluates Ceph angles (ANB/Wits), FDI tooth chart, pre-ortho disease clearance, and cortical limits. It outputs an exact extraction rationale, archwire progression, elastic wear schedule, and literature citations.
+                  </p>
+                  <div className="flex items-center gap-2 mt-3 text-xs text-emerald-300 font-medium">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                    <span>Every recommendation mathematically correlates with your input numbers.</span>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Right Action Navigation Column */}
+            <div className="md:col-span-4 flex flex-col items-end justify-center gap-3 border-t md:border-t-0 md:border-l border-blue-800/80 pt-4 md:pt-0 md:pl-6">
+              <div className="flex items-center gap-2 w-full justify-end">
+                {tourStep > 1 && (
+                  <Button 
+                    size="sm" 
+                    variant="outline"
+                    onClick={() => setTourStep(tourStep - 1)}
+                    className="text-xs bg-transparent border-blue-700 text-blue-200 hover:bg-white/10 hover:text-white cursor-pointer"
+                  >
+                    <ChevronLeft className="w-3.5 h-3.5" /> Prev
+                  </Button>
+                )}
+
+                {tourStep < 3 ? (
+                  <Button 
+                    size="sm"
+                    onClick={() => setTourStep(tourStep + 1)}
+                    className="text-xs bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold gap-1 cursor-pointer"
+                  >
+                    Next Step <ChevronRight className="w-3.5 h-3.5" />
+                  </Button>
+                ) : (
+                  <Button 
+                    size="sm"
+                    onClick={() => {
+                      setShowTour(false);
+                      handleGenerate(true);
+                    }}
+                    className="text-xs bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold gap-1 cursor-pointer shadow-md"
+                  >
+                    Synthesize Plan Now 🚀
+                  </Button>
+                )}
+              </div>
+
+              <button 
+                onClick={() => setShowTour(false)}
+                className="text-[11px] text-blue-300 hover:text-white underline cursor-pointer"
+              >
+                Skip Tour & Dismiss
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* 7-Layer Progress Pipeline Bar */}
       <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2">
@@ -361,7 +544,7 @@ function GeneratePlanContent() {
                   <button
                     type="button"
                     onClick={() => setExperienceLevel('beginner')}
-                    className={`px-3 py-2 rounded-lg text-xs font-medium border transition-all ${
+                    className={`px-3 py-2 rounded-lg text-xs font-medium border transition-all cursor-pointer ${
                       experienceLevel === 'beginner' 
                         ? 'bg-indigo-50 border-indigo-500 text-indigo-900 font-bold shadow-sm' 
                         : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
@@ -372,7 +555,7 @@ function GeneratePlanContent() {
                   <button
                     type="button"
                     onClick={() => setExperienceLevel('expert')}
-                    className={`px-3 py-2 rounded-lg text-xs font-medium border transition-all ${
+                    className={`px-3 py-2 rounded-lg text-xs font-medium border transition-all cursor-pointer ${
                       experienceLevel === 'expert' 
                         ? 'bg-indigo-50 border-indigo-500 text-indigo-900 font-bold shadow-sm' 
                         : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
