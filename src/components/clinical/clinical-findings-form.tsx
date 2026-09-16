@@ -23,12 +23,12 @@ export function ClinicalFindingsForm() {
   const router = useRouter();
 
   // Demographics State
-  const [firstName, setFirstName] = useState('Dr. Osama');
-  const [lastName, setLastName] = useState('Test Patient');
+  const [firstName, setFirstName] = useState('John');
+  const [lastName, setLastName] = useState('Doe');
   const [age, setAge] = useState<number>(15);
   const [gender, setGender] = useState<'male' | 'female'>('male');
   const [phone, setPhone] = useState('+1 (555) 019-2834');
-  const [email, setEmail] = useState('osama.test@example.com');
+  const [email, setEmail] = useState('john.doe@example.com');
   const [chiefComplaint, setChiefComplaint] = useState('Severe underbite and lower teeth in front of upper teeth');
 
   // Clinical Examination State
@@ -53,8 +53,8 @@ export function ClinicalFindingsForm() {
   // Quick Preset Handlers
   const applyPreset = (preset: 'class3' | 'class2' | 'bimax' | 'openbite') => {
     if (preset === 'class3') {
-      setFirstName('Dr. Osama');
-      setLastName('Class III Underbite');
+      setFirstName('John');
+      setLastName('Doe');
       setAge(15);
       setGender('male');
       setAngleClass('Class III');
@@ -262,7 +262,7 @@ export function ClinicalFindingsForm() {
               type="text"
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
-              placeholder="e.g. Dr. Osama"
+              placeholder="e.g. John"
               className="w-full bg-white border border-slate-300 rounded-lg px-3 py-2 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium"
             />
           </div>

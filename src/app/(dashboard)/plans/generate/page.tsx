@@ -45,7 +45,7 @@ function GeneratePlanContent() {
 
   // Custom patient input state matching user test case
   const [customPatient, setCustomPatient] = useState({
-    name: 'Dr. Osama Test Patient',
+    name: 'John Doe',
     age: 15,
     gender: 'male',
     chiefComplaint: 'Severe underbite and lower teeth in front of upper teeth',
@@ -102,7 +102,7 @@ function GeneratePlanContent() {
     setIsCustomMode(true);
     if (preset === 'class3') {
       setCustomPatient({
-        name: 'Dr. Osama Test Patient',
+        name: 'John Doe',
         age: 15,
         gender: 'male',
         chiefComplaint: 'Severe underbite and lower teeth in front of upper teeth',
@@ -597,7 +597,7 @@ function GeneratePlanContent() {
                     onClick={() => applyCustomPreset('class3')}
                     className="px-2.5 py-1 text-xs font-semibold bg-white text-blue-700 border border-blue-300 rounded-md hover:bg-blue-100 transition-all cursor-pointer shadow-xs"
                   >
-                    Dr. Osama Class III (-4mm Underbite)
+                    Class III Underbite (-4mm)
                   </button>
                   <button
                     type="button"

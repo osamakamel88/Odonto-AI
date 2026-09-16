@@ -73,10 +73,10 @@ export function Sidebar() {
       <div className="p-4 border-t border-slate-800/80 flex items-center justify-between bg-slate-950/40">
         <div className="flex items-center space-x-3">
           <div className="h-9 w-9 rounded-lg bg-blue-600/30 border border-blue-500/30 flex items-center justify-center text-xs font-bold text-blue-300">
-            OK
+            JD
           </div>
           <div>
-            <div className="text-xs font-bold text-white">Dr. Osama Kamel</div>
+            <div className="text-xs font-bold text-white">Dr. John Doe</div>
             <div className="text-[10px] text-teal-400 font-medium">Orthodontic Specialist</div>
           </div>
         </div>

@@ -568,7 +568,7 @@ Wear: ${plan.retentionProtocol?.wearSchedule || ''}
               </div>
               <div className="text-right text-[11px] text-slate-600">
                 <div>Date: {new Date().toLocaleDateString()}</div>
-                <div>Attending: Dr. Osama Kamel</div>
+                <div>Attending: Dr. John Doe</div>
               </div>
             </div>
 

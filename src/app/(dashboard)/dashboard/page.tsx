@@ -35,7 +35,7 @@ export default function DashboardPage() {
           </div>
 
           <h1 className="text-3xl lg:text-4xl font-extrabold tracking-tight text-white">
-            Welcome back, <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-teal-200">Dr. Osama Kamel</span>
+            Welcome back, <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-teal-200">Dr. John Doe</span>
           </h1>
 
           <p className="text-slate-300 text-sm leading-relaxed max-w-2xl">
