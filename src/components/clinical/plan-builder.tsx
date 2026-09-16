@@ -193,12 +193,55 @@ export function PlanBuilder({
 }) {
   const [educationMode, setEducationMode] = useState(true);
   const [expandedSection, setExpandedSection] = useState<string | null>('mechanics');
+  const [showExportModal, setShowExportModal] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const toggleSection = (sec: string) => {
     setExpandedSection(expandedSection === sec ? null : sec);
   };
 
+  const handleExportClick = () => {
+    if (onExportPdf) {
+      onExportPdf();
+    } else {
+      setShowExportModal(true);
+    }
+  };
+
+  const handlePrint = () => {
+    window.print();
+  };
+
+  const handleCopy = () => {
+    const text = `
+ORTHODONTIC TREATMENT PLAN - ODONTO AI
+Prescription: ${plan.treatmentModality?.primary || 'Fixed Appliance'} (${plan.treatmentModality?.prescription || ''})
+Duration: ${plan.estimatedDuration || '20-24 Months'}
+Extraction Decision: ${plan.extractionDecision?.decision || 'Non-Extraction'} ${plan.extractionDecision?.teeth?.join(', ') || ''}
+
+DIAGNOSIS:
+Skeletal: ${plan.diagnosisSummary?.skeletal || ''}
+Dental: ${plan.diagnosisSummary?.dental || ''}
+
+OBJECTIVES:
+${plan.objectives?.map((o, i) => `${i + 1}. ${o}`).join('\n') || ''}
+
+STAGED MECHANICS:
+${plan.mechanicsSequence?.map(m => `${m.phase} (${m.duration}): ${m.objectives} | Wires: ${m.wires}`).join('\n') || ''}
+
+RETENTION PROTOCOL:
+Maxillary: ${plan.retentionProtocol?.maxillary || ''}
+Mandibular: ${plan.retentionProtocol?.mandibular || ''}
+Wear: ${plan.retentionProtocol?.wearSchedule || ''}
+    `.trim();
+
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   return (
+    <>
     <Card className="shadow-sm border-slate-200">
       <CardHeader className="pb-3 border-b bg-slate-50/50 flex flex-row items-center justify-between">
         <div>
@@ -231,10 +274,10 @@ export function PlanBuilder({
           <Button 
             size="sm" 
             variant="outline" 
-            className="text-xs h-8 gap-1.5"
-            onClick={onExportPdf}
+            className="text-xs h-8 gap-1.5 bg-white hover:bg-slate-50 border-slate-300 text-slate-800 font-semibold"
+            onClick={handleExportClick}
           >
-            <FileDown className="w-3.5 h-3.5" />
+            <FileDown className="w-3.5 h-3.5 text-blue-600" />
             Export Plan
           </Button>
         </div>
@@ -437,5 +480,107 @@ export function PlanBuilder({
         </div>
       </CardContent>
     </Card>
+
+    {/* Export / Print Prescription Modal */}
+    {showExportModal && (
+      <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div className="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto p-6 shadow-2xl border border-slate-200 space-y-4">
+          <div className="flex items-center justify-between border-b pb-4">
+            <div>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
+                Official Clinical Document
+              </span>
+              <h2 className="text-xl font-bold text-slate-900 mt-1">Orthodontic Treatment Plan Prescription</h2>
+            </div>
+            <div className="flex items-center gap-2">
+              <Button size="sm" variant="outline" onClick={handleCopy} className="text-xs h-8">
+                {copied ? '✓ Copied to Clipboard' : 'Copy Text'}
+              </Button>
+              <Button size="sm" onClick={handlePrint} className="text-xs h-8 bg-blue-600 hover:bg-blue-700 text-white font-semibold">
+                Print / Save PDF
+              </Button>
+              <Button size="sm" variant="ghost" onClick={() => setShowExportModal(false)}>
+                ✕
+              </Button>
+            </div>
+          </div>
+
+          {/* Printable Prescription Content */}
+          <div className="p-6 bg-slate-50 border rounded-xl space-y-4 text-xs font-sans">
+            <div className="flex justify-between items-start border-b pb-3">
+              <div>
+                <h3 className="text-base font-bold text-slate-900">ODONTO AI SPECIALIZED ORTHODONTICS</h3>
+                <p className="text-[11px] text-slate-500">Evidence-Based Clinical Decision Support</p>
+              </div>
+              <div className="text-right text-[11px] text-slate-600">
+                <div>Date: {new Date().toLocaleDateString()}</div>
+                <div>Attending: Dr. Osama Kamel</div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3 bg-white p-3 rounded-lg border">
+              <div>
+                <strong className="text-slate-900 block uppercase text-[10px]">Primary Prescription</strong>
+                <span className="text-blue-700 font-bold text-sm">{plan.treatmentModality?.primary}</span>
+                <p className="text-slate-600 mt-0.5">{plan.treatmentModality?.prescription}</p>
+              </div>
+              <div>
+                <strong className="text-slate-900 block uppercase text-[10px]">Extraction Decision</strong>
+                <span className={`font-bold text-sm ${plan.extractionDecision?.decision === 'Extraction' ? 'text-amber-800' : 'text-emerald-700'}`}>
+                  {plan.extractionDecision?.decision} {plan.extractionDecision?.teeth?.length ? `(${plan.extractionDecision.teeth.join(', ')})` : ''}
+                </span>
+                <p className="text-slate-600 mt-0.5">Estimated Duration: {plan.estimatedDuration}</p>
+              </div>
+            </div>
+
+            <div className="space-y-1">
+              <strong className="text-slate-900 block uppercase text-[10px]">Diagnostic Summary</strong>
+              <p className="text-slate-700"><strong>Skeletal:</strong> {plan.diagnosisSummary?.skeletal}</p>
+              <p className="text-slate-700"><strong>Dental:</strong> {plan.diagnosisSummary?.dental}</p>
+              <p className="text-slate-700"><strong>Soft Tissue:</strong> {plan.diagnosisSummary?.softTissue}</p>
+            </div>
+
+            <div className="space-y-1">
+              <strong className="text-slate-900 block uppercase text-[10px]">Staged Mechanics Sequence</strong>
+              <div className="space-y-2">
+                {plan.mechanicsSequence?.map((m, idx) => (
+                  <div key={idx} className="bg-white p-2 rounded border">
+                    <div className="flex justify-between font-bold text-slate-900">
+                      <span>{m.phase}</span>
+                      <span className="text-slate-500 font-normal">{m.duration}</span>
+                    </div>
+                    <div className="text-slate-600 mt-0.5">Goals: {m.objectives}</div>
+                    <div className="text-blue-700 mt-0.5">Archwires: {m.wires}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <strong className="text-slate-900 block uppercase text-[10px]">Archwire Sequence</strong>
+                <ul className="list-disc pl-4 text-slate-700 space-y-0.5 mt-1">
+                  {plan.wireSequence?.map((w, i) => (
+                    <li key={i}>{w}</li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <strong className="text-slate-900 block uppercase text-[10px]">Retention Protocol</strong>
+                <p className="text-slate-700 mt-1">Maxillary: {plan.retentionProtocol?.maxillary}</p>
+                <p className="text-slate-700">Mandibular: {plan.retentionProtocol?.mandibular}</p>
+                <p className="text-slate-500 italic mt-0.5">Schedule: {plan.retentionProtocol?.wearSchedule}</p>
+              </div>
+            </div>
+
+            <div className="border-t pt-4 flex justify-between items-center text-[10px] text-slate-400">
+              <span>Verified with Odonto AI Clinical Decision Support Engine</span>
+              <span>Orthodontist Signature: _______________________</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+    </>
   );
 }

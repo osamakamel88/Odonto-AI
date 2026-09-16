@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PlanBuilder, TreatmentPlanData } from '@/components/clinical/plan-builder';
 import { CephViewer } from '@/components/clinical/ceph-viewer';
 import { ToothChart } from '@/components/clinical/tooth-chart';
@@ -9,7 +9,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { getMockPatients } from '@/lib/db/mock-data';
-import { Sparkles, UserCheck, Stethoscope, Sliders, RefreshCw, CheckCircle } from 'lucide-react';
+import { Sparkles, UserCheck, Stethoscope, Sliders, RefreshCw, CheckCircle2, AlertCircle } from 'lucide-react';
 
 export default function GeneratePlanPage() {
   const patients = getMockPatients();
@@ -22,16 +22,24 @@ export default function GeneratePlanPage() {
 
   const activePatient = patients.find(p => p.id === selectedPatientId) || patients[0];
 
-  const handleGenerate = async () => {
+  // Auto-generate initial plan when patient changes
+  useEffect(() => {
+    handleGenerate(false);
+  }, [selectedPatientId, modality, experienceLevel]);
+
+  const handleGenerate = async (showPipelineAnimation: boolean = true) => {
     setIsGenerating(true);
     setCurrentStep(1);
 
-    try {
-      // Step simulation for all 7 AI layers
-      const timer1 = setTimeout(() => setCurrentStep(2), 600);
-      const timer2 = setTimeout(() => setCurrentStep(3), 1200);
-      const timer3 = setTimeout(() => setCurrentStep(4), 1800);
+    // Smooth animation across all 7 layers
+    const layerTimers: NodeJS.Timeout[] = [];
+    if (showPipelineAnimation) {
+      for (let i = 2; i <= 7; i++) {
+        layerTimers.push(setTimeout(() => setCurrentStep(i), (i - 1) * 350));
+      }
+    }
 
+    try {
       const response = await fetch('/api/ai/generate-plan', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -43,6 +51,7 @@ export default function GeneratePlanPage() {
             chiefComplaint: activePatient.chiefComplaint,
             clinicalFindings: activePatient.clinicalRecords[0]
           },
+          clinicalFindings: activePatient.clinicalRecords[0],
           experienceLevel,
           modality
         })
@@ -50,24 +59,32 @@ export default function GeneratePlanPage() {
 
       const resData = await response.json();
       if (resData.success && resData.data) {
-        setGeneratedPlan(resData.data);
+        // Wait until layer 7 completes visually before setting result
+        const waitTime = showPipelineAnimation ? 2400 : 200;
+        setTimeout(() => {
+          setGeneratedPlan(resData.data);
+          setIsGenerating(false);
+          setCurrentStep(0);
+        }, waitTime);
+      } else {
+        setIsGenerating(false);
+        setCurrentStep(0);
       }
     } catch (err) {
       console.error('Plan generation error:', err);
-    } finally {
       setIsGenerating(false);
       setCurrentStep(0);
     }
   };
 
   const layersStatus = [
-    { num: 1, name: 'Cephalometric Skeletal Tracing', status: 'Active' },
-    { num: 2, name: 'Panoramic Tooth Segmentation', status: 'Active' },
-    { num: 3, name: 'Pre-Ortho Disease Clearance', status: 'Cleared' },
-    { num: 4, name: '3D Arch Space Discrepancy', status: 'Calculated' },
-    { num: 5, name: 'CBCT Cortical Envelope Limit', status: 'Verified' },
-    { num: 6, name: 'Dental Clinical Reasoning (CoT)', status: 'Active' },
-    { num: 7, name: 'Orthodontic Plan Synthesis & Evidence', status: 'Synthesized' },
+    { num: 1, name: 'Ceph Tracing', detail: 'Skeletal ANB/Wits' },
+    { num: 2, name: 'Panoramic OPG', detail: 'FDI Segmentation' },
+    { num: 3, name: 'Pathology AI', detail: 'Pre-Ortho Clearance' },
+    { num: 4, name: '3D Arch Space', detail: 'Bolton & Perimeter' },
+    { num: 5, name: 'CBCT Boundary', detail: 'Cortical Limits' },
+    { num: 6, name: 'Clinical CoT', detail: 'Orthodontic Logic' },
+    { num: 7, name: 'Plan Synthesis', detail: 'Staged Biomechanics' },
   ];
 
   return (
@@ -77,58 +94,70 @@ export default function GeneratePlanPage() {
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-2xl font-bold text-slate-900">Treatment Planning Studio</h1>
-            <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-100 border-none font-semibold">
+            <Badge className="bg-blue-100 text-blue-800 border-none font-semibold">
               7-Layer AI Pipeline
             </Badge>
           </div>
           <p className="text-sm text-slate-500 mt-1">
-            Feed clinical findings, radiographs, and cephs to synthesize evidence-backed orthodontic protocols
+            Synthesizing evidence-based biomechanics, archwire progressions, and extraction protocols
           </p>
         </div>
 
         <div className="flex items-center gap-3">
           <Button 
-            onClick={handleGenerate} 
+            onClick={() => handleGenerate(true)} 
             disabled={isGenerating}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold gap-2 shadow-md shadow-blue-500/20 px-5"
+            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold gap-2 shadow-md shadow-blue-500/20 px-5 transition-all"
           >
             {isGenerating ? (
               <>
-                <RefreshCw className="w-4 h-4 animate-spin" />
-                <span>Running Pipeline (Layer {currentStep || 1}/7)...</span>
+                <RefreshCw className="w-4 h-4 animate-spin text-white" />
+                <span>Processing Layer {currentStep || 1} of 7...</span>
               </>
             ) : (
               <>
                 <Sparkles className="w-4 h-4" />
-                <span>Generate Plan with GPT-4o</span>
+                <span>Re-Synthesize Plan with AI</span>
               </>
             )}
           </Button>
         </div>
       </div>
 
-      {/* 7-Layer Status Bar */}
+      {/* 7-Layer Progress Pipeline Bar */}
       <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2">
-        {layersStatus.map((l) => (
-          <div 
-            key={l.num} 
-            className={`p-2.5 rounded-lg border text-center transition-all ${
-              isGenerating && currentStep === l.num 
-                ? 'bg-blue-50 border-blue-400 ring-2 ring-blue-300 scale-105' 
-                : 'bg-white border-slate-200'
-            }`}
-          >
-            <div className="text-[10px] text-slate-400 font-bold uppercase">Layer {l.num}</div>
-            <div className="text-xs font-semibold text-slate-800 truncate mt-0.5" title={l.name}>{l.name}</div>
-            <div className="flex items-center justify-center gap-1 mt-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-              <span className="text-[10px] text-emerald-700 font-medium">{l.status}</span>
+        {layersStatus.map((l) => {
+          const isCurrent = isGenerating && currentStep === l.num;
+          const isPassed = isGenerating && currentStep > l.num;
+          const isDone = !isGenerating && generatedPlan !== undefined;
+
+          return (
+            <div 
+              key={l.num} 
+              className={`p-2.5 rounded-lg border text-center transition-all ${
+                isCurrent 
+                  ? 'bg-blue-50 border-blue-500 ring-2 ring-blue-300 scale-105 shadow-sm' 
+                  : isPassed || isDone
+                  ? 'bg-emerald-50/70 border-emerald-300'
+                  : 'bg-white border-slate-200'
+              }`}
+            >
+              <div className="flex items-center justify-between text-[10px] text-slate-400 font-bold uppercase mb-0.5">
+                <span>Layer {l.num}</span>
+                {isPassed || isDone ? (
+                  <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                ) : isCurrent ? (
+                  <RefreshCw className="w-3 h-3 text-blue-600 animate-spin" />
+                ) : null}
+              </div>
+              <div className="text-xs font-bold text-slate-800 truncate">{l.name}</div>
+              <div className="text-[10px] text-slate-500 truncate mt-0.5">{l.detail}</div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
-      {/* Configuration Strip */}
+      {/* Patient & Modality Configuration Strip */}
       <Card className="shadow-sm border-slate-200">
         <CardContent className="p-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -145,7 +174,7 @@ export default function GeneratePlanPage() {
               >
                 {patients.map(p => (
                   <option key={p.id} value={p.id}>
-                    {p.firstName} {p.lastName} — {p.chiefComplaint} ({p.clinicalRecords[0]?.angleClass})
+                    {p.firstName} {p.lastName} — {p.chiefComplaint} ({p.clinicalRecords[0]?.angleClass || 'Class I'})
                   </option>
                 ))}
               </select>
