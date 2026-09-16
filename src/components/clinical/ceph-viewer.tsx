@@ -100,15 +100,28 @@ const PRESET_CASES: Record<'class2' | 'class1' | 'class3', PresetCase> = {
   }
 };
 
-export function CephViewer({ onAnalysisReady }: { onAnalysisReady?: (analysis: Partial<CephAnalysis>) => void }) {
-  const [selectedCase, setSelectedCase] = useState<'class2' | 'class1' | 'class3'>('class2');
-  const [landmarks, setLandmarks] = useState<CephLandmark[]>(PRESET_CASES.class2.landmarks);
+export function CephViewer({ 
+  presetCase = 'class2',
+  onAnalysisReady 
+}: { 
+  presetCase?: 'class2' | 'class1' | 'class3';
+  onAnalysisReady?: (analysis: Partial<CephAnalysis>) => void;
+}) {
+  const [selectedCase, setSelectedCase] = useState<'class2' | 'class1' | 'class3'>(presetCase);
+  const [landmarks, setLandmarks] = useState<CephLandmark[]>(PRESET_CASES[presetCase]?.landmarks || PRESET_CASES.class2.landmarks);
   const [showPlanes, setShowPlanes] = useState(true);
   const [showLandmarks, setShowLandmarks] = useState(true);
   const [showProfile, setShowProfile] = useState(true);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [activeLandmark, setActiveLandmark] = useState<string | null>(null);
   const canvasRef = useRef<SVGSVGElement | null>(null);
+
+  useEffect(() => {
+    if (presetCase && PRESET_CASES[presetCase]) {
+      setSelectedCase(presetCase);
+      setLandmarks(PRESET_CASES[presetCase].landmarks);
+    }
+  }, [presetCase]);
 
   const measurements = calculateCephMeasurements(landmarks);
   const fullAnalysis: CephAnalysis = {
