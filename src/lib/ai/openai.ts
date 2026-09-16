@@ -1,3 +1,8 @@
 import OpenAI from 'openai';
 
-export const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+// Safe fallback for Next.js build-time page collection on Vercel
+const apiKey = process.env.OPENAI_API_KEY || 'sk-build-time-placeholder-key-for-vercel';
+
+export const openai = new OpenAI({ 
+  apiKey,
+});
