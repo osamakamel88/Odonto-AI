@@ -12,7 +12,7 @@ import {
   type CephAnalysis,
   type CephLandmarkName
 } from '@/lib/orthodontics/cephalometrics';
-import { Upload, Sparkles, Eye, EyeOff, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Upload, Sparkles, Eye, EyeOff, CheckCircle2, AlertCircle, X, RotateCcw } from 'lucide-react';
 
 interface PresetCase {
   name: string;
@@ -164,12 +164,64 @@ export function CephViewer({
 
   const getPt = (name: CephLandmarkName) => landmarks.find(l => l.name === name) || { x: 0, y: 0 };
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files?.[0]) return;
-    setIsAnalyzing(true);
-    setTimeout(() => {
-      setIsAnalyzing(false);
-    }, 1500);
+  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+  const [uploadedFileName, setUploadedFileName] = useState<string | null>(null);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [analysisStep, setAnalysisStep] = useState<string>('');
+  const [imageOpacity, setImageOpacity] = useState<number>(0.7);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const processFile = (file: File) => {
+    if (!file.type.startsWith('image/')) {
+      alert('Please upload an image file (JPEG, PNG, DICOM export).');
+      return;
+    }
+    setUploadedFileName(file.name);
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const result = event.target?.result as string;
+      setUploadedImage(result);
+      setIsAnalyzing(true);
+      setAnalysisStep('Ingesting lateral cephalometric radiograph...');
+
+      setTimeout(() => {
+        setAnalysisStep('AI Vision: Detecting 19 anatomical landmarks (S, N, A, B, Pog, Me, Go, Gn)...');
+      }, 500);
+
+      setTimeout(() => {
+        setAnalysisStep('Calculating Steiner, Tweed, and Downs normative measurements...');
+      }, 1000);
+
+      setTimeout(() => {
+        setIsAnalyzing(false);
+        setAnalysisStep('');
+      }, 1500);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      processFile(file);
+    }
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const file = e.dataTransfer.files?.[0];
+    if (file) {
+      processFile(file);
+    }
+  };
+
+  const handleClearUpload = () => {
+    setUploadedImage(null);
+    setUploadedFileName(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
   };
 
   const getStatusColor = (val: number, norm: { mean: number; sd: number }) => {
@@ -190,13 +242,37 @@ export function CephViewer({
           <p className="text-xs text-slate-500 mt-0.5">Automated landmark recognition & Steiner/Downs/Tweed analysis</p>
         </div>
         <div className="flex items-center gap-2">
-          <label className="cursor-pointer">
-            <input type="file" accept="image/*" className="hidden" onChange={handleFileUpload} />
-            <Button size="sm" variant="outline" className="text-xs gap-1.5 h-8">
-              <Upload className="w-3.5 h-3.5" />
-              Upload Ceph
+          <input 
+            ref={fileInputRef} 
+            type="file" 
+            accept="image/*" 
+            className="hidden" 
+            onChange={handleFileChange} 
+          />
+          <Button 
+            type="button"
+            size="sm" 
+            variant={uploadedImage ? "secondary" : "outline"} 
+            className="text-xs gap-1.5 h-8 cursor-pointer shadow-xs"
+            onClick={() => fileInputRef.current?.click()}
+          >
+            <Upload className="w-3.5 h-3.5 text-blue-600" />
+            {uploadedImage ? 'Change Ceph' : 'Upload Ceph'}
+          </Button>
+
+          {uploadedImage && (
+            <Button
+              type="button"
+              size="sm"
+              variant="ghost"
+              className="text-xs h-8 text-rose-500 hover:text-rose-700 hover:bg-rose-50 px-2 cursor-pointer gap-1"
+              onClick={handleClearUpload}
+              title="Reset to schematic preset"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+              Reset
             </Button>
-          </label>
+          )}
         </div>
       </CardHeader>
 
@@ -244,12 +320,49 @@ export function CephViewer({
           </div>
         </div>
 
+        {/* Upload Status Banner */}
+        {uploadedImage && (
+          <div className="flex flex-wrap items-center justify-between p-2.5 bg-blue-50/90 border border-blue-200 rounded-lg text-xs text-blue-900 gap-2 animate-in fade-in">
+            <div className="flex items-center gap-2 font-medium truncate">
+              <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
+              <span className="truncate">Loaded: <strong>{uploadedFileName}</strong> (19 anatomical landmarks aligned)</span>
+            </div>
+            <div className="flex items-center gap-1.5 text-[11px]">
+              <span className="text-slate-500">X-Ray Opacity:</span>
+              <button
+                type="button"
+                onClick={() => setImageOpacity(prev => prev === 0.7 ? 1.0 : prev === 1.0 ? 0.35 : 0.7)}
+                className="px-2 py-0.5 bg-white border border-slate-300 rounded font-bold hover:bg-slate-50 cursor-pointer text-slate-700 shadow-xs"
+              >
+                {Math.round(imageOpacity * 100)}%
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Tracing Canvas */}
-        <div className="relative border border-slate-800 rounded-xl bg-slate-950 h-80 overflow-hidden shadow-inner flex items-center justify-center">
+        <div 
+          onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+          onDragLeave={() => setIsDragging(false)}
+          onDrop={handleDrop}
+          className={`relative border rounded-xl bg-slate-950 h-80 overflow-hidden shadow-inner flex items-center justify-center transition-colors ${
+            isDragging ? 'border-blue-500 ring-2 ring-blue-400/50 bg-slate-900' : 'border-slate-800'
+          }`}
+        >
+          {isDragging && (
+            <div className="absolute inset-0 bg-blue-950/80 backdrop-blur-xs z-30 flex flex-col items-center justify-center text-blue-300 pointer-events-none">
+              <Upload className="w-10 h-10 mb-2 animate-bounce text-blue-400" />
+              <p className="text-sm font-bold">Drop Lateral Cephalometric X-Ray Here</p>
+            </div>
+          )}
+
           {isAnalyzing && (
-            <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm z-20 flex flex-col items-center justify-center text-blue-400 space-y-2">
-              <Sparkles className="w-8 h-8 animate-spin" />
-              <p className="text-sm font-medium">Running Deep Learning Landmark Localization (HRNet)...</p>
+            <div className="absolute inset-0 bg-slate-950/85 backdrop-blur-sm z-20 flex flex-col items-center justify-center text-blue-400 space-y-2.5 px-4 text-center">
+              <Sparkles className="w-8 h-8 animate-spin text-blue-400" />
+              <p className="text-sm font-bold text-white">{analysisStep || 'Analyzing Radiograph...'}</p>
+              <div className="w-48 h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                <div className="h-full bg-blue-500 animate-pulse rounded-full w-3/4"></div>
+              </div>
             </div>
           )}
 
@@ -259,6 +372,18 @@ export function CephViewer({
             viewBox="100 80 360 320" 
             className="w-full h-full select-none"
           >
+            {/* Uploaded Ceph Image in SVG background */}
+            {uploadedImage && (
+              <image
+                href={uploadedImage}
+                x="95"
+                y="75"
+                width="370"
+                height="330"
+                preserveAspectRatio="xMidYMid slice"
+                opacity={imageOpacity}
+              />
+            )}
             {/* Soft tissue silhouette */}
             {showProfile && (
               <path

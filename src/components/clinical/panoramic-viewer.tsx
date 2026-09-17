@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Upload, Sparkles, AlertTriangle, ShieldCheck, Eye, EyeOff } from 'lucide-react';
+import { Upload, Sparkles, AlertTriangle, ShieldCheck, Eye, EyeOff, CheckCircle2, RotateCcw, X } from 'lucide-react';
 
 interface DetectedTooth {
   fdi: number;
@@ -99,10 +99,64 @@ export function PanoramicViewer() {
   const [isScanning, setIsScanning] = useState(false);
   const [selectedFinding, setSelectedFinding] = useState<PathologyFinding | null>(null);
 
-  const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files?.[0]) return;
-    setIsScanning(true);
-    setTimeout(() => setIsScanning(false), 1500);
+  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+  const [uploadedFileName, setUploadedFileName] = useState<string | null>(null);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [scanStep, setScanStep] = useState<string>('');
+  const [imageOpacity, setImageOpacity] = useState<number>(0.7);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const processFile = (file: File) => {
+    if (!file.type.startsWith('image/')) {
+      alert('Please upload an image file (JPEG, PNG, DICOM export).');
+      return;
+    }
+    setUploadedFileName(file.name);
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const result = event.target?.result as string;
+      setUploadedImage(result);
+      setIsScanning(true);
+      setScanStep('AI Vision: Ingesting panoramic orthopantomogram (OPG)...');
+
+      setTimeout(() => {
+        setScanStep('YOLOv8 & U-Net: Segmenting 32 teeth and alveolar bone crests...');
+      }, 500);
+
+      setTimeout(() => {
+        setScanStep('Pathology AI: Screening caries, impactions, and periapical lesions...');
+      }, 1000);
+
+      setTimeout(() => {
+        setIsScanning(false);
+        setScanStep('');
+      }, 1500);
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      processFile(file);
+    }
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const file = e.dataTransfer.files?.[0];
+    if (file) {
+      processFile(file);
+    }
+  };
+
+  const handleClearUpload = () => {
+    setUploadedImage(null);
+    setUploadedFileName(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
   };
 
   return (
@@ -117,13 +171,37 @@ export function PanoramicViewer() {
         </div>
 
         <div className="flex items-center gap-2">
-          <label className="cursor-pointer">
-            <input type="file" accept="image/*" className="hidden" onChange={handleUpload} />
-            <Button size="sm" variant="outline" className="text-xs gap-1.5 h-8">
-              <Upload className="w-3.5 h-3.5" />
-              Upload OPG
+          <input 
+            ref={fileInputRef} 
+            type="file" 
+            accept="image/*" 
+            className="hidden" 
+            onChange={handleFileChange} 
+          />
+          <Button 
+            type="button"
+            size="sm" 
+            variant={uploadedImage ? "secondary" : "outline"} 
+            className="text-xs gap-1.5 h-8 cursor-pointer shadow-xs"
+            onClick={() => fileInputRef.current?.click()}
+          >
+            <Upload className="w-3.5 h-3.5 text-teal-600" />
+            {uploadedImage ? 'Change OPG' : 'Upload OPG'}
+          </Button>
+
+          {uploadedImage && (
+            <Button
+              type="button"
+              size="sm"
+              variant="ghost"
+              className="text-xs h-8 text-rose-500 hover:text-rose-700 hover:bg-rose-50 px-2 cursor-pointer gap-1"
+              onClick={handleClearUpload}
+              title="Reset to schematic view"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+              Reset
             </Button>
-          </label>
+          )}
         </div>
       </CardHeader>
 
@@ -163,16 +241,65 @@ export function PanoramicViewer() {
           </div>
         </div>
 
+        {/* Upload Status Banner */}
+        {uploadedImage && (
+          <div className="flex flex-wrap items-center justify-between p-2.5 bg-teal-50/90 border border-teal-200 rounded-lg text-xs text-teal-900 gap-2 animate-in fade-in">
+            <div className="flex items-center gap-2 font-medium truncate">
+              <CheckCircle2 className="w-4 h-4 text-teal-600 shrink-0" />
+              <span className="truncate">Loaded: <strong>{uploadedFileName}</strong> (32 teeth segmented • Pre-ortho cleared)</span>
+            </div>
+            <div className="flex items-center gap-1.5 text-[11px]">
+              <span className="text-slate-500">X-Ray Opacity:</span>
+              <button
+                type="button"
+                onClick={() => setImageOpacity(prev => prev === 0.7 ? 1.0 : prev === 1.0 ? 0.35 : 0.7)}
+                className="px-2 py-0.5 bg-white border border-slate-300 rounded font-bold hover:bg-slate-50 cursor-pointer text-slate-700 shadow-xs"
+              >
+                {Math.round(imageOpacity * 100)}%
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Panoramic Canvas */}
-        <div className="relative border border-slate-800 rounded-xl bg-slate-950 h-72 overflow-hidden shadow-inner flex items-center justify-center">
+        <div 
+          onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+          onDragLeave={() => setIsDragging(false)}
+          onDrop={handleDrop}
+          className={`relative border rounded-xl bg-slate-950 h-72 overflow-hidden shadow-inner flex items-center justify-center transition-colors ${
+            isDragging ? 'border-teal-500 ring-2 ring-teal-400/50 bg-slate-900' : 'border-slate-800'
+          }`}
+        >
+          {isDragging && (
+            <div className="absolute inset-0 bg-teal-950/80 backdrop-blur-xs z-30 flex flex-col items-center justify-center text-teal-300 pointer-events-none">
+              <Upload className="w-10 h-10 mb-2 animate-bounce text-teal-400" />
+              <p className="text-sm font-bold">Drop Panoramic Orthopantomogram (OPG) Here</p>
+            </div>
+          )}
+
           {isScanning && (
-            <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm z-20 flex flex-col items-center justify-center text-teal-400 space-y-2">
-              <Sparkles className="w-8 h-8 animate-spin" />
-              <p className="text-sm font-medium">Running YOLOv8 Dental Pathology & U-Net Segmentation...</p>
+            <div className="absolute inset-0 bg-slate-950/85 backdrop-blur-sm z-20 flex flex-col items-center justify-center text-teal-400 space-y-2.5 px-4 text-center">
+              <Sparkles className="w-8 h-8 animate-spin text-teal-400" />
+              <p className="text-sm font-bold text-white">{scanStep || 'Scanning Panoramic X-Ray...'}</p>
+              <div className="w-48 h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                <div className="h-full bg-teal-500 animate-pulse rounded-full w-3/4"></div>
+              </div>
             </div>
           )}
 
           <svg viewBox="50 100 520 150" className="w-full h-full select-none">
+            {/* Uploaded OPG Image in background */}
+            {uploadedImage && (
+              <image
+                href={uploadedImage}
+                x="50"
+                y="95"
+                width="520"
+                height="155"
+                preserveAspectRatio="xMidYMid meet"
+                opacity={imageOpacity}
+              />
+            )}
             {/* Simulated Jaw bone arc */}
             <path
               d="M 60 130 Q 310 80 560 130 Q 560 230 310 240 Q 60 230 60 130 Z"

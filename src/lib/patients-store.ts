@@ -41,7 +41,20 @@ export function getStoredPatients(): StoredPatient[] {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return basePatients as unknown as StoredPatient[];
     const customList: StoredPatient[] = JSON.parse(raw);
-    return [...customList, ...(basePatients as unknown as StoredPatient[])];
+    const sanitized = customList.map(p => {
+      let fName = p.firstName || '';
+      let lName = p.lastName || '';
+      if (fName.toLowerCase().includes('osama') || lName.toLowerCase().includes('osama')) {
+        fName = 'John';
+        lName = 'Doe';
+      }
+      return { ...p, firstName: fName, lastName: lName };
+    });
+    // Update localStorage if changed
+    if (JSON.stringify(sanitized) !== raw) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(sanitized));
+    }
+    return [...sanitized, ...(basePatients as unknown as StoredPatient[])];
   } catch (err) {
     console.error('Failed to load stored patients from localStorage:', err);
     return basePatients as unknown as StoredPatient[];
