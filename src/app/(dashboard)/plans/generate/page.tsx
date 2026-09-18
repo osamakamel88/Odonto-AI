@@ -6,6 +6,7 @@ import { PlanBuilder, TreatmentPlanData } from '@/components/clinical/plan-build
 import { CephViewer } from '@/components/clinical/ceph-viewer';
 import { ToothChart } from '@/components/clinical/tooth-chart';
 import { PanoramicViewer } from '@/components/clinical/panoramic-viewer';
+import { BoltonAnalysisCard } from '@/components/clinical/bolton-analysis-card';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -27,7 +28,10 @@ import {
   ChevronRight,
   ChevronLeft,
   Info,
-  Layers
+  Layers,
+  Ruler,
+  Scan,
+  Maximize2
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -38,6 +42,7 @@ function GeneratePlanContent() {
   const [patients, setPatients] = useState<StoredPatient[]>([]);
   const [selectedPatientId, setSelectedPatientId] = useState<string>('');
   const [isCustomMode, setIsCustomMode] = useState(false);
+  const [activeDiagnosticTab, setActiveDiagnosticTab] = useState<'ceph' | 'odontogram' | 'panoramic' | 'bolton'>('ceph');
 
   // 3-Step Interactive Tour State
   const [showTour, setShowTour] = useState<boolean>(true);
@@ -83,6 +88,12 @@ function GeneratePlanContent() {
   const currentOverjet = isCustomMode 
     ? customPatient.overjet 
     : ((activePatient?.clinicalRecords?.[0] as any)?.overjet ?? 2);
+  const currentOverbite = isCustomMode 
+    ? customPatient.overbite 
+    : ((activePatient?.clinicalRecords?.[0] as any)?.overbite ?? 2);
+  const currentCrowding = isCustomMode 
+    ? customPatient.crowdingUpper 
+    : ((activePatient?.clinicalRecords?.[0] as any)?.crowdingUpper || 'moderate');
 
   const cephPresetCase: 'class1' | 'class2' | 'class3' = 
     currentAngle.toLowerCase().includes('iii') || currentOverjet < 0
@@ -724,12 +735,178 @@ function GeneratePlanContent() {
       </Card>
 
       {/* Main Studio Grid: Diagnostic Imaging vs Plan Output */}
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-        {/* Left Column: Clinical & Radiographic Findings */}
-        <div className="space-y-6">
-          <CephViewer presetCase={cephPresetCase} />
-          <ToothChart />
-          <PanoramicViewer />
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 items-start">
+        {/* Left Column: Segmented Diagnostic Records Hub */}
+        <div className="space-y-4">
+          {/* Segmented Diagnostic Records Hub Card */}
+          <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+            {/* Hub Header & Status Bar */}
+            <div className="bg-slate-50/80 border-b border-slate-200/80 px-4 py-3 flex flex-wrap items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <span className="p-1.5 rounded-lg bg-blue-600 text-white shadow-xs">
+                  <Layers className="w-3.5 h-3.5" />
+                </span>
+                <div>
+                  <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
+                    Diagnostic Records Hub
+                  </h3>
+                  <p className="text-[10px] text-slate-500">
+                    Active Case: <span className="font-semibold text-slate-700">{isCustomMode ? customPatient.name : `${activePatient?.firstName} ${activePatient?.lastName}`}</span> • {currentAngle} • Overjet: {currentOverjet}mm
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-1.5">
+                <Badge variant="outline" className="text-[10px] bg-white text-slate-600 border-slate-200 font-medium">
+                  {activeDiagnosticTab === 'ceph' && 'Cephalometric Tracing'}
+                  {activeDiagnosticTab === 'odontogram' && 'FDI ISO 3950 Chart'}
+                  {activeDiagnosticTab === 'panoramic' && 'Panoramic Radiography'}
+                  {activeDiagnosticTab === 'bolton' && 'Bolton 3D Arch Space'}
+                </Badge>
+              </div>
+            </div>
+
+            {/* Segmented Navigation Tab Buttons */}
+            <div className="p-2 bg-slate-100/70 border-b border-slate-200/60">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-xs font-semibold">
+                <button
+                  type="button"
+                  onClick={() => setActiveDiagnosticTab('ceph')}
+                  className={`flex items-center justify-center gap-1.5 py-2 px-2 rounded-lg transition-all cursor-pointer ${
+                    activeDiagnosticTab === 'ceph'
+                      ? 'bg-white text-blue-700 font-bold shadow-xs border border-slate-200'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
+                  }`}
+                >
+                  <span className="truncate">📐 Ceph Tracing</span>
+                  <span className="text-[9px] px-1 py-0.2 bg-blue-50 text-blue-600 rounded font-bold uppercase">
+                    {cephPresetCase}
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setActiveDiagnosticTab('odontogram')}
+                  className={`flex items-center justify-center gap-1.5 py-2 px-2 rounded-lg transition-all cursor-pointer ${
+                    activeDiagnosticTab === 'odontogram'
+                      ? 'bg-white text-blue-700 font-bold shadow-xs border border-slate-200'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
+                  }`}
+                >
+                  <span className="truncate">🦷 FDI Odontogram</span>
+                  <span className="text-[9px] px-1 py-0.2 bg-slate-100 text-slate-700 rounded font-bold">
+                    32T
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setActiveDiagnosticTab('panoramic')}
+                  className={`flex items-center justify-center gap-1.5 py-2 px-2 rounded-lg transition-all cursor-pointer ${
+                    activeDiagnosticTab === 'panoramic'
+                      ? 'bg-white text-blue-700 font-bold shadow-xs border border-slate-200'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
+                  }`}
+                >
+                  <span className="truncate">🩻 Panoramic OPG</span>
+                  <span className="text-[9px] px-1 py-0.2 bg-emerald-50 text-emerald-700 rounded font-bold">
+                    HD
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setActiveDiagnosticTab('bolton')}
+                  className={`flex items-center justify-center gap-1.5 py-2 px-2 rounded-lg transition-all cursor-pointer ${
+                    activeDiagnosticTab === 'bolton'
+                      ? 'bg-white text-teal-700 font-bold shadow-xs border border-slate-200'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
+                  }`}
+                >
+                  <span className="truncate">📊 Bolton Space</span>
+                  <span className="text-[9px] px-1 py-0.2 bg-teal-50 text-teal-700 rounded font-bold">
+                    77.2%
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Active Diagnostic View */}
+          <div className="transition-opacity duration-200">
+            {activeDiagnosticTab === 'ceph' && (
+              <CephViewer presetCase={cephPresetCase} />
+            )}
+            {activeDiagnosticTab === 'odontogram' && (
+              <ToothChart />
+            )}
+            {activeDiagnosticTab === 'panoramic' && (
+              <PanoramicViewer />
+            )}
+            {activeDiagnosticTab === 'bolton' && (
+              <BoltonAnalysisCard 
+                overjet={currentOverjet} 
+                overbite={currentOverbite} 
+                crowdingUpper={currentCrowding} 
+                angleClass={currentAngle} 
+              />
+            )}
+          </div>
+
+          {/* Diagnostic Quick-Nav Overview Ribbon */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-white p-3 rounded-xl border border-slate-200 shadow-xs text-xs">
+            <div 
+              onClick={() => setActiveDiagnosticTab('ceph')}
+              className={`p-2 rounded-lg cursor-pointer transition-all border ${
+                activeDiagnosticTab === 'ceph' ? 'bg-blue-50/70 border-blue-300' : 'border-slate-100 hover:bg-slate-50'
+              }`}
+            >
+              <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Ceph Sagittal</div>
+              <div className="font-bold text-slate-800 text-xs mt-0.5 flex items-center justify-between">
+                <span>ANB / Wits</span>
+                <span className="text-blue-600 text-[11px] font-semibold uppercase">{cephPresetCase}</span>
+              </div>
+            </div>
+
+            <div 
+              onClick={() => setActiveDiagnosticTab('odontogram')}
+              className={`p-2 rounded-lg cursor-pointer transition-all border ${
+                activeDiagnosticTab === 'odontogram' ? 'bg-blue-50/70 border-blue-300' : 'border-slate-100 hover:bg-slate-50'
+              }`}
+            >
+              <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Odontogram</div>
+              <div className="font-bold text-slate-800 text-xs mt-0.5 flex items-center justify-between">
+                <span>FDI Chart</span>
+                <span className="text-slate-600 text-[11px] font-semibold">Healthy</span>
+              </div>
+            </div>
+
+            <div 
+              onClick={() => setActiveDiagnosticTab('panoramic')}
+              className={`p-2 rounded-lg cursor-pointer transition-all border ${
+                activeDiagnosticTab === 'panoramic' ? 'bg-blue-50/70 border-blue-300' : 'border-slate-100 hover:bg-slate-50'
+              }`}
+            >
+              <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Panoramic OPG</div>
+              <div className="font-bold text-slate-800 text-xs mt-0.5 flex items-center justify-between">
+                <span>Pathology</span>
+                <span className="text-emerald-600 text-[11px] font-semibold">Cleared</span>
+              </div>
+            </div>
+
+            <div 
+              onClick={() => setActiveDiagnosticTab('bolton')}
+              className={`p-2 rounded-lg cursor-pointer transition-all border ${
+                activeDiagnosticTab === 'bolton' ? 'bg-teal-50/70 border-teal-300' : 'border-slate-100 hover:bg-slate-50'
+              }`}
+            >
+              <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Bolton Ratio</div>
+              <div className="font-bold text-slate-800 text-xs mt-0.5 flex items-center justify-between">
+                <span>Anterior</span>
+                <span className="text-teal-700 text-[11px] font-semibold">77.2% Norm</span>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Right Column: AI Treatment Plan Output */}
