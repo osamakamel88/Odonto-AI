@@ -248,48 +248,50 @@ function GeneratePlanContent() {
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-12">
       {/* Page Header */}
-      <div className="flex flex-wrap justify-between items-center gap-4 bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-4 sm:p-6 rounded-xl border border-slate-200 shadow-sm">
         <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold text-slate-900">Treatment Planning Studio</h1>
-            <Badge className="bg-blue-100 text-blue-800 border-none font-semibold">
+          <div className="flex flex-wrap items-center gap-2">
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Treatment Planning Studio</h1>
+            <Badge className="bg-blue-100 text-blue-800 border-none font-semibold text-xs">
               7-Layer AI Pipeline
             </Badge>
           </div>
-          <p className="text-sm text-slate-500 mt-1">
+          <p className="text-xs sm:text-sm text-slate-500 mt-1">
             Synthesizing evidence-based biomechanics, archwire progressions, and extraction protocols
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
           <Button 
             variant="outline" 
+            size="sm"
             onClick={() => setShowTour(!showTour)} 
-            className="text-xs font-semibold gap-1.5 border-blue-200 text-blue-700 bg-blue-50/60 hover:bg-blue-100 cursor-pointer"
+            className="flex-1 sm:flex-initial text-xs font-semibold gap-1.5 border-blue-200 text-blue-700 bg-blue-50/60 hover:bg-blue-100 cursor-pointer"
           >
             <HelpCircle className="w-3.5 h-3.5 text-blue-600" />
-            {showTour ? 'Hide 3-Step Guide' : '💡 3-Step Quick Guide'}
+            {showTour ? 'Hide Guide' : '💡 Quick Guide'}
           </Button>
 
-          <Link href="/patients/new">
-            <Button variant="outline" className="text-xs font-semibold gap-1.5 border-slate-300 cursor-pointer">
-              <Plus className="w-3.5 h-3.5 text-blue-600" /> New Patient Intake
+          <Link href="/patients/new" className="flex-1 sm:flex-initial">
+            <Button variant="outline" size="sm" className="w-full text-xs font-semibold gap-1.5 border-slate-300 cursor-pointer">
+              <Plus className="w-3.5 h-3.5 text-blue-600" /> Intake
             </Button>
           </Link>
 
           <Button 
+            size="sm"
             onClick={() => handleGenerate(true)} 
             disabled={isGenerating}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold gap-2 shadow-md shadow-blue-500/20 px-5 transition-all cursor-pointer"
+            className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold gap-2 shadow-md shadow-blue-500/20 px-4 h-9 transition-all cursor-pointer"
           >
             {isGenerating ? (
               <>
-                <RefreshCw className="w-4 h-4 animate-spin text-white" />
-                <span>Processing Layer {currentStep || 1} of 7...</span>
+                <RefreshCw className="w-3.5 h-3.5 animate-spin text-white" />
+                <span>Layer {currentStep || 1} of 7...</span>
               </>
             ) : (
               <>
-                <Sparkles className="w-4 h-4" />
+                <Sparkles className="w-3.5 h-3.5" />
                 <span>Synthesize Plan with AI</span>
               </>
             )}
