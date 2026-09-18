@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { openai } from '@/lib/ai/openai';
 import { TREATMENT_PLAN_SYSTEM_PROMPT, buildTreatmentPlanUserPrompt } from '@/lib/ai/prompts/treatment-plan';
+import { queryOrthodonticEvidence } from '@/lib/orthodontics/evidence-base';
 
 export async function POST(request: Request) {
   try {
@@ -191,15 +192,22 @@ function normalizePlanData(parsed: any, patientData: any, modality: string, pati
       'Gingival margin recalibration / black triangle potential.',
       'Post-treatment anterior relapse if retainer wear is inconsistent.'
     ],
-    evidenceCitations: [
-      {
-        author: 'Proffit WR, Fields HW, Sarver DM',
-        year: '2019',
-        title: 'Contemporary Orthodontics (6th Edition)',
-        journal: 'Elsevier Health Sciences',
-        takeaway: 'Comprehensive preadjusted appliance mechanics provide predictable 3D root control.'
-      }
-    ],
+    evidenceCitations: queryOrthodonticEvidence({
+      angleClass: rawAngle,
+      isExtraction: !parsed.extractionVsNonExtraction?.recommendation?.toLowerCase().includes('non'),
+      modality,
+      isAligners: modality === 'aligners'
+    }).map(p => ({
+      author: p.authors.split(',')[0],
+      year: String(p.year),
+      title: p.title,
+      journal: p.journal,
+      takeaway: p.clinicalKeyFinding,
+      pmid: p.pmid,
+      doi: p.doi,
+      url: p.url,
+      evidenceTier: p.evidenceTier
+    })),
     aiReasoning: parsed.aiReasoning || `Biomechanical plan customized based on clinical exam and cephalometric tracing for ${patientName}.`,
     estimatedDuration: parsed.estimatedDuration || '18–24 Months'
   };
@@ -222,6 +230,24 @@ function generateTailoredOrthodonticPlan({
   isImpacted,
   experienceLevel
 }: any) {
+  const matchingEvidence = queryOrthodonticEvidence({
+    angleClass,
+    isExtraction: isClass2Div1 || isCrowding,
+    modality,
+    hasTADs: isClass3 || isClass2Div1,
+    isAligners: modality === 'aligners' || isOpenBite,
+    age: patientAge
+  }).map(p => ({
+    author: p.authors.split(',')[0],
+    year: String(p.year),
+    title: p.title,
+    journal: p.journal,
+    takeaway: p.clinicalKeyFinding,
+    pmid: p.pmid,
+    doi: p.doi,
+    url: p.url,
+    evidenceTier: p.evidenceTier
+  }));
 
   // SCENARIO 1: CLASS III UNDERBITE (e.g. Lucas Brown or negative overjet)
   if (isClass3 || overjet < 0) {
@@ -308,15 +334,7 @@ function generateTailoredOrthodonticPlan({
         'Chin cup pressure irritation or acne breakouts under pads.',
         'Dental tipping of maxillary incisors if extraoral angle is too shallow.'
       ],
-      evidenceCitations: [
-        {
-          author: 'Baccetti T, McGill JS, Franchi L, McNamara JA Jr',
-          year: '1998',
-          title: 'Skeletal effects of early treatment of Class III malocclusion with maxillary expansion and face-mask therapy',
-          journal: 'American Journal of Orthodontics and Dentofacial Orthopedics',
-          takeaway: 'Maxillary protraction initiated in growing Class III patients produces significantly greater forward skeletal movement than dental tipping.'
-        }
-      ],
+      evidenceCitations: matchingEvidence,
       aiReasoning: `For ${patientName}, presenting with an underbite (overjet ${overjet}mm), the treatment plan prioritizes orthopedic maxillary advancement over dental camouflage. By expanding the midpalatal suture and applying an anterior-inferior protraction vector, the maxilla is brought forward to convert the negative overjet into a stable 2mm positive overjet without requiring surgical jaw resection.`,
       estimatedDuration: '9–12 Months Phase 1, followed by Phase 2 alignment'
     };
@@ -405,15 +423,7 @@ function generateTailoredOrthodonticPlan({
         'Loss of anchorage if patient fails to wear TPA or elastics consistently.',
         'Post-treatment anterior crowding relapse if retainers are neglected.'
       ],
-      evidenceCitations: [
-        {
-          author: 'Proffit WR, Fields HW, Sarver DM',
-          year: '2019',
-          title: 'Contemporary Orthodontics (6th Edition)',
-          journal: 'Elsevier Health Sciences',
-          takeaway: 'Extraction of maxillary first premolars is gold-standard for Class II camouflage when mandibular growth is complete.'
-        }
-      ],
+      evidenceCitations: matchingEvidence,
       aiReasoning: `For ${patientName}, presenting with severe overjet (${overjet}mm) and lip trap, the extraction of bilateral upper first premolars allows maximum anchorage utilization for anterior retraction without risking lower incisor proclination beyond biological symphyseal boundaries.`,
       estimatedDuration: '20–24 Months'
     };
@@ -489,15 +499,7 @@ function generateTailoredOrthodonticPlan({
         'High relapse rate if myofunctional tongue swallowing habit is not re-trained.',
         'Posterior open bite development during aligner wear if bite blocks are not carefully planned.'
       ],
-      evidenceCitations: [
-        {
-          author: 'Garnick R, Smith R',
-          year: '2020',
-          title: 'Clear aligner treatment for anterior open bite: A systematic review',
-          journal: 'Journal of Clinical Orthodontics',
-          takeaway: 'Clear aligners successfully close anterior open bites predominantly through molar intrusion and mandibular autorotation.'
-        }
-      ],
+      evidenceCitations: matchingEvidence,
       aiReasoning: `Open bite etiology for ${patientName} involves neuromuscular tongue thrust. Utilizing clear aligner occlusal coverage intrudes posterior segments, allowing the mandible to rotate upward and forward, closing the -${openGap}mm open bite without unstable excessive anterior extrusion.`,
       estimatedDuration: '14–18 Months'
     };
@@ -581,15 +583,7 @@ function generateTailoredOrthodonticPlan({
       'Dark triangle emergence between lower incisors post-alignment.',
       'Loss of lip fullness if excessive retraction occurs (minimized by moderate anchorage).'
     ],
-    evidenceCitations: [
-      {
-        author: 'Tweed CH',
-        year: '1944',
-        title: 'The Frankfort-mandibular plane angle in orthodontic diagnosis, classification, treatment planning, and prognosis',
-        journal: 'American Journal of Orthodontics',
-        takeaway: 'Positioning lower incisors upright over basal bone (IMPA 90°) is the foundation for periodontal longevity and post-retention stability in severe crowding.'
-      }
-    ],
+    evidenceCitations: matchingEvidence,
     aiReasoning: `In severe crowding combined with normal soft tissue profile for ${patientName}, extraction of four first premolars is the most stable and biologically safe strategy. Attempting non-extraction in this case would push lower incisor apices through the labial cortical plate, creating irreversible periodontal dehiscence.`,
     estimatedDuration: '18–22 Months'
   };

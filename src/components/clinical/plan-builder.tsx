@@ -24,7 +24,8 @@ import {
   Check,
   Zap,
   Anchor,
-  CircleDot
+  CircleDot,
+  ExternalLink
 } from 'lucide-react';
 
 export interface TreatmentPlanData {
@@ -84,6 +85,10 @@ export interface TreatmentPlanData {
     title: string;
     journal: string;
     takeaway: string;
+    pmid?: string;
+    doi?: string;
+    url?: string;
+    evidenceTier?: string;
   }[];
   aiReasoning?: string;
   estimatedDuration?: string;
@@ -607,16 +612,39 @@ Schedule: ${plan.retentionProtocol?.wearSchedule}
                 </p>
 
                 {plan.evidenceCitations?.map((cit, idx) => (
-                  <div key={idx} className="p-3 rounded-lg border border-slate-200 bg-slate-50/60 space-y-1">
-                    <div className="flex items-center justify-between text-xs">
+                  <div key={idx} className="p-3.5 rounded-xl border border-slate-200 bg-slate-50/70 space-y-2 hover:bg-slate-50 transition-all shadow-2xs">
+                    <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
                       <span className="font-bold text-slate-900">{cit.author} ({cit.year})</span>
-                      <span className="text-[10px] font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
-                        {cit.journal}
-                      </span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-[10px] font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
+                          {cit.journal}
+                        </span>
+                        {cit.url && (
+                          <a
+                            href={cit.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 hover:bg-emerald-100 px-2 py-0.5 rounded border border-emerald-200 transition-colors"
+                          >
+                            <span>{cit.pmid ? `PMID: ${cit.pmid}` : 'PubMed'}</span>
+                            <ExternalLink className="w-2.5 h-2.5" />
+                          </a>
+                        )}
+                        {cit.doi && (
+                          <a
+                            href={`https://doi.org/${cit.doi}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 text-[10px] font-bold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 px-2 py-0.5 rounded border border-indigo-200 transition-colors"
+                          >
+                            <span>DOI ↗</span>
+                          </a>
+                        )}
+                      </div>
                     </div>
-                    <div className="text-xs font-medium text-slate-800 italic">"{cit.title}"</div>
-                    <p className="text-[11px] text-slate-600 pt-0.5">
-                      <strong className="text-slate-800">Key Clinical Takeaway:</strong> {cit.takeaway}
+                    <div className="text-xs font-semibold text-slate-800 italic leading-snug">"{cit.title}"</div>
+                    <p className="text-[11px] text-slate-600 bg-white p-2.5 rounded-lg border border-slate-200/80 leading-relaxed">
+                      <strong className="text-slate-800">Key Clinical Takeaway: </strong>{cit.takeaway}
                     </p>
                   </div>
                 ))}
