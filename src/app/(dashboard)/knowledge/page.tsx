@@ -30,14 +30,16 @@ import {
   Layers,
   Sparkles,
   Calculator,
-  Compass
+  Compass,
+  Database
 } from 'lucide-react';
 import { KnowledgeCalculators } from '@/components/clinical/knowledge-calculators';
+import { PubMedSearchHub } from '@/components/clinical/pubmed-search-hub';
 
 type CategoryFilter = 'all' | 'treatment' | 'functional' | 'expansion' | 'surgical' | 'anchorage' | 'retention' | 'brackets' | 'wires' | 'elastics';
 
 export default function KnowledgeBasePage() {
-  const [viewMode, setViewMode] = useState<'library' | 'calculators'>('library');
+  const [viewMode, setViewMode] = useState<'library' | 'calculators' | 'pubmed'>('library');
   const [selectedCategory, setSelectedCategory] = useState<CategoryFilter>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [activeItem, setActiveItem] = useState<any | null>(null);
@@ -187,7 +189,7 @@ export default function KnowledgeBasePage() {
 
       {/* Knowledge Hub Primary View Switcher */}
       <div className="flex flex-wrap items-center justify-between p-1.5 bg-white border border-slate-200 rounded-xl shadow-xs gap-3">
-        <div className="grid grid-cols-2 gap-1.5 w-full sm:w-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-1.5 w-full sm:w-auto">
           <button
             type="button"
             onClick={() => setViewMode('library')}
@@ -213,6 +215,19 @@ export default function KnowledgeBasePage() {
             <Calculator className="w-3.5 h-3.5 text-amber-400" />
             <span>Interactive Calculators (4)</span>
           </button>
+
+          <button
+            type="button"
+            onClick={() => setViewMode('pubmed')}
+            className={`flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+              viewMode === 'pubmed'
+                ? 'bg-blue-600 text-white shadow-xs'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+            }`}
+          >
+            <Database className="w-3.5 h-3.5 text-emerald-400" />
+            <span>PubMed Live RAG Literature</span>
+          </button>
         </div>
 
         <div className="hidden md:flex items-center gap-2 pr-3 text-xs text-slate-500 font-medium">
@@ -221,7 +236,9 @@ export default function KnowledgeBasePage() {
         </div>
       </div>
 
-      {viewMode === 'calculators' ? (
+      {viewMode === 'pubmed' ? (
+        <PubMedSearchHub />
+      ) : viewMode === 'calculators' ? (
         <KnowledgeCalculators />
       ) : (
         <>

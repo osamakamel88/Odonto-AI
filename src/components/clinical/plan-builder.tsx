@@ -90,11 +90,25 @@ export interface TreatmentPlanData {
     url?: string;
     evidenceTier?: string;
   }[];
+  specializedProtocols?: {
+    category: string;
+    protocolName: string;
+    keyTakeaway: string;
+    evidenceCitation: string;
+  }[];
   aiReasoning?: string;
   estimatedDuration?: string;
 }
 
 const DEFAULT_PLAN: TreatmentPlanData = {
+  specializedProtocols: [
+    {
+      category: 'Growth Velocity & Skeletal Timing Protocol',
+      protocolName: 'Baccetti CVM CS3-CS4 Pubertal Mandibular Spurt Window',
+      keyTakeaway: 'Maximum skeletal orthopedic response active. Maximize sagittal correction before CS5 maturation.',
+      evidenceCitation: 'Baccetti T et al. (Semin Orthod 2005; PMID: 16110663)'
+    }
+  ],
   diagnosisSummary: {
     skeletal: 'Class II Skeletal relationship (ANB 5.2°, Wits +3.5mm) due to Mandibular Retrognathism; Normodivergent growth pattern (FMA 25°).',
     dental: 'Angle Class II Division 1 malocclusion; Overjet 8.0mm; Overbite 5.5mm (Deep bite); Moderate upper arch crowding (-5mm); Coincident midlines.',
@@ -203,7 +217,7 @@ export function PlanBuilder({
   onExportPdf?: () => void;
 }) {
   const [educationMode, setEducationMode] = useState(false);
-  const [activeTab, setActiveTab] = useState<'mechanics' | 'wires' | 'anchorage' | 'retention' | 'evidence'>('mechanics');
+  const [activeTab, setActiveTab] = useState<'mechanics' | 'wires' | 'anchorage' | 'retention' | 'evidence' | 'protocols'>('mechanics');
   const [showExportModal, setShowExportModal] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -450,6 +464,23 @@ Schedule: ${plan.retentionProtocol?.wearSchedule}
             >
               Literature Evidence
             </button>
+            <button
+              onClick={() => setActiveTab('protocols')}
+              className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+                activeTab === 'protocols' 
+                  ? 'bg-blue-600 text-white shadow-xs' 
+                  : 'text-slate-600 hover:bg-slate-200/70'
+              }`}
+            >
+              <span>Specialized Protocols</span>
+              {plan.specializedProtocols && plan.specializedProtocols.length > 0 && (
+                <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold ${
+                  activeTab === 'protocols' ? 'bg-white/20 text-white' : 'bg-indigo-100 text-indigo-800'
+                }`}>
+                  {plan.specializedProtocols.length}
+                </span>
+              )}
+            </button>
           </div>
 
           <div className="p-4">
@@ -645,6 +676,36 @@ Schedule: ${plan.retentionProtocol?.wearSchedule}
                     <div className="text-xs font-semibold text-slate-800 italic leading-snug">"{cit.title}"</div>
                     <p className="text-[11px] text-slate-600 bg-white p-2.5 rounded-lg border border-slate-200/80 leading-relaxed">
                       <strong className="text-slate-800">Key Clinical Takeaway: </strong>{cit.takeaway}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Tab 6: Specialized Biomechanical Protocols */}
+            {activeTab === 'protocols' && (
+              <div className="space-y-3">
+                <p className="text-xs text-slate-500">
+                  Targeted biomechanical guidelines for complex clinical scenarios (impaction, adult expansion, Class III protraction, open bite):
+                </p>
+
+                {(plan.specializedProtocols || []).map((sp, idx) => (
+                  <div key={idx} className="p-4 rounded-xl border border-indigo-200 bg-indigo-50/40 space-y-2">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded">
+                        {sp.category}
+                      </span>
+                      <span className="text-[11px] font-mono text-slate-600">
+                        {sp.evidenceCitation}
+                      </span>
+                    </div>
+
+                    <h4 className="text-sm font-bold text-slate-900">
+                      {sp.protocolName}
+                    </h4>
+
+                    <p className="text-xs text-slate-700 bg-white p-3 rounded-lg border border-indigo-100 leading-relaxed">
+                      {sp.keyTakeaway}
                     </p>
                   </div>
                 ))}

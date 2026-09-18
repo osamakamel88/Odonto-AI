@@ -8,4 +8,8 @@ export * from './tad-protocols';
 export * from './advanced-ceph';
 export * from './root-resorption-risk';
 export * from './evidence-base';
+export * from './impaction-protocols';
+export * from './marpe-protocols';
+export * from './protraction-protocols';
+export * from './open-bite-protocols';
 export * from './knowledge-base';
