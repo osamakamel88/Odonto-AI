@@ -12,4 +12,5 @@ export * from './impaction-protocols';
 export * from './marpe-protocols';
 export * from './protraction-protocols';
 export * from './open-bite-protocols';
+export * from './dental-3d-geometry';
 export * from './knowledge-base';

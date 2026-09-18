@@ -7,6 +7,7 @@ import { CephViewer } from '@/components/clinical/ceph-viewer';
 import { ToothChart } from '@/components/clinical/tooth-chart';
 import { PanoramicViewer } from '@/components/clinical/panoramic-viewer';
 import { BoltonAnalysisCard } from '@/components/clinical/bolton-analysis-card';
+import { Dental3DViewer } from '@/components/clinical/dental-3d-viewer';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -31,7 +32,8 @@ import {
   Layers,
   Ruler,
   Scan,
-  Maximize2
+  Maximize2,
+  Box
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -42,7 +44,7 @@ function GeneratePlanContent() {
   const [patients, setPatients] = useState<StoredPatient[]>([]);
   const [selectedPatientId, setSelectedPatientId] = useState<string>('');
   const [isCustomMode, setIsCustomMode] = useState(false);
-  const [activeDiagnosticTab, setActiveDiagnosticTab] = useState<'ceph' | 'odontogram' | 'panoramic' | 'bolton'>('ceph');
+  const [activeDiagnosticTab, setActiveDiagnosticTab] = useState<'ceph' | 'odontogram' | 'panoramic' | 'bolton' | 'model3d'>('ceph');
 
   // 3-Step Interactive Tour State
   const [showTour, setShowTour] = useState<boolean>(true);
@@ -762,13 +764,14 @@ function GeneratePlanContent() {
                   {activeDiagnosticTab === 'odontogram' && 'FDI ISO 3950 Chart'}
                   {activeDiagnosticTab === 'panoramic' && 'Panoramic Radiography'}
                   {activeDiagnosticTab === 'bolton' && 'Bolton 3D Arch Space'}
+                  {activeDiagnosticTab === 'model3d' && '3D Digital Study Model (STL / Interactive)'}
                 </Badge>
               </div>
             </div>
 
             {/* Segmented Navigation Tab Buttons */}
             <div className="p-2 bg-slate-100/70 border-b border-slate-200/60">
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 text-xs font-semibold">
+              <div className="grid grid-cols-2 sm:grid-cols-5 gap-1.5 text-xs font-semibold">
                 <button
                   type="button"
                   onClick={() => setActiveDiagnosticTab('ceph')}
@@ -793,7 +796,7 @@ function GeneratePlanContent() {
                       : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
                   }`}
                 >
-                  <span className="truncate">🦷 FDI Odontogram</span>
+                  <span className="truncate">🦷 FDI Chart</span>
                   <span className="text-[9px] px-1 py-0.2 bg-slate-100 text-slate-700 rounded font-bold">
                     32T
                   </span>
@@ -808,7 +811,7 @@ function GeneratePlanContent() {
                       : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
                   }`}
                 >
-                  <span className="truncate">🩻 Panoramic OPG</span>
+                  <span className="truncate">🩻 OPG X-ray</span>
                   <span className="text-[9px] px-1 py-0.2 bg-emerald-50 text-emerald-700 rounded font-bold">
                     HD
                   </span>
@@ -826,6 +829,21 @@ function GeneratePlanContent() {
                   <span className="truncate">📊 Bolton Space</span>
                   <span className="text-[9px] px-1 py-0.2 bg-teal-50 text-teal-700 rounded font-bold">
                     77.2%
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setActiveDiagnosticTab('model3d')}
+                  className={`flex items-center justify-center gap-1.5 py-2 px-2 rounded-lg transition-all cursor-pointer ${
+                    activeDiagnosticTab === 'model3d'
+                      ? 'bg-white text-indigo-700 font-bold shadow-xs border border-slate-200'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
+                  }`}
+                >
+                  <span className="truncate">🧊 3D Study Model</span>
+                  <span className="text-[9px] px-1 py-0.2 bg-indigo-50 text-indigo-700 rounded font-bold">
+                    WebGL
                   </span>
                 </button>
               </div>
@@ -851,10 +869,13 @@ function GeneratePlanContent() {
                 angleClass={currentAngle} 
               />
             )}
+            {activeDiagnosticTab === 'model3d' && (
+              <Dental3DViewer />
+            )}
           </div>
 
           {/* Diagnostic Quick-Nav Overview Ribbon */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-white p-3 rounded-xl border border-slate-200 shadow-xs text-xs">
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 bg-white p-3 rounded-xl border border-slate-200 shadow-xs text-xs">
             <div 
               onClick={() => setActiveDiagnosticTab('ceph')}
               className={`p-2 rounded-lg cursor-pointer transition-all border ${
@@ -904,6 +925,19 @@ function GeneratePlanContent() {
               <div className="font-bold text-slate-800 text-xs mt-0.5 flex items-center justify-between">
                 <span>Anterior</span>
                 <span className="text-teal-700 text-[11px] font-semibold">77.2% Norm</span>
+              </div>
+            </div>
+
+            <div 
+              onClick={() => setActiveDiagnosticTab('model3d')}
+              className={`p-2 rounded-lg cursor-pointer transition-all border ${
+                activeDiagnosticTab === 'model3d' ? 'bg-indigo-50/70 border-indigo-300' : 'border-slate-100 hover:bg-slate-50'
+              }`}
+            >
+              <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">3D Study Cast</div>
+              <div className="font-bold text-slate-800 text-xs mt-0.5 flex items-center justify-between">
+                <span>Dual Arch</span>
+                <span className="text-indigo-700 text-[11px] font-semibold">Occlusion</span>
               </div>
             </div>
           </div>
