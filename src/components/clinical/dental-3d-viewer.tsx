@@ -128,10 +128,10 @@ export function Dental3DViewer({ onSelectTooth, selectedFdi }: Dental3DViewerPro
       clearcoatRoughness: 0.1
     });
 
-    // Gingiva / Plaster Base Material
+    // Gingiva / Plaster Base Material (Natural Anatomical Soft Tissue Rose)
     const gingivaMaterial = new THREE.MeshStandardMaterial({
-      color: 0xec4899,
-      roughness: 0.6,
+      color: 0xc86f7f,
+      roughness: 0.55,
       metalness: 0.05
     });
 
@@ -402,116 +402,116 @@ export function Dental3DViewer({ onSelectTooth, selectedFdi }: Dental3DViewerPro
   };
 
   return (
-    <div className="flex flex-col gap-4">
-      {/* 3D Viewport Frame */}
-      <div className="relative rounded-2xl overflow-hidden border border-slate-700/60 bg-slate-950 shadow-2xl">
-        {/* Top Floating Control Bar */}
-        <div className="absolute top-3 left-3 right-3 flex flex-wrap items-center justify-between gap-2 z-10 pointer-events-none">
-          <div className="flex items-center gap-1.5 pointer-events-auto bg-slate-900/85 backdrop-blur-md px-2.5 py-1.5 rounded-xl border border-slate-700/60 shadow-lg">
-            <span className="text-xs font-bold text-slate-200 flex items-center gap-1.5 pr-2 border-r border-slate-700">
+    <div className="flex flex-col gap-3">
+      {/* 3D Viewport Console Card */}
+      <div className="rounded-2xl overflow-hidden border border-slate-800 bg-slate-950 shadow-2xl">
+        {/* Dedicated Top Toolbar: Camera Presets & STL Import */}
+        <div className="bg-slate-900 border-b border-slate-800/80 px-3.5 py-2.5 flex flex-wrap items-center justify-between gap-2 text-xs">
+          <div className="flex items-center gap-1 overflow-x-auto no-scrollbar py-0.5">
+            <span className="text-[11px] font-bold text-slate-400 flex items-center gap-1 pr-2 shrink-0 border-r border-slate-800">
               <Compass className="w-3.5 h-3.5 text-blue-400" />
-              Presets:
+              Camera:
             </span>
             <button
               onClick={() => setCameraView('default')}
-              className={`px-2 py-1 rounded text-[11px] font-semibold transition-all cursor-pointer ${
-                activePreset === 'default' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'
+              className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all cursor-pointer shrink-0 ${
+                activePreset === 'default' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-400 hover:text-white hover:bg-slate-800'
               }`}
             >
               3/4 Orbit
             </button>
             <button
               onClick={() => setCameraView('frontal')}
-              className={`px-2 py-1 rounded text-[11px] font-semibold transition-all cursor-pointer ${
-                activePreset === 'frontal' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'
+              className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all cursor-pointer shrink-0 ${
+                activePreset === 'frontal' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-400 hover:text-white hover:bg-slate-800'
               }`}
             >
               Frontal
             </button>
             <button
               onClick={() => setCameraView('maxillary')}
-              className={`px-2 py-1 rounded text-[11px] font-semibold transition-all cursor-pointer ${
-                activePreset === 'maxillary' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'
+              className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all cursor-pointer shrink-0 ${
+                activePreset === 'maxillary' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-400 hover:text-white hover:bg-slate-800'
               }`}
             >
               Upper Arch
             </button>
             <button
               onClick={() => setCameraView('mandibular')}
-              className={`px-2 py-1 rounded text-[11px] font-semibold transition-all cursor-pointer ${
-                activePreset === 'mandibular' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'
+              className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all cursor-pointer shrink-0 ${
+                activePreset === 'mandibular' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-400 hover:text-white hover:bg-slate-800'
               }`}
             >
               Lower Arch
             </button>
             <button
               onClick={() => setCameraView('right_buccal')}
-              className={`px-2 py-1 rounded text-[11px] font-semibold transition-all cursor-pointer ${
-                activePreset === 'right_buccal' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'
+              className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all cursor-pointer shrink-0 ${
+                activePreset === 'right_buccal' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-400 hover:text-white hover:bg-slate-800'
               }`}
             >
-              Right Buccal
+              Right
             </button>
             <button
               onClick={() => setCameraView('left_buccal')}
-              className={`px-2 py-1 rounded text-[11px] font-semibold transition-all cursor-pointer ${
-                activePreset === 'left_buccal' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'
+              className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all cursor-pointer shrink-0 ${
+                activePreset === 'left_buccal' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-400 hover:text-white hover:bg-slate-800'
               }`}
             >
-              Left Buccal
+              Left
             </button>
           </div>
 
-          <div className="flex items-center gap-2 pointer-events-auto">
+          <div className="shrink-0 flex items-center gap-2">
             {customStlLoaded ? (
-              <Badge className="bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs">
-                Scan: {customStlLoaded}
+              <Badge className="bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[11px]">
+                {customStlLoaded}
               </Badge>
             ) : (
-              <label className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-900/85 backdrop-blur-md border border-slate-700/60 text-xs font-semibold text-slate-300 hover:text-white hover:border-slate-500 transition-all cursor-pointer shadow-lg">
-                <Upload className="w-3.5 h-3.5 text-blue-400" />
-                <span>Upload .STL</span>
+              <label className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 text-[11px] font-semibold text-slate-300 hover:text-white transition-all cursor-pointer shadow-xs">
+                <Upload className="w-3 h-3 text-blue-400" />
+                <span>Import Scan</span>
                 <input type="file" accept=".stl,.obj" onChange={handleStlUpload} className="hidden" />
               </label>
             )}
           </div>
         </div>
 
-        {/* 3D WebGL Canvas Container */}
-        <div ref={mountRef} className="w-full h-[520px] cursor-grab active:cursor-grabbing" />
+        {/* 3D WebGL Canvas Container (100% Unobstructed) */}
+        <div ref={mountRef} className="w-full h-[460px] cursor-grab active:cursor-grabbing bg-slate-950" />
 
-        {/* Bottom Floating Telemetry & Arch Controls */}
-        <div className="absolute bottom-3 left-3 right-3 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 z-10 pointer-events-none">
+        {/* Dedicated Bottom Control Strip: Arch Occlusion & Alignment Slider */}
+        <div className="bg-slate-900 border-t border-slate-800/80 p-3 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 text-xs">
           {/* Arch Separation Switcher */}
-          <div className="flex items-center gap-1 pointer-events-auto bg-slate-900/85 backdrop-blur-md p-1.5 rounded-xl border border-slate-700/60 shadow-lg text-xs">
+          <div className="flex items-center gap-1 bg-slate-950/70 p-1 rounded-xl border border-slate-800 shrink-0">
             <button
               onClick={() => setArchMode('occlusion')}
-              className={`px-2.5 py-1 rounded-lg font-semibold transition-all cursor-pointer ${
-                archMode === 'occlusion' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'
+              className={`px-2.5 py-1 rounded-lg font-semibold transition-all cursor-pointer text-[11px] ${
+                archMode === 'occlusion' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-400 hover:text-white'
               }`}
             >
               In Occlusion
             </button>
             <button
               onClick={() => setArchMode('separated')}
-              className={`px-2.5 py-1 rounded-lg font-semibold transition-all cursor-pointer ${
-                archMode === 'separated' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'
+              className={`px-2.5 py-1 rounded-lg font-semibold transition-all cursor-pointer text-[11px] ${
+                archMode === 'separated' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-400 hover:text-white'
               }`}
             >
-              Disarticulated (Open)
+              Open (25mm)
             </button>
             <button
               onClick={() => setArchMode('maxilla_only')}
-              className={`px-2.5 py-1 rounded-lg font-semibold transition-all cursor-pointer ${
-                archMode === 'maxilla_only' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'
+              className={`px-2.5 py-1 rounded-lg font-semibold transition-all cursor-pointer text-[11px] ${
+                archMode === 'maxilla_only' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-400 hover:text-white'
               }`}
             >
               Maxilla
             </button>
             <button
               onClick={() => setArchMode('mandible_only')}
-              className={`px-2.5 py-1 rounded-lg font-semibold transition-all cursor-pointer ${
-                archMode === 'mandible_only' ? 'bg-blue-600 text-white' : 'text-slate-400 hover:text-white'
+              className={`px-2.5 py-1 rounded-lg font-semibold transition-all cursor-pointer text-[11px] ${
+                archMode === 'mandible_only' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-400 hover:text-white'
               }`}
             >
               Mandible
@@ -519,10 +519,10 @@ export function Dental3DViewer({ onSelectTooth, selectedFdi }: Dental3DViewerPro
           </div>
 
           {/* Alignment Simulation Slider & Play */}
-          <div className="flex items-center gap-3 pointer-events-auto bg-slate-900/85 backdrop-blur-md px-3.5 py-2 rounded-xl border border-slate-700/60 shadow-lg">
-            <span className="text-xs font-bold text-slate-300 flex items-center gap-1.5 whitespace-nowrap">
+          <div className="flex items-center justify-between sm:justify-end gap-2.5 bg-slate-950/70 px-3 py-1.5 rounded-xl border border-slate-800">
+            <span className="text-[11px] font-bold text-slate-300 flex items-center gap-1.5 whitespace-nowrap">
               <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-              Alignment Simulation:
+              Alignment:
             </span>
             <input
               type="range"
@@ -531,16 +531,16 @@ export function Dental3DViewer({ onSelectTooth, selectedFdi }: Dental3DViewerPro
               step="0.01"
               value={alignmentProgress}
               onChange={(e) => setAlignmentProgress(parseFloat(e.target.value))}
-              className="w-32 sm:w-44 accent-blue-500 cursor-pointer"
+              className="w-24 sm:w-36 accent-blue-500 cursor-pointer"
             />
-            <span className="text-xs font-mono font-bold text-blue-400 min-w-[40px] text-right">
+            <span className="text-xs font-mono font-bold text-blue-400 min-w-[36px] text-right">
               {Math.round(alignmentProgress * 100)}%
             </span>
             <button
               onClick={togglePlayAnimation}
-              className={`px-2 py-1 rounded-lg text-xs font-bold border transition-all cursor-pointer ${
+              className={`px-2 py-1 rounded-lg text-[11px] font-bold border transition-all cursor-pointer ${
                 isAnimating 
-                  ? 'bg-amber-500 text-slate-950 border-amber-400' 
+                  ? 'bg-amber-500 text-slate-950 border-amber-400 shadow-xs' 
                   : 'bg-slate-800 text-slate-200 border-slate-700 hover:bg-slate-700'
               }`}
             >

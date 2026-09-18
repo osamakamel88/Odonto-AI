@@ -413,73 +413,69 @@ Schedule: ${plan.retentionProtocol?.wearSchedule}
 
         {/* Segmented Navigation Tabs for Mechanics */}
         <div className="border border-slate-200 rounded-xl overflow-hidden bg-white">
-          <div className="flex flex-wrap items-center border-b bg-slate-50/80 p-1.5 gap-1 text-xs">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-1 border-b bg-slate-50/80 p-1.5 text-xs text-center">
             <button
               onClick={() => setActiveTab('mechanics')}
-              className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
+              className={`py-2 px-1 rounded-lg font-bold transition-all cursor-pointer truncate ${
                 activeTab === 'mechanics' 
                   ? 'bg-blue-600 text-white shadow-xs' 
                   : 'text-slate-600 hover:bg-slate-200/70'
               }`}
             >
-              Staged Mechanics
+              Mechanics
             </button>
             <button
               onClick={() => setActiveTab('wires')}
-              className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
+              className={`py-2 px-1 rounded-lg font-bold transition-all cursor-pointer truncate ${
                 activeTab === 'wires' 
                   ? 'bg-blue-600 text-white shadow-xs' 
                   : 'text-slate-600 hover:bg-slate-200/70'
               }`}
             >
-              Archwire Progression
+              Archwires
             </button>
             <button
               onClick={() => setActiveTab('anchorage')}
-              className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
+              className={`py-2 px-1 rounded-lg font-bold transition-all cursor-pointer truncate ${
                 activeTab === 'anchorage' 
                   ? 'bg-blue-600 text-white shadow-xs' 
                   : 'text-slate-600 hover:bg-slate-200/70'
               }`}
             >
-              Anchorage &amp; Elastics
+              Anchorage
             </button>
             <button
               onClick={() => setActiveTab('retention')}
-              className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
+              className={`py-2 px-1 rounded-lg font-bold transition-all cursor-pointer truncate ${
                 activeTab === 'retention' 
                   ? 'bg-blue-600 text-white shadow-xs' 
                   : 'text-slate-600 hover:bg-slate-200/70'
               }`}
             >
-              Retention Protocol
+              Retention
             </button>
             <button
               onClick={() => setActiveTab('evidence')}
-              className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
+              className={`py-2 px-1 rounded-lg font-bold transition-all cursor-pointer truncate ${
                 activeTab === 'evidence' 
                   ? 'bg-blue-600 text-white shadow-xs' 
                   : 'text-slate-600 hover:bg-slate-200/70'
               }`}
             >
-              Literature Evidence
+              Evidence
             </button>
             <button
               onClick={() => setActiveTab('protocols')}
-              className={`px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
+              className={`py-2 px-1 rounded-lg font-bold transition-all cursor-pointer flex items-center justify-center gap-1 truncate ${
                 activeTab === 'protocols' 
                   ? 'bg-blue-600 text-white shadow-xs' 
                   : 'text-slate-600 hover:bg-slate-200/70'
               }`}
             >
-              <span>Specialized Protocols</span>
-              {plan.specializedProtocols && plan.specializedProtocols.length > 0 && (
-                <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold ${
-                  activeTab === 'protocols' ? 'bg-white/20 text-white' : 'bg-indigo-100 text-indigo-800'
-                }`}>
-                  {plan.specializedProtocols.length}
-                </span>
-              )}
+              <span>Protocols</span>
+              <span className="text-[10px] px-1.5 py-0.2 rounded-full font-bold bg-amber-400 text-slate-950">
+                {plan.specializedProtocols?.length || 2}
+              </span>
             </button>
           </div>
 
