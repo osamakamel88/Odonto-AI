@@ -758,91 +758,128 @@ function GeneratePlanContent() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-1.5">
-                <Badge variant="outline" className="text-[10px] bg-white text-slate-600 border-slate-200 font-medium">
-                  {activeDiagnosticTab === 'ceph' && 'Cephalometric Tracing'}
-                  {activeDiagnosticTab === 'odontogram' && 'FDI ISO 3950 Chart'}
-                  {activeDiagnosticTab === 'panoramic' && 'Panoramic Radiography'}
-                  {activeDiagnosticTab === 'bolton' && 'Bolton 3D Arch Space'}
-                  {activeDiagnosticTab === 'model3d' && '3D Digital Study Model (STL / Interactive)'}
+              <div className="flex items-center gap-2">
+                <Badge variant="outline" className="text-xs bg-white text-slate-700 border-slate-200 font-semibold px-2.5 py-1 flex items-center gap-1.5 shadow-2xs">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  {activeDiagnosticTab === 'ceph' && 'Cephalometric Tracing (Sagittal)'}
+                  {activeDiagnosticTab === 'odontogram' && 'FDI ISO 3950 Chart (32 Teeth)'}
+                  {activeDiagnosticTab === 'panoramic' && 'Panoramic Radiography (OPG)'}
+                  {activeDiagnosticTab === 'bolton' && 'Bolton 3D Arch Space Analysis'}
+                  {activeDiagnosticTab === 'model3d' && '3D Digital Study Model (Interactive WebGL)'}
                 </Badge>
+                {activeDiagnosticTab !== 'model3d' && (
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => setActiveDiagnosticTab('model3d')}
+                    className="text-xs h-7 px-2.5 bg-indigo-50 border-indigo-200 text-indigo-700 hover:bg-indigo-100 hover:text-indigo-800 font-semibold cursor-pointer flex items-center gap-1"
+                  >
+                    <Sparkles className="w-3 h-3 text-indigo-500" />
+                    Open 3D Model
+                  </Button>
+                )}
               </div>
             </div>
 
             {/* Segmented Navigation Tab Buttons */}
-            <div className="p-2 bg-slate-100/70 border-b border-slate-200/60">
-              <div className="grid grid-cols-2 sm:grid-cols-5 gap-1.5 text-xs font-semibold">
+            <div className="p-2.5 bg-slate-100/80 border-b border-slate-200/80">
+              <div className="flex flex-wrap items-center gap-2 text-xs font-semibold">
+                {/* Tab 1: Ceph */}
                 <button
                   type="button"
                   onClick={() => setActiveDiagnosticTab('ceph')}
-                  className={`flex items-center justify-center gap-1.5 py-2 px-2 rounded-lg transition-all cursor-pointer ${
+                  className={`flex-1 min-w-[130px] flex items-center justify-between gap-1.5 py-2 px-3 rounded-lg transition-all cursor-pointer whitespace-nowrap ${
                     activeDiagnosticTab === 'ceph'
-                      ? 'bg-white text-blue-700 font-bold shadow-xs border border-slate-200'
-                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
+                      ? 'bg-white text-blue-700 font-bold shadow-xs border border-blue-200 ring-1 ring-blue-500/20'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 border border-transparent'
                   }`}
                 >
-                  <span className="truncate">📐 Ceph Tracing</span>
-                  <span className="text-[9px] px-1 py-0.2 bg-blue-50 text-blue-600 rounded font-bold uppercase">
+                  <span className="flex items-center gap-1.5">
+                    <span className="text-sm">📐</span>
+                    <span>Ceph Tracing</span>
+                  </span>
+                  <span className="text-[10px] px-1.5 py-0.5 bg-blue-50 text-blue-700 rounded font-bold uppercase shrink-0">
                     {cephPresetCase}
                   </span>
                 </button>
 
+                {/* Tab 2: Odontogram */}
                 <button
                   type="button"
                   onClick={() => setActiveDiagnosticTab('odontogram')}
-                  className={`flex items-center justify-center gap-1.5 py-2 px-2 rounded-lg transition-all cursor-pointer ${
+                  className={`flex-1 min-w-[130px] flex items-center justify-between gap-1.5 py-2 px-3 rounded-lg transition-all cursor-pointer whitespace-nowrap ${
                     activeDiagnosticTab === 'odontogram'
-                      ? 'bg-white text-blue-700 font-bold shadow-xs border border-slate-200'
-                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
+                      ? 'bg-white text-blue-700 font-bold shadow-xs border border-blue-200 ring-1 ring-blue-500/20'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 border border-transparent'
                   }`}
                 >
-                  <span className="truncate">🦷 FDI Chart</span>
-                  <span className="text-[9px] px-1 py-0.2 bg-slate-100 text-slate-700 rounded font-bold">
+                  <span className="flex items-center gap-1.5">
+                    <span className="text-sm">🦷</span>
+                    <span>FDI Chart</span>
+                  </span>
+                  <span className="text-[10px] px-1.5 py-0.5 bg-slate-100 text-slate-700 rounded font-bold shrink-0">
                     32T
                   </span>
                 </button>
 
+                {/* Tab 3: Panoramic */}
                 <button
                   type="button"
                   onClick={() => setActiveDiagnosticTab('panoramic')}
-                  className={`flex items-center justify-center gap-1.5 py-2 px-2 rounded-lg transition-all cursor-pointer ${
+                  className={`flex-1 min-w-[130px] flex items-center justify-between gap-1.5 py-2 px-3 rounded-lg transition-all cursor-pointer whitespace-nowrap ${
                     activeDiagnosticTab === 'panoramic'
-                      ? 'bg-white text-blue-700 font-bold shadow-xs border border-slate-200'
-                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
+                      ? 'bg-white text-blue-700 font-bold shadow-xs border border-blue-200 ring-1 ring-blue-500/20'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 border border-transparent'
                   }`}
                 >
-                  <span className="truncate">🩻 OPG X-ray</span>
-                  <span className="text-[9px] px-1 py-0.2 bg-emerald-50 text-emerald-700 rounded font-bold">
+                  <span className="flex items-center gap-1.5">
+                    <span className="text-sm">🩻</span>
+                    <span>OPG X-Ray</span>
+                  </span>
+                  <span className="text-[10px] px-1.5 py-0.5 bg-emerald-50 text-emerald-700 rounded font-bold shrink-0">
                     HD
                   </span>
                 </button>
 
+                {/* Tab 4: Bolton */}
                 <button
                   type="button"
                   onClick={() => setActiveDiagnosticTab('bolton')}
-                  className={`flex items-center justify-center gap-1.5 py-2 px-2 rounded-lg transition-all cursor-pointer ${
+                  className={`flex-1 min-w-[130px] flex items-center justify-between gap-1.5 py-2 px-3 rounded-lg transition-all cursor-pointer whitespace-nowrap ${
                     activeDiagnosticTab === 'bolton'
-                      ? 'bg-white text-teal-700 font-bold shadow-xs border border-slate-200'
-                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
+                      ? 'bg-white text-teal-700 font-bold shadow-xs border border-teal-200 ring-1 ring-teal-500/20'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60 border border-transparent'
                   }`}
                 >
-                  <span className="truncate">📊 Bolton Space</span>
-                  <span className="text-[9px] px-1 py-0.2 bg-teal-50 text-teal-700 rounded font-bold">
+                  <span className="flex items-center gap-1.5">
+                    <span className="text-sm">📊</span>
+                    <span>Bolton Space</span>
+                  </span>
+                  <span className="text-[10px] px-1.5 py-0.5 bg-teal-50 text-teal-700 rounded font-bold shrink-0">
                     77.2%
                   </span>
                 </button>
 
+                {/* Tab 5: 3D Study Model */}
                 <button
                   type="button"
                   onClick={() => setActiveDiagnosticTab('model3d')}
-                  className={`flex items-center justify-center gap-1.5 py-2 px-2 rounded-lg transition-all cursor-pointer ${
+                  className={`flex-1 min-w-[145px] flex items-center justify-between gap-1.5 py-2 px-3 rounded-lg transition-all cursor-pointer whitespace-nowrap ${
                     activeDiagnosticTab === 'model3d'
-                      ? 'bg-white text-indigo-700 font-bold shadow-xs border border-slate-200'
-                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
+                      ? 'bg-white text-indigo-700 font-bold shadow-xs border border-indigo-300 ring-2 ring-indigo-500/20'
+                      : 'bg-indigo-50/80 text-indigo-900 font-bold hover:bg-indigo-100 border border-indigo-200 shadow-2xs'
                   }`}
                 >
-                  <span className="truncate">🧊 3D Study Model</span>
-                  <span className="text-[9px] px-1 py-0.2 bg-indigo-50 text-indigo-700 rounded font-bold">
+                  <span className="flex items-center gap-1.5">
+                    <span className="text-sm">🧊</span>
+                    <span>3D Study Model</span>
+                  </span>
+                  <span className={`text-[10px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider shrink-0 flex items-center gap-1 ${
+                    activeDiagnosticTab === 'model3d' 
+                      ? 'bg-indigo-600 text-white shadow-xs' 
+                      : 'bg-indigo-600 text-white'
+                  }`}>
+                    <Sparkles className="w-2.5 h-2.5" />
                     WebGL
                   </span>
                 </button>
@@ -875,69 +912,72 @@ function GeneratePlanContent() {
           </div>
 
           {/* Diagnostic Quick-Nav Overview Ribbon */}
-          <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 bg-white p-3 rounded-xl border border-slate-200 shadow-xs text-xs">
+          <div className="flex flex-wrap gap-2 bg-white p-3 rounded-xl border border-slate-200 shadow-xs text-xs">
             <div 
               onClick={() => setActiveDiagnosticTab('ceph')}
-              className={`p-2 rounded-lg cursor-pointer transition-all border ${
-                activeDiagnosticTab === 'ceph' ? 'bg-blue-50/70 border-blue-300' : 'border-slate-100 hover:bg-slate-50'
+              className={`flex-1 min-w-[110px] p-2 rounded-lg cursor-pointer transition-all border ${
+                activeDiagnosticTab === 'ceph' ? 'bg-blue-50/80 border-blue-300 shadow-xs' : 'border-slate-100 hover:bg-slate-50'
               }`}
             >
               <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Ceph Sagittal</div>
-              <div className="font-bold text-slate-800 text-xs mt-0.5 flex items-center justify-between">
-                <span>ANB / Wits</span>
-                <span className="text-blue-600 text-[11px] font-semibold uppercase">{cephPresetCase}</span>
+              <div className="font-bold text-slate-800 text-xs mt-0.5 flex items-center justify-between gap-1">
+                <span className="whitespace-nowrap">ANB / Wits</span>
+                <span className="text-blue-600 text-[11px] font-semibold uppercase shrink-0">{cephPresetCase}</span>
               </div>
             </div>
 
             <div 
               onClick={() => setActiveDiagnosticTab('odontogram')}
-              className={`p-2 rounded-lg cursor-pointer transition-all border ${
-                activeDiagnosticTab === 'odontogram' ? 'bg-blue-50/70 border-blue-300' : 'border-slate-100 hover:bg-slate-50'
+              className={`flex-1 min-w-[110px] p-2 rounded-lg cursor-pointer transition-all border ${
+                activeDiagnosticTab === 'odontogram' ? 'bg-blue-50/80 border-blue-300 shadow-xs' : 'border-slate-100 hover:bg-slate-50'
               }`}
             >
               <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Odontogram</div>
-              <div className="font-bold text-slate-800 text-xs mt-0.5 flex items-center justify-between">
-                <span>FDI Chart</span>
-                <span className="text-slate-600 text-[11px] font-semibold">Healthy</span>
+              <div className="font-bold text-slate-800 text-xs mt-0.5 flex items-center justify-between gap-1">
+                <span className="whitespace-nowrap">FDI Chart</span>
+                <span className="text-slate-600 text-[11px] font-semibold shrink-0">32 Teeth</span>
               </div>
             </div>
 
             <div 
               onClick={() => setActiveDiagnosticTab('panoramic')}
-              className={`p-2 rounded-lg cursor-pointer transition-all border ${
-                activeDiagnosticTab === 'panoramic' ? 'bg-blue-50/70 border-blue-300' : 'border-slate-100 hover:bg-slate-50'
+              className={`flex-1 min-w-[110px] p-2 rounded-lg cursor-pointer transition-all border ${
+                activeDiagnosticTab === 'panoramic' ? 'bg-blue-50/80 border-blue-300 shadow-xs' : 'border-slate-100 hover:bg-slate-50'
               }`}
             >
               <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Panoramic OPG</div>
-              <div className="font-bold text-slate-800 text-xs mt-0.5 flex items-center justify-between">
-                <span>Pathology</span>
-                <span className="text-emerald-600 text-[11px] font-semibold">Cleared</span>
+              <div className="font-bold text-slate-800 text-xs mt-0.5 flex items-center justify-between gap-1">
+                <span className="whitespace-nowrap">Pathology</span>
+                <span className="text-emerald-600 text-[11px] font-semibold shrink-0">Cleared</span>
               </div>
             </div>
 
             <div 
               onClick={() => setActiveDiagnosticTab('bolton')}
-              className={`p-2 rounded-lg cursor-pointer transition-all border ${
-                activeDiagnosticTab === 'bolton' ? 'bg-teal-50/70 border-teal-300' : 'border-slate-100 hover:bg-slate-50'
+              className={`flex-1 min-w-[110px] p-2 rounded-lg cursor-pointer transition-all border ${
+                activeDiagnosticTab === 'bolton' ? 'bg-teal-50/80 border-teal-300 shadow-xs' : 'border-slate-100 hover:bg-slate-50'
               }`}
             >
               <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Bolton Ratio</div>
-              <div className="font-bold text-slate-800 text-xs mt-0.5 flex items-center justify-between">
-                <span>Anterior</span>
-                <span className="text-teal-700 text-[11px] font-semibold">77.2% Norm</span>
+              <div className="font-bold text-slate-800 text-xs mt-0.5 flex items-center justify-between gap-1">
+                <span className="whitespace-nowrap">Anterior</span>
+                <span className="text-teal-700 text-[11px] font-semibold shrink-0">77.2%</span>
               </div>
             </div>
 
             <div 
               onClick={() => setActiveDiagnosticTab('model3d')}
-              className={`p-2 rounded-lg cursor-pointer transition-all border ${
-                activeDiagnosticTab === 'model3d' ? 'bg-indigo-50/70 border-indigo-300' : 'border-slate-100 hover:bg-slate-50'
+              className={`flex-1 min-w-[110px] p-2 rounded-lg cursor-pointer transition-all border ${
+                activeDiagnosticTab === 'model3d' ? 'bg-indigo-50/80 border-indigo-300 shadow-xs' : 'border-indigo-100/80 bg-indigo-50/40 hover:bg-indigo-50/80'
               }`}
             >
-              <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">3D Study Cast</div>
-              <div className="font-bold text-slate-800 text-xs mt-0.5 flex items-center justify-between">
-                <span>Dual Arch</span>
-                <span className="text-indigo-700 text-[11px] font-semibold">Occlusion</span>
+              <div className="text-[10px] text-indigo-600 font-bold uppercase tracking-wider flex items-center gap-1">
+                <span>3D Study Cast</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
+              </div>
+              <div className="font-bold text-slate-800 text-xs mt-0.5 flex items-center justify-between gap-1">
+                <span className="whitespace-nowrap">Dual Arch</span>
+                <span className="text-indigo-700 text-[11px] font-bold shrink-0">WebGL 3D</span>
               </div>
             </div>
           </div>
