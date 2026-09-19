@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { Logo } from '@/components/brand/logo';
 
 interface SidebarProps {
   isOpen?: boolean;
@@ -42,15 +43,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
     <div className="flex flex-col h-full bg-slate-900 text-slate-100 select-none">
       {/* Brand Header */}
       <div className="p-4 sm:p-5 flex items-center justify-between border-b border-slate-800/80">
-        <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-teal-400 flex items-center justify-center text-white shadow-lg shadow-blue-500/20 shrink-0">
-            <SmilePlus className="h-6 w-6" />
-          </div>
-          <div>
-            <span className="text-lg font-bold text-white tracking-tight">Odonto AI</span>
-            <span className="block text-[10px] text-teal-400 font-semibold uppercase tracking-wider">Orthodontic SaaS</span>
-          </div>
-        </div>
+        <Logo href="/" size="md" subtitle="Orthodontic SaaS" />
 
         {/* Mobile close button */}
         {onClose && (

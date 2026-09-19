@@ -5,8 +5,16 @@ import './globals.css';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Odonto AI - Orthodontic Treatment Planning',
-  description: 'AI-powered orthodontic treatment planning SaaS platform.',
+  title: 'Odonto AI — By Orthodontists, For Orthodontists',
+  description: 'The world’s first 7-layer clinical AI operating system for orthodontic treatment planning, orthognathic surgical decompensation, and dental implantology.',
+  icons: {
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/icon.svg', type: 'image/svg+xml' }
+    ],
+    shortcut: '/favicon.svg',
+    apple: '/favicon.svg',
+  },
 };
 
 export default function RootLayout({

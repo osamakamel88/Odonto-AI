@@ -1,9 +1,10 @@
 "use client";
 
 import React from 'react';
-import { Menu, Plus, Sparkles, SmilePlus } from 'lucide-react';
+import { Menu, Plus, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { LogoIcon } from '@/components/brand/logo';
 
 interface HeaderProps {
   onOpenMobileMenu?: () => void;
@@ -25,9 +26,7 @@ export function Header({ onOpenMobileMenu }: HeaderProps) {
 
         {/* Mobile Brand Title (visible only when sidebar is collapsed) */}
         <div className="flex items-center gap-2 lg:hidden">
-          <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-blue-600 to-teal-400 flex items-center justify-center text-white shadow-xs shrink-0">
-            <SmilePlus className="h-4 w-4" />
-          </div>
+          <LogoIcon className="w-7 h-7" />
           <span className="font-bold text-sm text-slate-900 tracking-tight">Odonto AI</span>
         </div>
 
