@@ -9,6 +9,7 @@ import {
   BookOpen, 
   Sparkles, 
   Scale, 
+  Drill,
   X 
 } from 'lucide-react';
 import Link from 'next/link';
@@ -29,6 +30,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 
   const navItems = [
     { label: 'Treatment Studio', href: '/plans/generate', icon: Sparkles, badge: 'Main' },
+    { label: 'Implant Planning', href: '/implants', icon: Drill, badge: 'New' },
     { label: 'Patients', href: '/patients', icon: Users },
     { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
     { label: 'Treatment Plans', href: '/plans', icon: FileText },
