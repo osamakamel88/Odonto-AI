@@ -8,6 +8,7 @@ import { ImplantSiteSelector } from '@/components/clinical/implant-site-selector
 import { BoneAssessmentCard } from '@/components/clinical/bone-assessment-card';
 import { ImplantPlanBuilder, ImplantPlanData } from '@/components/clinical/implant-plan-builder';
 import { BoneDensity } from '@/lib/implantology/knowledge-base/bone-classification';
+import { OnboardingTour, DEFAULT_IMPLANT_TOUR_STEPS } from '@/components/clinical/onboarding-tour';
 import { 
   Sparkles, 
   Drill, 
@@ -26,6 +27,9 @@ import {
 } from 'lucide-react';
 
 export default function ImplantPlanningPage() {
+  // Tour state
+  const [showTour, setShowTour] = useState<boolean>(false);
+
   // Patient info state
   const [patientName, setPatientName] = useState('Sarah Jenkins');
   const [patientAge, setPatientAge] = useState<number>(42);
@@ -55,6 +59,19 @@ export default function ImplantPlanningPage() {
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
   const [pipelineStep, setPipelineStep] = useState<number>(0);
   const [generatedPlan, setGeneratedPlan] = useState<ImplantPlanData | undefined>(undefined);
+
+  // Auto-launch interactive onboarding tour on first visit if not completed
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const completed = localStorage.getItem('odonto_implant_onboarding_completed');
+      if (!completed) {
+        const timer = setTimeout(() => {
+          setShowTour(true);
+        }, 800);
+        return () => clearTimeout(timer);
+      }
+    }
+  }, []);
 
   // Presets
   const applyPreset = (presetKey: 'anterior-aesthetic' | 'posterior-sinus' | 'mandibular-molar' | 'immediate-socket') => {
@@ -217,9 +234,21 @@ export default function ImplantPlanningPage() {
 
         <div className="flex items-center gap-2">
           <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setShowTour(true)}
+            className="text-xs font-bold gap-1.5 border-blue-300 text-blue-700 bg-blue-50/80 hover:bg-blue-100 cursor-pointer shadow-2xs h-9 px-3"
+            title="جولة تعريفية تفاعلية لتوضيح خطوات تخطيط الزرعات"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-blue-600" />
+            جولة تعريفية (Tour)
+          </Button>
+
+          <Button
+            id="tour-implant-generate-btn"
             onClick={handleGeneratePlan}
             disabled={isGenerating}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm px-4 py-2 gap-2 shadow-xs cursor-pointer"
+            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs sm:text-sm px-4 h-9 gap-2 shadow-xs cursor-pointer"
           >
             {isGenerating ? (
               <>
@@ -235,6 +264,17 @@ export default function ImplantPlanningPage() {
           </Button>
         </div>
       </div>
+
+      {/* Active Interactive Skippable Onboarding Tour */}
+      <OnboardingTour
+        isOpen={showTour}
+        onClose={() => setShowTour(false)}
+        steps={DEFAULT_IMPLANT_TOUR_STEPS}
+        storageKey="odonto_implant_onboarding_completed"
+        onFinish={() => {
+          handleGeneratePlan();
+        }}
+      />
 
       {/* Preset Case Quick-Select Strip */}
       <div className="flex flex-wrap items-center gap-2 p-3 bg-slate-50 border border-slate-200 rounded-xl">
@@ -316,7 +356,7 @@ export default function ImplantPlanningPage() {
       {/* Main Grid: Patient & Medical Profile */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Column 1: Patient Clinical Data */}
-        <Card className="border-slate-200 shadow-xs">
+        <Card id="tour-implant-system" className="border-slate-200 shadow-xs">
           <CardHeader className="p-4 sm:p-5 border-b border-slate-100">
             <CardTitle className="text-sm font-bold text-slate-900 flex items-center gap-2">
               <UserCheck className="w-4 h-4 text-blue-600" />
@@ -387,7 +427,7 @@ export default function ImplantPlanningPage() {
         </Card>
 
         {/* Column 2 & 3: Medical Risk Factors & Restorative Clearance */}
-        <Card className="border-slate-200 shadow-xs lg:col-span-2">
+        <Card id="tour-implant-medical" className="border-slate-200 shadow-xs lg:col-span-2">
           <CardHeader className="p-4 sm:p-5 border-b border-slate-100 flex flex-row items-center justify-between">
             <CardTitle className="text-sm font-bold text-slate-900 flex items-center gap-2">
               <ShieldCheck className="w-4 h-4 text-teal-600" />
@@ -489,25 +529,29 @@ export default function ImplantPlanningPage() {
       </div>
 
       {/* FDI Interactive Chart */}
-      <ImplantSiteSelector
-        selectedFdi={selectedFdi}
-        onSelectSite={(fdi) => setSelectedFdi(fdi)}
-      />
+      <div id="tour-implant-fdi">
+        <ImplantSiteSelector
+          selectedFdi={selectedFdi}
+          onSelectSite={(fdi) => setSelectedFdi(fdi)}
+        />
+      </div>
 
       {/* Bone Assessment & Dimension Sliders */}
-      <BoneAssessmentCard
-        fdiPosition={selectedFdi}
-        boneWidth={boneWidth}
-        boneHeight={boneHeight}
-        boneDensity={boneDensity}
-        isImmediateSocket={isImmediateSocket}
-        socketType={socketType}
-        onWidthChange={(w) => setBoneWidth(w)}
-        onHeightChange={(h) => setBoneHeight(h)}
-        onDensityChange={(d) => setBoneDensity(d)}
-        onImmediateSocketChange={(immed) => setIsImmediateSocket(immed)}
-        onSocketTypeChange={(st) => setSocketType(st)}
-      />
+      <div id="tour-implant-bone">
+        <BoneAssessmentCard
+          fdiPosition={selectedFdi}
+          boneWidth={boneWidth}
+          boneHeight={boneHeight}
+          boneDensity={boneDensity}
+          isImmediateSocket={isImmediateSocket}
+          socketType={socketType}
+          onWidthChange={(w) => setBoneWidth(w)}
+          onHeightChange={(h) => setBoneHeight(h)}
+          onDensityChange={(d) => setBoneDensity(d)}
+          onImmediateSocketChange={(immed) => setIsImmediateSocket(immed)}
+          onSocketTypeChange={(st) => setSocketType(st)}
+        />
+      </div>
 
       {/* Treatment Plan Results */}
       <ImplantPlanBuilder

@@ -66,18 +66,63 @@ export const DEFAULT_TOUR_STEPS: TourStep[] = [
   }
 ];
 
+export const DEFAULT_IMPLANT_TOUR_STEPS: TourStep[] = [
+  {
+    id: 'implant-fdi',
+    targetSelector: '#tour-implant-fdi',
+    title: '١. تحديد موضع السن والزرعة (FDI Chart)',
+    subtitle: 'Missing Tooth & Implant Site Selection',
+    description: 'أهلاً بك يا دكتور في استوديو تخطيط الزراعة! من الشارت التفاعلي ده بتختار رقم السن المفقود (زي #11 في المنطقة الجمالية أو #16 و #36 في المولارز). الاختيار هنا بيحدد تلقائياً اعتبارات الجيب الأنفي (Sinus) أو عصب الفك (IAN).',
+    tip: '🦷 دوس على أي سنة في الفك العلوي أو السفلي وهيتحول التخطيط لموضعها فوراً.'
+  },
+  {
+    id: 'implant-bone',
+    targetSelector: '#tour-implant-bone',
+    title: '٢. قياسات العظم وكثافة Misch (D1 - D4)',
+    subtitle: 'Bone Width, Height & Density Assessment',
+    description: 'هنا بتحدد العرض (Width) والارتفاع (Height) المتاحين للعظم بالمليمتر من واقع الـ CBCT، وبتحدد كثافة العظم (D1 عظم كثيف لحد D4 عظم إسفنجي). لو الحالة خلع فوري تقدر تفعل "Immediate Socket" وتحدد الـ Type.',
+    tip: '📐 النظام بيحسب هوامش الأمان الحيوية أوتوماتيكياً (1.5mm بين الزرعات و 2mm فوق العصب).'
+  },
+  {
+    id: 'implant-medical',
+    targetSelector: '#tour-implant-medical',
+    title: '٣. الفحص الطبي وعوامل الخطورة البيولوجية',
+    subtitle: 'Medical Risk Screening & Complication Scoring',
+    description: 'تقدر تفحص موانع وعوامل فشل الاندماج العظمي: التدخين، سكر الدم التراكمي (HbA1c)، أمراض اللثة، والجز على الأسنان (Bruxism) وأدوية السيولة والـ Bisphosphonates، عشان المحرك يحدد نسبة نجاح الزرعة بدقة.',
+    tip: '🛡️ أي عامل خطورة بيغير تلقائياً بروتوكول الشفاء (Healing Period) وعزم الربط الأولي المطلوب.'
+  },
+  {
+    id: 'implant-system',
+    targetSelector: '#tour-implant-system',
+    title: '٤. اختيار نظام وماركة الزرعة المفضلة',
+    subtitle: 'Implant System & Brand Catalog',
+    description: 'اختر الماركة والنظام اللي شغال بيه في عيادتك (Straumann, Nobel Biocare, Zimmer Biomet, Dentsply Astra, Osstem, MegaGen). المحرك مربوط بكتالوجات الشركات دي وبيختارلك الفيكستشر المناسبة بالضبط.',
+    tip: '⚙️ كل ماركة مدعومة بمواصفات الكونكشن (Conical / Internal Hex) ونوع السطح (SLActive / TiUnite).'
+  },
+  {
+    id: 'implant-generate-btn',
+    targetSelector: '#tour-implant-generate-btn',
+    title: '٥. توليد الخطة الجراحية ومواصفات المسامير',
+    subtitle: 'AI Biomechanical Surgical Plan Synthesis',
+    description: 'بضغطة واحدة على "Generate Surgical Plan"، المحرك بيحلل الـ 5 طبقات ويحددلك قطر وطول الفيكستشر، بروتوكول الدريل وسرعات الحفر وعزم التثبيت (Torque N.cm)، ونوع الأباتمنت ومقاسات مسمار الربط.',
+    tip: '🚀 دوس على الزرار ده دلوقتي وجرب الخطة الجراحية المتكاملة مع الأبحاث المعتمدة!'
+  }
+];
+
 interface OnboardingTourProps {
   isOpen: boolean;
   onClose: () => void;
   steps?: TourStep[];
   onFinish?: () => void;
+  storageKey?: string;
 }
 
 export function OnboardingTour({
   isOpen,
   onClose,
   steps = DEFAULT_TOUR_STEPS,
-  onFinish
+  onFinish,
+  storageKey = 'odonto_onboarding_completed'
 }: OnboardingTourProps) {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [targetRect, setTargetRect] = useState<DOMRect | null>(null);
@@ -222,14 +267,14 @@ export function OnboardingTour({
 
   const handleSkip = () => {
     if (typeof window !== 'undefined') {
-      localStorage.setItem('odonto_onboarding_completed', 'true');
+      localStorage.setItem(storageKey, 'true');
     }
     onClose();
   };
 
   const handleComplete = () => {
     if (typeof window !== 'undefined') {
-      localStorage.setItem('odonto_onboarding_completed', 'true');
+      localStorage.setItem(storageKey, 'true');
     }
     if (onFinish) {
       onFinish();
