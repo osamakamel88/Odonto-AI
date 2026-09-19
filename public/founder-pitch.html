@@ -30,10 +30,17 @@
       --rose-50: #fff1f2;
     }
 
+    html, body {
+      overflow-x: hidden;
+      max-width: 100vw;
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+      overflow-wrap: break-word;
+      word-break: break-word;
     }
 
     body {
@@ -43,11 +50,12 @@
       line-height: 1.7;
       font-size: 15px;
       -webkit-font-smoothing: antialiased;
-      padding: 40px 20px;
+      padding: 40px 20px 80px 20px;
     }
 
     .container {
       max-width: 960px;
+      width: 100%;
       margin: 0 auto;
       background: #ffffff;
       border: 1px solid var(--slate-200);
@@ -90,6 +98,7 @@
       border-bottom: 2px solid var(--slate-100);
       padding-bottom: 24px;
       margin-bottom: 36px;
+      gap: 20px;
     }
 
     .brand-group {
@@ -110,6 +119,7 @@
       font-weight: 900;
       font-size: 22px;
       box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
+      flex-shrink: 0;
     }
 
     .brand-text h1 {
@@ -117,6 +127,7 @@
       font-weight: 800;
       color: var(--slate-900);
       letter-spacing: -0.5px;
+      line-height: 1.3;
     }
 
     .brand-text p {
@@ -125,12 +136,14 @@
       color: var(--teal-600);
       text-transform: uppercase;
       letter-spacing: 0.5px;
+      line-height: 1.4;
     }
 
     .pitch-meta {
       text-align: left;
       font-size: 12px;
       color: var(--slate-500);
+      flex-shrink: 0;
     }
 
     .pitch-meta strong {
@@ -254,12 +267,22 @@
       line-height: 1.5;
     }
 
-    /* Table Styling */
+    /* Table Styling & Container */
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin: 22px 0;
+      border-radius: 12px;
+      border: 1px solid var(--slate-200);
+      background: #ffffff;
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
-      margin: 22px 0;
       font-size: 13.5px;
+      min-width: 580px;
     }
 
     th, td {
@@ -401,6 +424,178 @@
 
     .print-btn:hover {
       background: var(--primary-dark);
+    }
+
+    .pitch-footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid var(--slate-200);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: var(--slate-500);
+    }
+
+    /* Tablet & Mobile Media Queries */
+    @media (max-width: 768px) {
+      body {
+        padding: 16px 12px 85px 12px;
+        font-size: 14px;
+      }
+
+      .container {
+        padding: 24px 16px;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+      }
+
+      .pitch-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+        padding-bottom: 18px;
+        margin-bottom: 24px;
+      }
+
+      .brand-group {
+        width: 100%;
+        gap: 12px;
+      }
+
+      .brand-text h1 {
+        font-size: 18px;
+        line-height: 1.35;
+      }
+
+      .brand-text p {
+        font-size: 11px;
+        letter-spacing: 0.2px;
+      }
+
+      .pitch-meta {
+        text-align: right;
+        width: 100%;
+        border-top: 1px solid var(--slate-100);
+        padding-top: 12px;
+        font-size: 11.5px;
+      }
+
+      h2 {
+        font-size: 19px;
+        line-height: 1.35;
+        margin-bottom: 12px;
+      }
+
+      h3 {
+        font-size: 16px;
+        margin-top: 16px;
+        margin-bottom: 8px;
+      }
+
+      p {
+        font-size: 13.5px;
+        text-align: right; /* Prevent justify word-stretching on mobile */
+        margin-bottom: 12px;
+      }
+
+      .grid-2, .grid-3 {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        margin: 16px 0;
+      }
+
+      .card {
+        padding: 14px 16px;
+      }
+
+      .card-stat {
+        font-size: 22px;
+      }
+
+      .callout {
+        padding: 14px 16px;
+        font-size: 13px;
+        margin: 16px 0;
+      }
+
+      .journey-step {
+        padding-right: 28px;
+        margin-bottom: 20px;
+      }
+
+      .journey-step::before {
+        right: 4px;
+        top: 6px;
+        width: 12px;
+        height: 12px;
+      }
+
+      .journey-step::after {
+        right: 9px;
+        top: 22px;
+      }
+
+      .step-title {
+        font-size: 14.5px;
+        line-height: 1.4;
+      }
+
+      .qa-q {
+        padding: 12px 14px;
+        font-size: 13px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+      }
+
+      .qa-a {
+        padding: 14px;
+        font-size: 13px;
+      }
+
+      .print-bar {
+        bottom: 12px;
+        left: 12px;
+        right: 12px;
+        transform: none;
+        width: auto;
+        padding: 8px 14px;
+        font-size: 11.5px;
+        justify-content: space-between;
+        gap: 8px;
+      }
+
+      .print-btn {
+        padding: 6px 12px;
+        font-size: 11px;
+        flex-shrink: 0;
+      }
+
+      .pitch-footer {
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+        margin-top: 30px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 12px 8px 80px 8px;
+      }
+
+      .container {
+        padding: 18px 12px;
+      }
+
+      .brand-text h1 {
+        font-size: 16.5px;
+      }
+
+      h2 {
+        font-size: 17.5px;
+      }
     }
   </style>
 </head>
@@ -560,48 +755,50 @@
         كصاحب بيزنس عيادة أو مركز أسنان، استثمارك في أي أداة لازم يترجم لأرقام في حسابك البنكي. هنا الحسبة الاقتصادية المباشرة لعيادة تقويم وزراعة بتستقبل 20 حالة جديدة شهرياً:
       </p>
 
-      <table>
-        <thead>
-          <tr>
-            <th>بند التكلفة والأثر المالي</th>
-            <th>بدون Odonto AI (الوضع التقليدي)</th>
-            <th>مع Odonto AI</th>
-            <th>مقدار الوفر والربح الشهري</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><strong>وقت التشخيص والتخطيط</strong></td>
-            <td>45 دقيقة لكل كيس = 15 ساعة شهرياً إهدار وقت استشاري</td>
-            <td>3 دقائق لكل كيس = ساعة واحدة شهرياً</td>
-            <td><strong>وفر 14 ساعة شهرياً</strong> (تساوي كشف 28 مريض إضافي = +28,000 ج.م)</td>
-          </tr>
-          <tr>
-            <td><strong>تراخيص البرامج والدونجل</strong></td>
-            <td>8,000$ - 15,000$ مقدماً + 2,000$ صيانة سنوية</td>
-            <td>اشتراك سحابي مرن بدون أي تكاليف رأسمالية (0$ CapEx)</td>
-            <td><strong>وفر نقدي مباشر 10,000$+</strong> من أول يوم</td>
-          </tr>
-          <tr>
-            <td><strong>نسبة إقناع المرضى (Case Acceptance)</strong></td>
-            <td>50% من المرضى بيترددوا أو بيأجلوا لبعدين</td>
-            <td>75% - 80% بسبب المحاكاة ثلاثية الأبعاد اللحظية</td>
-            <td><strong>زيادة 5 حالات مقبولة شهرياً</strong> (متوسط الحالة 25,000 ج.م = +125,000 ج.م شهرياً)</td>
-          </tr>
-          <tr>
-            <td><strong>إعادة شغل المعامل وتتبع الألاينرز (Refinements)</strong></td>
-            <td>3 إلى 4 حالات شهرياً بتحتاج إعادة طبعات وشغل معمل مهدور</td>
-            <td>تتبع دقيق بحد أقصى 0.2mm لكل مرحلة يقضي على الـ Tracking Loss</td>
-            <td><strong>وفر تكاليف معملية مباشرة</strong> بنسبة 60% (حوالي 15,000 ج.م شهرياً)</td>
-          </tr>
-          <tr>
-            <td><strong>فشل الزرعات ومشاكل المسامير</strong></td>
-            <td>ارتخاء متكرر للمسامير بسبب عزم ربط تقديري غير معاير</td>
-            <td>حساب عزم الربط (Torque) الدقيق لكل سيستم زراعة من كتالوج الشركة</td>
-            <td><strong>حماية سمعة المركز الطبية</strong> وتفادي تعويضات وخسائر إعادة الزراعة</td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>بند التكلفة والأثر المالي</th>
+              <th>بدون Odonto AI (الوضع التقليدي)</th>
+              <th>مع Odonto AI</th>
+              <th>مقدار الوفر والربح الشهري</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>وقت التشخيص والتخطيط</strong></td>
+              <td>45 دقيقة لكل كيس = 15 ساعة شهرياً إهدار وقت استشاري</td>
+              <td>3 دقائق لكل كيس = ساعة واحدة شهرياً</td>
+              <td><strong>وفر 14 ساعة شهرياً</strong> (تساوي كشف 28 مريض إضافي = +28,000 ج.م)</td>
+            </tr>
+            <tr>
+              <td><strong>تراخيص البرامج والدونجل</strong></td>
+              <td>8,000$ - 15,000$ مقدماً + 2,000$ صيانة سنوية</td>
+              <td>اشتراك سحابي مرن بدون أي تكاليف رأسمالية (0$ CapEx)</td>
+              <td><strong>وفر نقدي مباشر 10,000$+</strong> من أول يوم</td>
+            </tr>
+            <tr>
+              <td><strong>نسبة إقناع المرضى (Case Acceptance)</strong></td>
+              <td>50% من المرضى بيترددوا أو بيأجلوا لبعدين</td>
+              <td>75% - 80% بسبب المحاكاة ثلاثية الأبعاد اللحظية</td>
+              <td><strong>زيادة 5 حالات مقبولة شهرياً</strong> (متوسط الحالة 25,000 ج.م = +125,000 ج.م شهرياً)</td>
+            </tr>
+            <tr>
+              <td><strong>إعادة شغل المعامل وتتبع الألاينرز (Refinements)</strong></td>
+              <td>3 إلى 4 حالات شهرياً بتحتاج إعادة طبعات وشغل معمل مهدور</td>
+              <td>تتبع دقيق بحد أقصى 0.2mm لكل مرحلة يقضي على الـ Tracking Loss</td>
+              <td><strong>وفر تكاليف معملية مباشرة</strong> بنسبة 60% (حوالي 15,000 ج.م شهرياً)</td>
+            </tr>
+            <tr>
+              <td><strong>فشل الزرعات ومشاكل المسامير</strong></td>
+              <td>ارتخاء متكرر للمسامير بسبب عزم ربط تقديري غير معاير</td>
+              <td>حساب عزم الربط (Torque) الدقيق لكل سيستم زراعة من كتالوج الشركة</td>
+              <td><strong>حماية سمعة المركز الطبية</strong> وتفادي تعويضات وخسائر إعادة الزراعة</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
       <div class="callout callout-warning">
         <strong>صافي الأثر المالي التراكمي:</strong> المركز المتوسط الحجم اللي بيستخدم Odonto AI بيحقق عائد استثمار مباشر (ROI) يتجاوز <strong>450%</strong> في أول 3 شهور فقط، مع زيادة في دخل العيادة الصافي تتراوح بين <strong>100,000 إلى 150,000 جنيه مصري شهرياً</strong> ناتجة عن رفع نسب قبول الحالات واختصار زمن الجلسات.
@@ -704,7 +901,7 @@
     </section>
 
     <!-- Footer -->
-    <footer style="margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--slate-200); display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--slate-500);">
+    <footer class="pitch-footer">
       <div>
         &copy; 2026 <strong>Odonto AI</strong>. جميع الحقوق محفوظة لأطباء الأسنان والمؤسسين.
       </div>
