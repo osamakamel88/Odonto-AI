@@ -43,7 +43,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
     <div className="flex flex-col h-full bg-slate-900 text-slate-100 select-none">
       {/* Brand Header */}
       <div className="p-4 sm:p-5 flex items-center justify-between border-b border-slate-800/80">
-        <Logo href="/" size="md" subtitle="Orthodontic SaaS" />
+        <Logo href="/" size="md" subtitle="Orthodontic SaaS" variant="dark" />
 
         {/* Mobile close button */}
         {onClose && (

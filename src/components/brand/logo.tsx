@@ -7,6 +7,7 @@ export interface LogoProps {
   size?: 'sm' | 'md' | 'lg' | 'xl';
   showWordmark?: boolean;
   subtitle?: string;
+  variant?: 'light' | 'dark'; // 'light' is for light background (landing page), 'dark' is for dark background (sidebar)
   href?: string;
   className?: string;
 }
@@ -38,7 +39,7 @@ export function LogoIcon({ className = 'w-10 h-10' }: { className?: string }) {
 
       {/* Apple-style Squircle Glass Container */}
       <rect x="1.5" y="1.5" width="33" height="33" rx="9.5" fill="url(#logo-bg-grad)" />
-      <rect x="2" y="2" width="32" height="32" rx="9" stroke="rgba(255,255,255,0.3)" strokeWidth="1" />
+      <rect x="2" y="2" width="32" height="32" rx="9" stroke="rgba(255,255,255,0.35)" strokeWidth="1" />
 
       {/* Stylized Molar Crown with Roots */}
       <path 
@@ -75,6 +76,7 @@ export function Logo({
   size = 'md',
   showWordmark = true,
   subtitle = 'Orthodontic & Implant SaaS',
+  variant = 'light',
   href,
   className = ''
 }: LogoProps) {
@@ -86,19 +88,20 @@ export function Logo({
   };
 
   const currentSize = sizeMap[size];
+  const isLight = variant === 'light';
 
   const content = (
     <div className={`flex items-center space-x-3 select-none ${className}`}>
-      <div className="shrink-0 drop-shadow-md">
+      <div className="shrink-0 drop-shadow-sm">
         <LogoIcon className={currentSize.icon} />
       </div>
       {showWordmark && (
         <div>
-          <span className={`font-extrabold tracking-tight text-white ${currentSize.text} block leading-tight`}>
-            Odonto <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-teal-300 to-teal-200">AI</span>
+          <span className={`font-extrabold tracking-tight ${isLight ? 'text-slate-900' : 'text-white'} ${currentSize.text} block leading-tight`}>
+            Odonto <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-sky-600 to-teal-500">AI</span>
           </span>
           {subtitle && (
-            <span className={`block font-semibold uppercase tracking-wider text-teal-400/90 ${currentSize.sub}`}>
+            <span className={`block font-semibold uppercase tracking-wider ${isLight ? 'text-teal-700' : 'text-teal-400'} ${currentSize.sub}`}>
               {subtitle}
             </span>
           )}

@@ -6,7 +6,6 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { 
   Layers, 
-  Sparkles, 
   Ruler, 
   Scan, 
   Box, 
@@ -88,52 +87,52 @@ export function EngineShowcase() {
   const [selectedLayer, setSelectedLayer] = useState(PIPELINE_LAYERS[0]);
 
   return (
-    <section id="engine" className="py-24 sm:py-32 relative bg-slate-900 border-t border-b border-white/5 overflow-hidden">
+    <section id="engine" className="py-24 sm:py-32 bg-white relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-4">
-          <Badge className="bg-teal-500/10 text-teal-300 border-teal-500/20 text-xs px-3 py-1 font-semibold rounded-full">
+          <Badge className="bg-teal-50 text-teal-800 border-teal-200 text-xs px-3.5 py-1 font-semibold rounded-full shadow-xs">
             Clinical Architecture
           </Badge>
-          <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
+          <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 leading-tight">
             The 7-Layer Clinical AI Pipeline.
           </h2>
-          <p className="text-sm sm:text-base text-slate-400 leading-relaxed">
-            Generic LLMs hallucinate tooth numbers and force levels. Odonto AI runs a 7-stage deterministic diagnostic pipeline before synthesizing any clinical plan.
+          <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-2xl mx-auto">
+            Generic LLMs hallucinate tooth numbers and force levels. Odonto AI executes a 7-stage deterministic diagnostic pipeline before synthesizing any clinical plan.
           </p>
         </div>
 
-        {/* Live Metrics Grid */}
+        {/* Live Metrics Grid in Clean Light Apple Style */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12 mb-16">
-          <div className="bg-slate-950/80 border border-white/10 rounded-2xl p-5 text-center">
-            <div className="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-teal-300 font-mono">
+          <div className="bg-slate-50/70 border border-slate-200/80 rounded-2xl p-6 text-center shadow-xs">
+            <div className="text-3xl sm:text-4xl font-black text-blue-600 font-mono">
               85%
             </div>
-            <div className="text-xs font-semibold text-slate-300 mt-1">Diagnosis Time Saved</div>
-            <p className="text-[11px] text-slate-500 mt-0.5">From ceph to staged plan</p>
+            <div className="text-xs font-bold text-slate-800 mt-1.5">Diagnosis Time Saved</div>
+            <p className="text-[11px] text-slate-500 mt-0.5">From ceph tracing to final plan</p>
           </div>
 
-          <div className="bg-slate-950/80 border border-white/10 rounded-2xl p-5 text-center">
-            <div className="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-teal-300 to-emerald-400 font-mono">
+          <div className="bg-slate-50/70 border border-slate-200/80 rounded-2xl p-6 text-center shadow-xs">
+            <div className="text-3xl sm:text-4xl font-black text-teal-600 font-mono">
               100%
             </div>
-            <div className="text-xs font-semibold text-slate-300 mt-1">Biological Safety Check</div>
+            <div className="text-xs font-bold text-slate-800 mt-1.5">Biological Safety Check</div>
             <p className="text-[11px] text-slate-500 mt-0.5">Cortical bone boundary limits</p>
           </div>
 
-          <div className="bg-slate-950/80 border border-white/10 rounded-2xl p-5 text-center">
-            <div className="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400 font-mono">
+          <div className="bg-slate-50/70 border border-slate-200/80 rounded-2xl p-6 text-center shadow-xs">
+            <div className="text-3xl sm:text-4xl font-black text-indigo-600 font-mono">
               0 mm
             </div>
-            <div className="text-xs font-semibold text-slate-300 mt-1">Anchor Loss with TADs</div>
+            <div className="text-xs font-bold text-slate-800 mt-1.5">Anchor Loss with TADs</div>
             <p className="text-[11px] text-slate-500 mt-0.5">Calculated skeletal vectors</p>
           </div>
 
-          <div className="bg-slate-950/80 border border-white/10 rounded-2xl p-5 text-center">
-            <div className="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-teal-300 font-mono">
+          <div className="bg-slate-50/70 border border-slate-200/80 rounded-2xl p-6 text-center shadow-xs">
+            <div className="text-3xl sm:text-4xl font-black text-emerald-600 font-mono">
               11+
             </div>
-            <div className="text-xs font-semibold text-slate-300 mt-1">Evidence Modules</div>
+            <div className="text-xs font-bold text-slate-800 mt-1.5">Evidence Modules</div>
             <p className="text-[11px] text-slate-500 mt-0.5">Peer-reviewed orthodontic data</p>
           </div>
         </div>
@@ -153,27 +152,27 @@ export function EngineShowcase() {
                   onClick={() => setSelectedLayer(layer)}
                   className={`w-full text-left p-3.5 sm:p-4 rounded-xl border transition-all duration-200 cursor-pointer flex items-center justify-between gap-4 ${
                     isSelected
-                      ? 'bg-blue-600/20 border-blue-500 text-white shadow-lg shadow-blue-500/10'
-                      : 'bg-slate-950/60 border-white/5 text-slate-400 hover:text-white hover:bg-slate-950'
+                      ? 'bg-blue-50/80 border-blue-400 text-slate-900 shadow-xs ring-1 ring-blue-300'
+                      : 'bg-white border-slate-200/80 text-slate-600 hover:text-slate-900 hover:bg-slate-50 shadow-xs'
                   }`}
                 >
                   <div className="flex items-center gap-3 min-w-0">
                     <span className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-mono font-bold shrink-0 ${
-                      isSelected ? 'bg-blue-600 text-white' : 'bg-slate-900 text-slate-400 border border-slate-800'
+                      isSelected ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-700 border border-slate-200'
                     }`}>
                       {layer.step}
                     </span>
                     <div className="min-w-0">
-                      <div className="text-xs sm:text-sm font-bold truncate text-white">
+                      <div className="text-xs sm:text-sm font-bold truncate text-slate-900">
                         {layer.name}
                       </div>
-                      <div className="text-[11px] text-slate-400 truncate">
+                      <div className="text-[11px] text-slate-500 truncate">
                         {layer.subtitle}
                       </div>
                     </div>
                   </div>
                   <Badge className={`text-[10px] shrink-0 font-mono ${
-                    isSelected ? 'bg-blue-600 text-white border-none' : 'bg-slate-900 text-slate-400 border-slate-800'
+                    isSelected ? 'bg-blue-600 text-white border-none' : 'bg-slate-100 text-slate-600 border-slate-200'
                   }`}>
                     {layer.tag}
                   </Badge>
@@ -183,48 +182,48 @@ export function EngineShowcase() {
           </div>
 
           {/* Right Column: Active Layer Deep Dive Card */}
-          <div className="lg:col-span-6 bg-slate-950/80 border border-white/10 rounded-3xl p-6 sm:p-8 lg:p-10 space-y-6 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-white/10 pb-4">
+          <div className="lg:col-span-6 bg-slate-50/70 border border-slate-200/90 rounded-3xl p-6 sm:p-8 lg:p-10 space-y-6 shadow-sm">
+            <div className="flex items-center justify-between border-b border-slate-200 pb-4">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-teal-400 flex items-center justify-center text-white shadow-md">
+                <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center shadow-sm">
                   <selectedLayer.icon className="w-5 h-5" />
                 </div>
                 <div>
-                  <Badge className="bg-blue-500/20 text-blue-300 border-blue-500/30 text-[10px] font-mono">
+                  <Badge className="bg-blue-100 text-blue-800 border-none text-[10px] font-mono font-bold">
                     Layer 0{selectedLayer.step} of 07
                   </Badge>
-                  <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight mt-0.5">
+                  <h3 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight mt-0.5">
                     {selectedLayer.name}
                   </h3>
                 </div>
               </div>
             </div>
 
-            <div className="space-y-4 text-xs sm:text-sm text-slate-300">
+            <div className="space-y-4 text-xs sm:text-sm text-slate-600">
               <div>
                 <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 block mb-1">
                   How This Layer Works:
                 </span>
-                <p className="leading-relaxed text-slate-300">
+                <p className="leading-relaxed text-slate-700">
                   {selectedLayer.description}
                 </p>
               </div>
 
-              <div className="p-4 rounded-xl bg-blue-950/40 border border-blue-800/50 space-y-1 text-xs">
-                <span className="font-bold text-blue-300 block flex items-center gap-1.5">
-                  <Activity className="w-3.5 h-3.5 text-teal-400" />
-                  Clinical & Biomechanical Safety Value:
+              <div className="p-4 rounded-xl bg-white border border-slate-200 space-y-1 text-xs shadow-xs">
+                <span className="font-bold text-slate-900 block flex items-center gap-1.5">
+                  <Activity className="w-3.5 h-3.5 text-teal-600" />
+                  Clinical &amp; Biomechanical Safety Value:
                 </span>
-                <p className="text-slate-300 leading-relaxed">
+                <p className="text-slate-600 leading-relaxed">
                   {selectedLayer.clinicalFocus}
                 </p>
               </div>
             </div>
 
-            <div className="pt-2 border-t border-white/10 flex items-center justify-between">
-              <span className="text-xs text-slate-400">Experience this live in the Treatment Studio</span>
+            <div className="pt-2 border-t border-slate-200 flex items-center justify-between">
+              <span className="text-xs font-medium text-slate-500">Available live in Treatment Studio</span>
               <Link href="/plans/generate">
-                <Button size="sm" className="bg-white text-slate-950 hover:bg-slate-100 text-xs font-semibold rounded-full gap-1.5">
+                <Button size="sm" className="bg-slate-950 text-white hover:bg-blue-600 text-xs font-semibold rounded-full gap-1.5 transition-colors">
                   <span>Open Studio</span>
                   <ChevronRight className="w-3.5 h-3.5" />
                 </Button>
