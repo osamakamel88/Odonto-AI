@@ -14,7 +14,7 @@ export function LandingFooter() {
           <div className="lg:col-span-2 space-y-4">
             <Logo href="/" size="md" subtitle="By Orthodontists, For Orthodontists" variant="light" />
             <p className="text-xs text-slate-600 max-w-sm leading-relaxed">
-              The world’s first 7-layer clinical AI operating system engineered exclusively for orthodontic specialists, orthognathic surgeons, and implantologists.
+              The most comprehensive and up-to-date clinical AI operating system engineered exclusively for orthodontic specialists, orthognathic surgeons, and implantologists.
             </p>
             <div className="pt-2 flex items-center space-x-3 text-[11px] text-slate-400">
               <span>Next.js 16</span>

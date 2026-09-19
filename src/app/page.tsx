@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { LandingHeader } from '@/components/landing/landing-header';
 import { SpecialtyExplorer } from '@/components/landing/specialty-explorer';
 import { EngineShowcase } from '@/components/landing/engine-showcase';
+import { CompetitorComparison } from '@/components/landing/competitor-comparison';
 import { LandingFooter } from '@/components/landing/landing-footer';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -86,7 +87,7 @@ export default function LandingPage() {
 
             {/* Subtitle */}
             <p className="text-base sm:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed font-normal">
-              The world’s first clinical operating system that unifies cephalometric Steiner tracing, 3D arch space analysis, staged biomechanics, and dental implantology into one seamless workflow.
+              The most comprehensive and up-to-date clinical operating system that unifies cephalometric Steiner tracing, 3D arch space analysis, staged biomechanics, and dental implantology into one seamless workflow.
             </p>
 
             {/* High-Contrast CTA Buttons */}
@@ -410,6 +411,9 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+      {/* OBJECTIVE MARKET & COMPETITOR COMPARISON */}
+      <CompetitorComparison />
 
       {/* INTERACTIVE CLINICAL FAQ SECTION (LIGHT THEME) */}
       <section id="faq" className="py-20 sm:py-28 bg-slate-50/60 border-b border-slate-200 relative">

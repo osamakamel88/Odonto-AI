@@ -33,6 +33,7 @@ export function LandingHeader() {
     { label: 'Specialties', href: '#specialties' },
     { label: '7-Layer Engine', href: '#engine' },
     { label: 'Implant Studio', href: '#implants' },
+    { label: 'Comparison', href: '#comparison' },
     { label: 'Evidence Base', href: '#evidence' },
     { label: 'Clinical FAQ', href: '#faq' },
   ];

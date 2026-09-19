@@ -6,7 +6,7 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'Odonto AI — By Orthodontists, For Orthodontists',
-  description: 'The world’s first 7-layer clinical AI operating system for orthodontic treatment planning, orthognathic surgical decompensation, and dental implantology.',
+  description: 'The most comprehensive and up-to-date clinical AI operating system for orthodontic treatment planning, orthognathic surgical decompensation, and dental implantology.',
   icons: {
     icon: [
       { url: '/favicon.svg', type: 'image/svg+xml' },
