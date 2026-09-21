@@ -35,6 +35,7 @@ export function LandingHeader() {
     { label: 'Implant Studio', href: '#implants' },
     { label: 'Comparison', href: '#comparison' },
     { label: 'Evidence Base', href: '#evidence' },
+    { label: 'Under the Hood 🔬', href: '/under-the-hood.html', external: true },
     { label: 'Clinical FAQ', href: '#faq' },
   ];
 
@@ -51,12 +52,17 @@ export function LandingHeader() {
         <Logo href="/" size="md" subtitle="Clinical SaaS" variant="light" />
 
         {/* Desktop Nav Links */}
-        <nav className="hidden md:flex items-center space-x-8 text-xs font-semibold text-slate-600">
+        <nav className="hidden md:flex items-center space-x-7 text-xs font-semibold text-slate-600">
           {navLinks.map((link) => (
             <a
               key={link.label}
               href={link.href}
-              className="hover:text-blue-600 transition-colors duration-150 tracking-tight"
+              {...(link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+              className={`transition-colors duration-150 tracking-tight ${
+                link.external 
+                  ? 'text-teal-700 hover:text-teal-800 font-bold bg-teal-50 hover:bg-teal-100/70 px-2.5 py-1 rounded-full border border-teal-200/80' 
+                  : 'hover:text-blue-600'
+              }`}
             >
               {link.label}
             </a>
@@ -118,10 +124,20 @@ export function LandingHeader() {
               <a
                 key={link.label}
                 href={link.href}
+                {...(link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                 onClick={() => setMobileMenuOpen(false)}
-                className="text-sm font-semibold text-slate-700 hover:text-blue-600 py-2 border-b border-slate-100"
+                className={`text-sm font-semibold py-2.5 border-b border-slate-100 flex items-center justify-between ${
+                  link.external 
+                    ? 'text-teal-700 font-bold bg-teal-50/50 px-2 rounded-lg' 
+                    : 'text-slate-700 hover:text-blue-600'
+                }`}
               >
-                {link.label}
+                <span>{link.label}</span>
+                {link.external && (
+                  <span className="text-[10px] bg-teal-100 text-teal-800 px-2 py-0.5 rounded-full font-bold">
+                    Manual ↗
+                  </span>
+                )}
               </a>
             ))}
           </nav>

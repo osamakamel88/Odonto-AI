@@ -74,13 +74,35 @@ export function LandingFooter() {
 
           {/* Evidence & Compliance */}
           <div className="space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900">Clinical Rigor</h4>
-            <ul className="space-y-2 text-xs text-slate-600">
-              <li><span>NCBI PubMed RAG Engine</span></li>
-              <li><span>Angle Orthod &amp; AJODO Norms</span></li>
-              <li><span>Misch D1-D4 Bone Protocol</span></li>
-              <li><span>Steiner &amp; Tweed Analysis</span></li>
-              <li><span>Bolton Tooth-Size Ratio</span></li>
+            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900">Clinical Rigor &amp; Manuals</h4>
+            <ul className="space-y-2 text-xs">
+              <li>
+                <a
+                  href="/under-the-hood.html"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-teal-700 hover:text-teal-800 font-bold flex items-center gap-1 transition-colors"
+                >
+                  <span>Under the Hood Manual 🔬</span>
+                  <ExternalLink className="w-3 h-3" />
+                </a>
+              </li>
+              <li>
+                <a
+                  href="/founder-pitch.html"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-700 hover:text-blue-800 font-medium flex items-center gap-1 transition-colors"
+                >
+                  <span>Founder Pitch Deck 📑</span>
+                  <ExternalLink className="w-3 h-3" />
+                </a>
+              </li>
+              <li className="text-slate-500 pt-1"><span>NCBI PubMed RAG Engine</span></li>
+              <li className="text-slate-500"><span>Angle Orthod &amp; AJODO Norms</span></li>
+              <li className="text-slate-500"><span>Misch D1-D4 Bone Protocol</span></li>
+              <li className="text-slate-500"><span>Steiner &amp; Tweed Analysis</span></li>
+              <li className="text-slate-500"><span>Bolton Tooth-Size Ratio</span></li>
             </ul>
           </div>
         </div>

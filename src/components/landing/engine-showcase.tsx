@@ -14,7 +14,8 @@ import {
   CheckCircle2, 
   ChevronRight, 
   Activity,
-  Maximize2
+  Maximize2,
+  ExternalLink
 } from 'lucide-react';
 
 export const PIPELINE_LAYERS = [
@@ -230,6 +231,32 @@ export function EngineShowcase() {
               </Link>
             </div>
           </div>
+        </div>
+
+        {/* Scientific Transparency & Under the Hood Callout */}
+        <div className="mt-12 p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 text-white flex flex-col sm:flex-row items-center justify-between gap-5 border border-slate-800 shadow-md">
+          <div className="space-y-1.5 text-center sm:text-left">
+            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+              <Badge className="bg-teal-500/20 text-teal-300 border-teal-500/30 text-[10px] uppercase font-bold tracking-wider">
+                Full Scientific Transparency
+              </Badge>
+              <span className="text-xs font-bold text-slate-200">
+                Peer-Reviewed Evidence Base &amp; Biomechanical Rules
+              </span>
+            </div>
+            <p className="text-xs text-slate-300 max-w-2xl leading-relaxed">
+              Inspect our exact cephalometric formulas, Misch D1–D4 drilling protocols, PubMed NCBI live RAG pipeline, and 14+ landmark study citations in our complete clinician manual.
+            </p>
+          </div>
+          <a
+            href="/under-the-hood.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white text-slate-950 hover:bg-blue-50 text-xs font-bold transition-all shrink-0 shadow-sm cursor-pointer hover:shadow-md"
+          >
+            <span>Read Under the Hood 🔬</span>
+            <ExternalLink className="w-3.5 h-3.5 text-teal-600" />
+          </a>
         </div>
       </div>
     </section>

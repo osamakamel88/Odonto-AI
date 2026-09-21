@@ -10,6 +10,9 @@ import {
   Sparkles, 
   Scale, 
   Drill,
+  Microscope,
+  Presentation,
+  ExternalLink,
   X 
 } from 'lucide-react';
 import Link from 'next/link';
@@ -89,6 +92,39 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
             </Link>
           );
         })}
+
+        {/* Resources & Clinical References Section */}
+        <div className="pt-4 pb-1">
+          <p className="px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+            Reference &amp; Manuals
+          </p>
+        </div>
+
+        <a
+          href="/under-the-hood.html"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-all group"
+        >
+          <div className="flex items-center space-x-3">
+            <Microscope className="h-4 w-4 shrink-0 text-teal-400 group-hover:text-teal-300" />
+            <span>Under the Hood 🔬</span>
+          </div>
+          <ExternalLink className="h-3 w-3 text-slate-500 group-hover:text-slate-300" />
+        </a>
+
+        <a
+          href="/founder-pitch.html"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-all group"
+        >
+          <div className="flex items-center space-x-3">
+            <Presentation className="h-4 w-4 shrink-0 text-indigo-400 group-hover:text-indigo-300" />
+            <span>Founder Pitch 📑</span>
+          </div>
+          <ExternalLink className="h-3 w-3 text-slate-500 group-hover:text-slate-300" />
+        </a>
       </nav>
 
       {/* Clinician Profile */}

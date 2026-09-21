@@ -31,7 +31,8 @@ import {
   Sparkles,
   Calculator,
   Compass,
-  Database
+  Database,
+  ExternalLink
 } from 'lucide-react';
 import { KnowledgeCalculators } from '@/components/clinical/knowledge-calculators';
 import { PubMedSearchHub } from '@/components/clinical/pubmed-search-hub';
@@ -230,9 +231,16 @@ export default function KnowledgeBasePage() {
           </button>
         </div>
 
-        <div className="hidden md:flex items-center gap-2 pr-3 text-xs text-slate-500 font-medium">
-          <Sparkles className="w-3.5 h-3.5 text-blue-600" />
-          <span>Evidence-Based Orthodontic Biomechanics Suite</span>
+        <div className="flex items-center gap-2 pr-1">
+          <a
+            href="/under-the-hood.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-teal-50 text-slate-700 hover:text-teal-700 border border-slate-200 hover:border-teal-200 rounded-lg text-xs font-semibold transition-colors cursor-pointer"
+          >
+            <span>Under the Hood Manual 🔬</span>
+            <ExternalLink className="w-3.5 h-3.5 text-teal-600" />
+          </a>
         </div>
       </div>
 
