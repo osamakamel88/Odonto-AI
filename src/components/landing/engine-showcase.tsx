@@ -249,12 +249,12 @@ export function EngineShowcase() {
             </p>
           </div>
           <a
-            href="/under-the-hood.html"
+            href="/resources.html"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white text-slate-950 hover:bg-blue-50 text-xs font-bold transition-all shrink-0 shadow-sm cursor-pointer hover:shadow-md"
           >
-            <span>Read Under the Hood 🔬</span>
+            <span>Resources &amp; References 🔬</span>
             <ExternalLink className="w-3.5 h-3.5 text-teal-600" />
           </a>
         </div>

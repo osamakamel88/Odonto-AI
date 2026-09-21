@@ -35,7 +35,7 @@ export function LandingHeader() {
     { label: 'Implant Studio', href: '#implants' },
     { label: 'Comparison', href: '#comparison' },
     { label: 'Evidence Base', href: '#evidence' },
-    { label: 'Under the Hood 🔬', href: '/under-the-hood.html', external: true },
+    { label: 'Resources & References', href: '/resources.html', external: true },
     { label: 'Clinical FAQ', href: '#faq' },
   ];
 

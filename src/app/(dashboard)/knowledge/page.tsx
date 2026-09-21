@@ -233,12 +233,12 @@ export default function KnowledgeBasePage() {
 
         <div className="flex items-center gap-2 pr-1">
           <a
-            href="/under-the-hood.html"
+            href="/resources.html"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-teal-50 text-slate-700 hover:text-teal-700 border border-slate-200 hover:border-teal-200 rounded-lg text-xs font-semibold transition-colors cursor-pointer"
           >
-            <span>Under the Hood Manual 🔬</span>
+            <span>Resources &amp; References 🔬</span>
             <ExternalLink className="w-3.5 h-3.5 text-teal-600" />
           </a>
         </div>

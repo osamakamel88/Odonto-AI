@@ -74,27 +74,16 @@ export function LandingFooter() {
 
           {/* Evidence & Compliance */}
           <div className="space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900">Clinical Rigor &amp; Manuals</h4>
+            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900">Clinical Rigor &amp; Evidence</h4>
             <ul className="space-y-2 text-xs">
               <li>
                 <a
-                  href="/under-the-hood.html"
+                  href="/resources.html"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-teal-700 hover:text-teal-800 font-bold flex items-center gap-1 transition-colors"
                 >
-                  <span>Under the Hood Manual 🔬</span>
-                  <ExternalLink className="w-3 h-3" />
-                </a>
-              </li>
-              <li>
-                <a
-                  href="/founder-pitch.html"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-700 hover:text-blue-800 font-medium flex items-center gap-1 transition-colors"
-                >
-                  <span>Founder Pitch Deck 📑</span>
+                  <span>Resources &amp; References 🔬</span>
                   <ExternalLink className="w-3 h-3" />
                 </a>
               </li>
