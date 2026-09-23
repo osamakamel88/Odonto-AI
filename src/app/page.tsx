@@ -36,11 +36,15 @@ export default function LandingPage() {
 
   const faqs = [
     {
-      q: 'Does Odonto AI handle surgical orthognathic cases?',
+      q: 'What can Odonto AI do that Overjet and Pearl cannot?',
+      a: 'Overjet and Pearl are excellent FDA-cleared diagnostic tools that detect caries, bone loss, and periapical pathology on X-rays. However, they stop at detection — they do not generate treatment plans, do not perform cephalometric analysis, do not plan orthodontic biomechanics, and do not cover implantology. Odonto AI picks up where they leave off: it synthesizes complete staged treatment plans with archwire sequences, extraction algorithms, surgical protocols, and implant fixture sizing.'
+    },
+    {
+      q: 'Does Odonto AI handle orthognathic surgical cases?',
       a: 'Yes, absolutely. Odonto AI includes dedicated surgical protocols for Le Fort I osteotomies (advancement, impaction, downgrafting), BSSO (mandibular setback and advancement), sliding genioplasty, and Surgery-First Approaches (SFA) utilizing the Regional Acceleratory Phenomenon (RAP). It automatically models pre-surgical incisor decompensation goals and arch width coordination.'
     },
     {
-      q: 'Can it calculate dental implant fixture dimensions and prosthetic screw torques?',
+      q: 'Can it calculate dental implant fixture dimensions?',
       a: 'Yes! The newly built Dental Implant Planning Studio evaluates CBCT bone width and height to calculate safe fixture diameters and lengths honoring the 1.5mm buccal cortical plate rule and 2.0mm IAN safety clearance. It calculates Misch D1–D4 bone density drilling speeds, subantral sinus lift requirements (OSFE crestal vs lateral window), and exact manufacturer prosthetic screw torque values (25–35 Ncm).'
     },
     {
@@ -72,22 +76,20 @@ export default function LandingPage() {
             {/* Top Eyebrow Badge */}
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-100/90 border border-slate-200/80 text-xs font-semibold text-slate-700 shadow-xs">
               <span className="w-2 h-2 rounded-full bg-teal-500 animate-pulse" />
-              <span>By Orthodontists, For Orthodontists</span>
-              <span className="text-slate-400">•</span>
-              <span className="text-blue-700 font-bold">7-Layer Clinical Intelligence</span>
+              <span>Clinical AI for Orthodontics &amp; Implantology</span>
             </div>
 
             {/* Apple-Style Bold Typography */}
             <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-slate-950 leading-[1.08]">
-              Biological Precision.{' '}
+              Your Clinical Co-Pilot.{' '}
               <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-teal-600">
-                Engineered for Every Malocclusion.
+                From Diagnosis to Treatment Plan.
               </span>
             </h1>
 
             {/* Subtitle */}
             <p className="text-base sm:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed font-normal">
-              The most comprehensive and up-to-date clinical operating system that unifies cephalometric Steiner tracing, 3D arch space analysis, staged biomechanics, and dental implantology into one seamless workflow.
+              The most comprehensive and up-to-date clinical AI platform that takes you from radiograph analysis through cephalometric tracing, biomechanical planning, and dental implantology — all in one seamless workflow.
             </p>
 
             {/* High-Contrast CTA Buttons */}
@@ -108,7 +110,7 @@ export default function LandingPage() {
                   className="w-full sm:w-auto h-12 px-7 text-sm font-semibold text-slate-700 border-slate-200 bg-white hover:bg-slate-50 hover:text-blue-600 rounded-full shadow-xs transition-all cursor-pointer flex items-center justify-center gap-2"
                 >
                   <Drill className="w-4 h-4 text-teal-600" />
-                  <span>Explore Implant Planning</span>
+                  <span>Explore Implant Studio</span>
                 </Button>
               </Link>
             </div>
@@ -125,11 +127,11 @@ export default function LandingPage() {
               </span>
               <span className="flex items-center gap-1.5">
                 <CheckCircle2 className="w-4 h-4 text-teal-600 shrink-0" />
-                <span>Live NCBI PubMed Evidence RAG</span>
+                <span>Live NCBI PubMed Evidence</span>
               </span>
               <span className="flex items-center gap-1.5">
                 <CheckCircle2 className="w-4 h-4 text-teal-600 shrink-0" />
-                <span>Zero Hallucination Deterministic Engine</span>
+                <span>Dual-Engine Zero Hallucination</span>
               </span>
             </div>
           </div>
@@ -236,6 +238,118 @@ export default function LandingPage() {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* WHY ODONTO AI SECTION */}
+      <section className="py-20 sm:py-28 bg-white relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
+            <Badge className="bg-blue-50 text-blue-700 border-blue-200 text-xs px-3.5 py-1 font-semibold rounded-full shadow-xs">
+              Why Odonto AI
+            </Badge>
+            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
+              What Makes This Different.
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Card 1 */}
+            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 shadow-xs hover:shadow-md transition-all space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center">
+                  <BrainCircuit className="w-5 h-5" />
+                </div>
+                <Badge className="bg-slate-200 text-slate-700 hover:bg-slate-200 border-none text-[10px] font-bold">
+                  Competitors: 0 Plans
+                </Badge>
+              </div>
+              <h3 className="text-base font-bold text-slate-900">Treatment Plan Synthesis</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                Unlike diagnostic-only tools that detect disease and stop, Odonto AI synthesizes complete multi-phase treatment plans with staged biomechanics, wire sequences, and retention protocols.
+              </p>
+            </div>
+            
+            {/* Card 2 */}
+            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 shadow-xs hover:shadow-md transition-all space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="w-10 h-10 rounded-xl bg-teal-100 text-teal-600 flex items-center justify-center">
+                  <Layers className="w-5 h-5" />
+                </div>
+                <Badge className="bg-slate-200 text-slate-700 hover:bg-slate-200 border-none text-[10px] font-bold">
+                  7 Safety Layers
+                </Badge>
+              </div>
+              <h3 className="text-base font-bold text-slate-900">7-Layer Diagnostic Pipeline</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                Every plan passes through 7 deterministic diagnostic stages: ceph tracing, OPG segmentation, pre-ortho clearance, Bolton analysis, cortical verification, clinical reasoning, and final synthesis.
+              </p>
+            </div>
+
+            {/* Card 3 */}
+            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 shadow-xs hover:shadow-md transition-all space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center">
+                  <Drill className="w-5 h-5" />
+                </div>
+                <Badge className="bg-slate-200 text-slate-700 hover:bg-slate-200 border-none text-[10px] font-bold">
+                  14 Implant Catalogs
+                </Badge>
+              </div>
+              <h3 className="text-base font-bold text-slate-900">Dental Implant Planning</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                Complete fixture sizing from 14 manufacturer catalogs, Misch D1-D4 bone density drilling protocols, sinus lift calculations, and calibrated prosthetic screw torques.
+              </p>
+            </div>
+
+            {/* Card 4 */}
+            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 shadow-xs hover:shadow-md transition-all space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="w-10 h-10 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center">
+                  <BookOpen className="w-5 h-5" />
+                </div>
+                <Badge className="bg-slate-200 text-slate-700 hover:bg-slate-200 border-none text-[10px] font-bold">
+                  Real-Time Citations
+                </Badge>
+              </div>
+              <h3 className="text-base font-bold text-slate-900">Live PubMed Evidence (RAG)</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                Every clinical recommendation is grounded in peer-reviewed literature from Angle Orthod, AJODO, and JCO via real-time NCBI PubMed retrieval — not AI hallucination.
+              </p>
+            </div>
+
+            {/* Card 5 */}
+            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 shadow-xs hover:shadow-md transition-all space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center">
+                  <ShieldCheck className="w-5 h-5" />
+                </div>
+                <Badge className="bg-slate-200 text-slate-700 hover:bg-slate-200 border-none text-[10px] font-bold">
+                  Dual-Engine Verified
+                </Badge>
+              </div>
+              <h3 className="text-base font-bold text-slate-900">Zero Clinical Hallucination</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                Dual-engine architecture: an AI reasoning layer backed by a deterministic biomechanical engine. All cephalometrics and force calculations are mathematically verified before plan synthesis.
+              </p>
+            </div>
+
+            {/* Card 6 */}
+            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 shadow-xs hover:shadow-md transition-all space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center">
+                  <Compass className="w-5 h-5" />
+                </div>
+                <Badge className="bg-slate-200 text-slate-700 hover:bg-slate-200 border-none text-[10px] font-bold">
+                  6 Specialties
+                </Badge>
+              </div>
+              <h3 className="text-base font-bold text-slate-900">6 Clinical Disciplines</h3>
+              <p className="text-sm text-slate-600 leading-relaxed">
+                Covers surgical orthodontics, clear aligners, comprehensive fixed mechanics, interceptive orthodontics, skeletal anchorage (TADs), and dental implantology in one platform.
+              </p>
             </div>
           </div>
         </div>
