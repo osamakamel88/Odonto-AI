@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Odonto AI — عرض المؤسس الاستثماري والتجاري (Founder Pitch Deck)</title>
+  <title>Odonto AI — عرض المؤسس الاستثماري والتجاري الشامل (Executive Founder Pitch Deck)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -12,6 +12,7 @@
       --primary: #0284c7;
       --primary-dark: #0369a1;
       --primary-light: #e0f2fe;
+      --slate-950: #020617;
       --slate-900: #0f172a;
       --slate-800: #1e293b;
       --slate-700: #334155;
@@ -20,14 +21,19 @@
       --slate-200: #e2e8f0;
       --slate-100: #f1f5f9;
       --slate-50: #f8fafc;
+      --teal-700: #0f766e;
       --teal-600: #0d9488;
       --teal-50: #f0fdfa;
       --amber-600: #d97706;
       --amber-50: #fffbeb;
+      --emerald-700: #047857;
       --emerald-600: #059669;
       --emerald-50: #ecfdf5;
+      --rose-700: #be123c;
       --rose-600: #e11d48;
       --rose-50: #fff1f2;
+      --indigo-600: #4f46e5;
+      --indigo-50: #eef2ff;
     }
 
     html, body {
@@ -54,12 +60,12 @@
     }
 
     .container {
-      max-width: 960px;
+      max-width: 1020px;
       width: 100%;
       margin: 0 auto;
       background: #ffffff;
       border: 1px solid var(--slate-200);
-      border-radius: 20px;
+      border-radius: 24px;
       box-shadow: 0 10px 40px -10px rgba(0,0,0,0.06);
       padding: 50px 60px;
     }
@@ -69,12 +75,13 @@
       body {
         background: #ffffff;
         padding: 0;
-        font-size: 13px;
+        font-size: 12.5px;
+        line-height: 1.55;
       }
       .container {
         border: none;
         box-shadow: none;
-        padding: 20px;
+        padding: 16px;
         max-width: 100%;
       }
       .page-break {
@@ -88,6 +95,15 @@
         text-decoration: none;
         color: inherit;
       }
+      .table-container {
+        overflow: visible !important;
+      }
+      table {
+        font-size: 11px !important;
+      }
+      th, td {
+        padding: 8px 10px !important;
+      }
     }
 
     /* Header Bar */
@@ -98,7 +114,8 @@
       border-bottom: 2px solid var(--slate-100);
       padding-bottom: 24px;
       margin-bottom: 36px;
-      gap: 20px;
+      flex-wrap: wrap;
+      gap: 16px;
     }
 
     .brand-group {
@@ -108,42 +125,39 @@
     }
 
     .logo-badge {
-      width: 48px;
-      height: 48px;
-      background: linear-gradient(135deg, #2563eb, #0284c7, #0d9488);
+      width: 46px;
+      height: 46px;
+      background: linear-gradient(135deg, #2563eb, #0d9488);
       border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
       color: white;
       font-weight: 900;
-      font-size: 22px;
-      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.25);
-      flex-shrink: 0;
+      font-size: 24px;
+      box-shadow: 0 4px 12px rgba(37,99,235,0.25);
     }
 
     .brand-text h1 {
       font-size: 22px;
-      font-weight: 800;
-      color: var(--slate-900);
-      letter-spacing: -0.5px;
-      line-height: 1.3;
+      font-weight: 900;
+      color: var(--slate-950);
+      margin: 0;
+      line-height: 1.2;
     }
 
     .brand-text p {
-      font-size: 12px;
+      font-size: 13px;
+      color: var(--slate-500);
+      margin: 0;
       font-weight: 600;
-      color: var(--teal-600);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      line-height: 1.4;
     }
 
     .pitch-meta {
       text-align: left;
       font-size: 12px;
       color: var(--slate-500);
-      flex-shrink: 0;
+      line-height: 1.5;
     }
 
     .pitch-meta strong {
@@ -154,32 +168,33 @@
 
     /* Section Styling */
     .section {
-      margin-bottom: 44px;
+      margin-bottom: 48px;
     }
 
     .section-tag {
       display: inline-block;
-      font-size: 11px;
-      font-weight: 700;
+      font-size: 11.5px;
+      font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 0.8px;
-      padding: 4px 12px;
+      letter-spacing: 0.5px;
+      padding: 4px 14px;
       border-radius: 9999px;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
 
     .tag-blue { background: var(--primary-light); color: var(--primary-dark); }
-    .tag-teal { background: var(--teal-50); color: var(--teal-600); }
+    .tag-teal { background: var(--teal-50); color: var(--teal-700); }
     .tag-amber { background: var(--amber-50); color: var(--amber-600); }
-    .tag-emerald { background: var(--emerald-50); color: var(--emerald-600); }
-    .tag-rose { background: var(--rose-50); color: var(--rose-600); }
+    .tag-emerald { background: var(--emerald-50); color: var(--emerald-700); }
+    .tag-rose { background: var(--rose-50); color: var(--rose-700); }
+    .tag-indigo { background: var(--indigo-50); color: var(--indigo-600); }
 
     h2 {
-      font-size: 24px;
+      font-size: 25px;
       font-weight: 800;
-      color: var(--slate-900);
+      color: var(--slate-950);
       margin-bottom: 14px;
-      letter-spacing: -0.5px;
+      letter-spacing: -0.4px;
       line-height: 1.3;
     }
 
@@ -204,8 +219,8 @@
       border: 1px solid var(--slate-200);
       border-right: 4px solid var(--primary);
       padding: 18px 22px;
-      border-radius: 12px;
-      margin: 20px 0;
+      border-radius: 14px;
+      margin: 22px 0;
       font-size: 14px;
     }
 
@@ -221,6 +236,13 @@
       border-color: #fde68a;
       border-right-color: var(--amber-600);
       color: #92400e;
+    }
+
+    .callout-danger {
+      background: var(--rose-50);
+      border-color: #fecdd3;
+      border-right-color: var(--rose-600);
+      color: #881337;
     }
 
     /* Grid Layouts */
@@ -242,172 +264,202 @@
       background: #ffffff;
       border: 1px solid var(--slate-200);
       border-radius: 14px;
-      padding: 18px 20px;
+      padding: 20px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+      transition: all 0.2s;
+    }
+
+    .card:hover {
+      border-color: var(--primary);
     }
 
     .card-stat {
       font-size: 26px;
       font-weight: 900;
-      font-family: monospace;
-      color: var(--primary);
+      color: var(--primary-dark);
       margin-bottom: 4px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
 
     .card-title {
-      font-size: 14px;
       font-weight: 700;
       color: var(--slate-900);
+      font-size: 15px;
       margin-bottom: 6px;
     }
 
     .card-desc {
-      font-size: 12.5px;
+      font-size: 13px;
       color: var(--slate-600);
       line-height: 1.5;
     }
 
-    /* Table Styling & Container */
+    /* Table Styling */
     .table-container {
       width: 100%;
       overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
       margin: 22px 0;
-      border-radius: 12px;
       border: 1px solid var(--slate-200);
+      border-radius: 16px;
       background: #ffffff;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.02);
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 13.5px;
-      min-width: 580px;
-    }
-
-    th, td {
-      padding: 12px 16px;
-      border: 1px solid var(--slate-200);
       text-align: right;
+      font-size: 13.5px;
     }
 
     th {
       background: var(--slate-100);
-      font-weight: 700;
       color: var(--slate-900);
+      font-weight: 800;
+      padding: 13px 16px;
+      border-bottom: 2px solid var(--slate-200);
+      white-space: nowrap;
     }
 
-    tr:nth-child(even) {
+    td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--slate-200);
+      color: var(--slate-700);
+      vertical-align: middle;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
       background: var(--slate-50);
     }
 
-    /* Timeline / Journey Steps */
-    .journey-step {
-      position: relative;
-      padding-right: 36px;
-      margin-bottom: 24px;
-    }
-
-    .journey-step::before {
-      content: '';
-      position: absolute;
-      right: 10px;
-      top: 6px;
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      background: var(--primary);
-      border: 3px solid #e0f2fe;
-    }
-
-    .journey-step::after {
-      content: '';
-      position: absolute;
-      right: 16px;
-      top: 24px;
-      bottom: -16px;
-      width: 2px;
-      background: var(--slate-200);
-    }
-
-    .journey-step:last-child::after {
-      display: none;
-    }
-
-    .step-title {
-      font-size: 16px;
+    .highlight-col {
+      background: #f0f7ff !important;
       font-weight: 700;
+      color: #1e40af;
+      border-left: 2px solid #bfdbfe;
+      border-right: 2px solid #bfdbfe;
+    }
+
+    .status-check {
+      color: #059669;
+      font-weight: 900;
+      font-size: 15px;
+    }
+
+    .status-cross {
+      color: #94a3b8;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .badge-chip {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    /* Step Journey */
+    .step-item {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 22px;
+      background: var(--slate-50);
+      border: 1px solid var(--slate-200);
+      border-radius: 14px;
+      padding: 18px 20px;
+    }
+
+    .step-num {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: var(--primary);
+      color: white;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 16px;
+    }
+
+    .step-content h4 {
+      font-size: 15.5px;
+      font-weight: 800;
       color: var(--slate-900);
       margin-bottom: 4px;
     }
 
-    .step-badge {
-      display: inline-block;
-      font-size: 11px;
-      font-weight: 700;
-      background: var(--primary-light);
-      color: var(--primary-dark);
-      padding: 2px 8px;
-      border-radius: 4px;
-      margin-right: 6px;
+    .step-content p {
+      margin-bottom: 0;
+      font-size: 13.5px;
     }
 
-    /* Objection / Rebuttal Dialogue */
+    /* Q&A Boxes */
     .qa-box {
-      background: #ffffff;
       border: 1px solid var(--slate-200);
       border-radius: 14px;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
       overflow: hidden;
+      background: #ffffff;
     }
 
     .qa-q {
-      background: var(--slate-100);
-      padding: 14px 20px;
-      font-weight: 700;
+      background: #f1f5f9;
+      padding: 14px 18px;
+      font-weight: 800;
       color: var(--slate-900);
-      font-size: 14px;
+      font-size: 14.5px;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
 
     .qa-a {
-      padding: 18px 20px;
+      padding: 16px 18px;
       font-size: 13.5px;
       color: var(--slate-700);
       line-height: 1.65;
+      text-align: justify;
     }
 
     .qa-a strong {
       color: var(--primary-dark);
     }
 
-    .highlight-badge {
-      font-weight: 700;
-      color: var(--teal-600);
-      background: var(--teal-50);
-      padding: 1px 6px;
-      border-radius: 4px;
+    /* Footer */
+    .pitch-footer {
+      border-top: 1px solid var(--slate-200);
+      padding-top: 24px;
+      margin-top: 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       font-size: 12px;
+      color: var(--slate-500);
+      flex-wrap: wrap;
+      gap: 12px;
     }
 
-    /* Print Button Floating Bar */
     .print-bar {
-      position: fixed;
-      bottom: 24px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--slate-900);
-      color: white;
-      padding: 12px 24px;
-      border-radius: 9999px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      font-size: 13px;
+      position: sticky;
+      top: 16px;
       z-index: 100;
+      background: #0f172a;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3);
     }
 
     .print-btn {
@@ -415,10 +467,11 @@
       color: white;
       border: none;
       padding: 8px 18px;
-      border-radius: 9999px;
+      border-radius: 8px;
       font-weight: 700;
-      cursor: pointer;
       font-family: inherit;
+      cursor: pointer;
+      font-size: 13px;
       transition: background 0.2s;
     }
 
@@ -426,175 +479,32 @@
       background: var(--primary-dark);
     }
 
-    .pitch-footer {
-      margin-top: 40px;
-      padding-top: 20px;
-      border-top: 1px solid var(--slate-200);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 12px;
-      color: var(--slate-500);
-    }
-
-    /* Tablet & Mobile Media Queries */
+    /* Mobile Responsive */
     @media (max-width: 768px) {
       body {
-        padding: 16px 12px 85px 12px;
-        font-size: 14px;
+        padding: 12px 8px 60px 8px;
       }
-
       .container {
         padding: 24px 16px;
         border-radius: 16px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.04);
       }
-
-      .pitch-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 14px;
-        padding-bottom: 18px;
-        margin-bottom: 24px;
-      }
-
-      .brand-group {
-        width: 100%;
-        gap: 12px;
-      }
-
-      .brand-text h1 {
-        font-size: 18px;
-        line-height: 1.35;
-      }
-
-      .brand-text p {
-        font-size: 11px;
-        letter-spacing: 0.2px;
-      }
-
-      .pitch-meta {
-        text-align: right;
-        width: 100%;
-        border-top: 1px solid var(--slate-100);
-        padding-top: 12px;
-        font-size: 11.5px;
-      }
-
-      h2 {
-        font-size: 19px;
-        line-height: 1.35;
-        margin-bottom: 12px;
-      }
-
-      h3 {
-        font-size: 16px;
-        margin-top: 16px;
-        margin-bottom: 8px;
-      }
-
-      p {
-        font-size: 13.5px;
-        text-align: right; /* Prevent justify word-stretching on mobile */
-        margin-bottom: 12px;
-      }
-
       .grid-2, .grid-3 {
         grid-template-columns: 1fr;
         gap: 12px;
-        margin: 16px 0;
       }
-
-      .card {
-        padding: 14px 16px;
-      }
-
-      .card-stat {
-        font-size: 22px;
-      }
-
-      .callout {
-        padding: 14px 16px;
-        font-size: 13px;
-        margin: 16px 0;
-      }
-
-      .journey-step {
-        padding-right: 28px;
-        margin-bottom: 20px;
-      }
-
-      .journey-step::before {
-        right: 4px;
-        top: 6px;
-        width: 12px;
-        height: 12px;
-      }
-
-      .journey-step::after {
-        right: 9px;
-        top: 22px;
-      }
-
-      .step-title {
-        font-size: 14.5px;
-        line-height: 1.4;
-      }
-
-      .qa-q {
-        padding: 12px 14px;
-        font-size: 13px;
+      .pitch-header {
         flex-direction: column;
         align-items: flex-start;
-        gap: 6px;
       }
-
-      .qa-a {
-        padding: 14px;
-        font-size: 13px;
+      .pitch-meta {
+        text-align: right;
       }
-
-      .print-bar {
-        bottom: 12px;
-        left: 12px;
-        right: 12px;
-        transform: none;
-        width: auto;
-        padding: 8px 14px;
-        font-size: 11.5px;
-        justify-content: space-between;
-        gap: 8px;
-      }
-
-      .print-btn {
-        padding: 6px 12px;
-        font-size: 11px;
-        flex-shrink: 0;
-      }
-
-      .pitch-footer {
-        flex-direction: column;
-        gap: 8px;
-        text-align: center;
-        margin-top: 30px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      body {
-        padding: 12px 8px 80px 8px;
-      }
-
-      .container {
-        padding: 18px 12px;
-      }
-
-      .brand-text h1 {
-        font-size: 16.5px;
-      }
-
       h2 {
-        font-size: 17.5px;
+        font-size: 21px;
+      }
+      .step-item {
+        flex-direction: column;
+        gap: 10px;
       }
     }
   </style>
@@ -603,22 +513,22 @@
 
   <!-- Floating Print Helper for User -->
   <div class="print-bar no-print">
-    <span>💡 جاهز للطباعة أو التصدير المباشر كـ PDF</span>
-    <button class="print-btn" onclick="window.print()">طباعة / حفظ كـ PDF</button>
+    <span>💡 جاهز للطباعة الفورية أو التصدير المباشر كـ PDF عالي الدقة</span>
+    <button class="print-btn" onclick="window.print()">طباعة / تصدير كـ PDF</button>
   </div>
 
   <div class="container">
 
     <!-- Strictly Confidential Notice -->
-    <div style="background: #fff1f2; border: 1.5px solid #f43f5e; border-radius: 12px; padding: 12px 18px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+    <div style="background: #fff1f2; border: 1.5px solid #f43f5e; border-radius: 14px; padding: 14px 18px; margin-bottom: 28px; display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
       <div style="display: flex; align-items: center; gap: 10px;">
-        <span style="font-size: 20px;">🔒</span>
+        <span style="font-size: 22px;">🔒</span>
         <div>
-          <strong style="color: #be123c; font-size: 13.5px; display: block;">سري للغاية — وثيقة استراتيجية داخلية (STRICTLY CONFIDENTIAL &bull; INTERNAL USE ONLY)</strong>
-          <span style="color: #881337; font-size: 11.5px;">هذا المستند يحتوي على أسرار المنظومة ودراسة الجدوى المالية والخطط التشغيلية، ويُحظر تداوله للعامة.</span>
+          <strong style="color: #be123c; font-size: 14px; display: block;">سري للغاية — وثيقة استراتيجية داخلية ومذكرة للمستثمرين والشركاء المؤسسين</strong>
+          <span style="color: #881337; font-size: 12px;">تحتوي هذه الوثيقة على أسرار المنظومة، دراسة الجدوى المالية، والتحليل التنافسي المباشر، ويُحظر تداولها علناً.</span>
         </div>
       </div>
-      <span style="background: #be123c; color: white; padding: 4px 12px; border-radius: 9999px; font-size: 10.5px; font-weight: 800; text-transform: uppercase; white-space: nowrap;">INTERNAL USE ONLY</span>
+      <span style="background: #be123c; color: white; padding: 4px 12px; border-radius: 9999px; font-size: 11px; font-weight: 800; text-transform: uppercase; white-space: nowrap;">STRICTLY CONFIDENTIAL</span>
     </div>
 
     <!-- Header -->
@@ -626,145 +536,336 @@
       <div class="brand-group">
         <div class="logo-badge">O</div>
         <div class="brand-text">
-          <h1>Odonto AI — عرض المؤسس الاستراتيجي</h1>
-          <p>By Orthodontists, For Orthodontists • الدليل التشغيلي والاستثماري الشامل</p>
+          <h1>Odonto AI — عرض المؤسس الاستراتيجي الشامل</h1>
+          <p>By Orthodontists, For Orthodontists • أول نظام تشغيل إكلينيكي متكامل للتقويم والزراعة</p>
         </div>
       </div>
       <div class="pitch-meta">
         <strong>وثيقة سرية موجهة للشركاء والمستثمرين</strong>
-        <span>تاريخ الإصدار: سبتمبر 2026 • الإصدار 2.0</span>
+        <span>الإصدار 2.5 • تحديث شامل لسبتمبر 2026</span>
       </div>
     </header>
 
     <!-- SECTION 1: الملخص التنفيذي -->
     <section class="section">
       <span class="section-tag tag-blue">1. ملخص تنفيذي (Executive Summary)</span>
-      <h2>التحول الجذري في بيزنس عيادات ومراكز الأسنان</h2>
+      <h2>التحول الجذري في بيزنس مراكز وعيادات الأسنان</h2>
       <p>
-        طب تقويم الأسنان وزراعة الأسنان في مصر والشرق الأوسط والعالم بيمر بنقطة تحول تاريخية. المريض النهارده بقى أذكى، وعايز يشوف خطة علاجه 3D قبل ما يدفع جنيه، وعايز يعرف توقيتات دقيقة وتكاليف واضحة. وفي نفس الوقت، صاحب العيادة أو المركز بيواجه ضغوط اقتصادية رهيبة:
+        طب تقويم وزراعة الأسنان في مصر والشرق الأوسط والعالم يمر بنقطة تحول تاريخية. المريض اليوم أصبح شديد الوعي، لا يقبل مجرد شرح شفهي على ورق، بل يطلب محاكاة بصرية ثلاثية الأبعاد (3D Visualization) لخطة علاجه وتوقيتات واضحة قبل أن يدفع جنيهاً واحداً. وفي المقابل، يواجه صاحب المركز أو الاستشاري ضغوطاً تشغيلية واقتصادية متزايدة:
       </p>
       <div class="grid-3">
         <div class="card">
           <div class="card-stat">60 دقيقة</div>
           <div class="card-title">إهدار وقت الكشف والتشخيص</div>
-          <div class="card-desc">الدكتور بيقعد يرسم السيفالومترك يدوي أو يتنقل بين 3 برامج مختلفة لكل كيس عشان يطلع بخطة.</div>
+          <div class="card-desc">يقضي الاستشاري وقتاً طويلاً في رسم السيفالومترك يدوياً والتنقل بين برامج مشتتة لكل حالة ليصيغ خطة علاج.</div>
         </div>
         <div class="card">
           <div class="card-stat">12,000$+</div>
-          <div class="card-title">تكلفة تراخيص ودونجل</div>
-          <div class="card-desc">برمجيات قديمة زي Dolphin أو قيود الشركات الاحتكارية في الألاينرز زي Invisalign بتستنزف أرباح المركز.</div>
+          <div class="card-title">تكلفة تراخيص ودونجل قديمة</div>
+          <div class="card-desc">برمجيات التسعينات مثل Dolphin تفرض رخصاً باهظة ودونجل USB، بينما تحتكر منصات الألاينرز العالمية مثل Invisalign هوامش الأرباح.</div>
         </div>
         <div class="card">
           <div class="card-stat">30% - 40%</div>
-          <div class="card-title">فقدان تحويل المرضى (Conversion)</div>
-          <div class="card-desc">مرضى كتير بيخرجوا من العيادة وميرجعوش تاني عشان الدكتور مش عارف يوريهم محاكاة بصرية مقنعة لأسنانهم.</div>
+          <div class="card-title">تسرب الحالات وعدم الإقناع</div>
+          <div class="card-desc">يفقد المركز 30% إلى 40% من المرضى الجدد نتيجة غياب العرض البصري المقنع على الكرسي (Chairside Case Conversion).</div>
         </div>
       </div>
       <div class="callout callout-success">
-        <strong>خلاصة الحل:</strong> <strong>Odonto AI</strong> هو أحدث وأشمل نظام تشغيل سحابي متكامل يجمع لأول مرة تشخيص السيفالومترك الدقيق (Steiner/Tweed)، وتحليل المسافات ثلاثي الأبعاد (Bolton 3D)، والتقويم الجراحي (Orthognathic)، والشفاف (Clear Aligners)، وحتى زراعة الأسنان وحساب أبعاد الفيكستشر والمسامير وعزم الربط (Torque) في منصة واحدة متكاملة بدون أي دونجل أو أجهزة مخصصة.
+        <strong>خلاصة الحل المتكامل:</strong> <strong>Odonto AI</strong> هو أحدث وأشمل نظام تشغيل سحابي متكامل يجمع لأول مرة تشخيص السيفالومترك الدقيق (Steiner/Tweed/McNamara)، وتخليق خطط العلاج سداسية المراحل (Master 6-Phase Engine)، وتغطية 14 تخصصاً للأسنان، واستوديو زراعة الأسنان وحساب أبعاد الفيكستشر والمسامير وعزم الربط (Torque)، مع نمطين متقدمين (الطبيب المبتدئ مقابل الاستشاري الأول) — كل ذلك عبر أي متصفح ويب دون الحاجة لأي دونجل أو أجهزة خاصة.
       </div>
     </section>
 
-    <!-- SECTION 2: الأزمة الحقيقية في عيادات الأسنان -->
+    <!-- SECTION 2: تشخيص المشكلة وفخ "الطريق التشخيصي المسدود" -->
     <section class="section">
-      <span class="section-tag tag-amber">2. تشخيص المشكلة في السوق (Market Pain Points)</span>
-      <h2>ليه مراكز وعيادات الأسنان بتخسر فلوس ووقت كل يوم؟</h2>
+      <span class="section-tag tag-amber">2. فجوات السوق وفخ "الطريق التشخيصي المسدود" (Market Gaps)</span>
+      <h2>أين تفشل الحلول الحالية؟ ولماذا يعلق المنافسون في التشخيص فقط؟</h2>
       <p>
-        لما قعدنا مع مئات من أطباء وأصحاب عيادات الأسنان في مصر والعالم العربي، لقينا إن المشكلة مش في شطارة الدكتور كطبيب، المشكلة في <strong>البنية التحتية البرمجية المعطلة</strong>:
+        عند دراسة السوق والحلول العالمية المنافسة، وجدنا مشكلة بنيوية كبرى تؤرق الأطباء وأصحاب المراكز:
       </p>
-      <ul>
-        <li style="margin-bottom: 10px;">
-          <strong>تشتت البرمجيات (Software Fragmentation):</strong> الدكتور بيعمل التريسينج على سوفت وير، ويبعت الـ STL لمعمل على الواتساب، ويحسب مقاس الزرعة بالمسطرة أو على الـ CBCT viewer بتاع مركز الأشعة، وفي الآخر بيكتب خطة العلاج في ورقة أو شيت إكسيل. ده بيخلق أخطاء تواصل قاتلة مع المعامل.
-        </li>
-        <li style="margin-bottom: 10px;">
-          <strong>الاحتكار والهوامش الضايعة في الألاينرز:</strong> شركات الألاينرز العالمية بتاخد من 800 لـ 1,500 دولار على الكيس الواحدة، وبتجبر الدكتور على خاماتهم وتصميمهم، ومع أي Refinement أو تتبع غلط، الدكتور بيدفع من جيبه وتكلفة العلاج بتزيد ووقته بيضيع.
-        </li>
-        <li style="margin-bottom: 10px;">
-          <strong>حسابات الزراعة العشوائية والـ Peri-implantitis:</strong> زرعات كتير بتفشل بعد سنتين لتلاتة لأن الدكتور اختار قطر زرعة واسع معضمش قاعدة الـ 1.5mm buccal plate، أو اختار عزم ربط للمسمار (Screw Torque) غلط سبب ارتخاء متكرر أو كسر في المسمار.
-        </li>
-      </ul>
-    </section>
-
-    <div class="page-break"></div>
-
-    <!-- SECTION 3: الحل المتكامل ورحلة العميل خطوة بخطوة -->
-    <section class="section">
-      <span class="section-tag tag-teal">3. رحلة المريض والعيادة من البداية للنهاية (End-to-End Workflow)</span>
-      <h2>إزاي Odonto AI بيشتغل جوة العيادة؟ رحلة عملية دقيقة</h2>
-      <p>
-        تعال نشوف بالورقة والقلم مريض دخل عيادتك عنده عضة معكوسة أو أسنان متراكبة وعايز زرعة في الضرس الخلفي، إزاي Odonto AI بيحول الزيارة دي من ساعة شغل وتشتت لـ 3 دقائق من الإبهار العلمي والاقتصادي:
-      </p>
-
-      <div class="journey-step">
-        <div class="step-title">
-          <span class="step-badge">المرحلة 1</span>
-          الاستقبال والتشخيص الفوري (Intake & Diagnostic Upload) — المدة: 60 ثانية
-        </div>
-        <p>
-          المساعد أو الدكتور بيرفع صورة الـ Lateral Ceph وصورة البانوراما أو الـ 3D STL. في ثوانٍ، نظام الـ 16-Landmark AI بيحدد النقاط السيفالومترية أوتوماتيكياً ويحسب زوايا ANB و Wits و IMPA و FMA بدقة متناهية تفوق دقة التريسينج اليدوي.
+      
+      <div class="card" style="margin-bottom: 16px; border-right: 4px solid var(--rose-600); background: #fffafb;">
+        <h3 style="margin-top: 0; color: var(--rose-700);">1. فخ "الطريق التشخيصي المسدود" (Diagnostic Dead-End) لدى Overjet و Pearl:</h3>
+        <p style="margin-bottom: 0;">
+          شركات مثل <strong>Overjet</strong> و <strong>Pearl (Second Opinion)</strong> جمعت مئات الملايين من الدولارات وحصلت على موافقات FDA لكشف التسوس وتآكل العظم على أشعة 2D. <strong>لكنها تقف عند هذا الحد تماماً!</strong> هي تكتشف المرض وترسم مربعات ملونة حول التسوس، لكنها <strong>لا تكتب خطة علاج، ولا ترسم سيفالومترك، ولا تفهم بيوميكانيكا التقويم، ولا تحسب أبعاد زراعة الأسنان، ولا تدعم أي تخصص سوى الأسنان العامة</strong>. يظل الطبيب في النهاية مضطراً ليجلس ويفكر ويخطط يدوياً من الصفر.
         </p>
       </div>
 
-      <div class="journey-step">
-        <div class="step-title">
-          <span class="step-badge">المرحلة 2</span>
-          المعالجة البيوميكانيكية بالـ 7 طبقات (7-Layer Biological Pipeline) — المدة: 30 ثانية
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title" style="color: var(--slate-900);">2. برمجيات التسعينات المحتكرة (Dolphin Imaging)</div>
+          <div class="card-desc">
+            برنامج ديسكتوب تقيل، يتطلب أجهزة بمواصفات معينة ودونجل USB فيزيائي، بتكلفة شراء مبدئية تتجاوز 10,000$ إلى 15,000$ وصيانة سنوية 2,000$ إجبارية، بدون دعم للألاينرز أو الزراعة أو الذكاء الاصطناعي الحديث.
+          </div>
         </div>
-        <p>
-          السيستم بيمرر الحالة على 7 فلاتر بيولوجية:
-          (1) التريسينج السيفالومتري، (2) تقسيم أسنان البانوراما 32-Tooth ومسافات الجذور، (3) فحص صحة اللثة وامتصاص العظم، (4) حساب نسب بولتون (Bolton Ratio 77.2% / 91.3%)، (5) التأكد من عدم تجاوز القشرة العظمية (Cortical Boundary Guard)، (6) التفكير الإكلينيكي المتسلسل، و (7) صياغة الخطة النهائية.
-        </p>
-      </div>
-
-      <div class="journey-step">
-        <div class="step-title">
-          <span class="step-badge">المرحلة 3</span>
-          جلسة الإقناع والمحاكاة على الكرسي (Chairside Conversion) — المدة: 90 ثانية
+        <div class="card">
+          <div class="card-title" style="color: var(--slate-900);">3. احتكار الشركات المصنعة (ClinCheck / Align)</div>
+          <div class="card-desc">
+            أنظمة مغلقة تجبر الطبيب على استخدام خامات ومصانع الشركة فقط بأسعار باهظة (تصل لـ 1,500$ للحالة)، وتمنعه من التعاون مع معامله المحلية أو استخدام تقنيات أخرى كالميكانيكا الثابتة والزراعة.
+          </div>
         </div>
-        <p>
-          بدل ما الدكتور يشرح للمريض نظري بمصطلحات معقدة، بيلف شاشة الآيباد أو الكمبيوتر للمريض. المريض بيشوف أسنانه 3D قبل وبعد، وبيفهم ليه محتاج خلع أو توسيع فك، وبيشوف خطة الزراعة بالمسامير المحددة. <strong>النتيجة: نسبة موافقة المريض ودفع المقدم بتزيد فورياً بأكتر من 40%.</strong>
-        </p>
-      </div>
-
-      <div class="journey-step">
-        <div class="step-title">
-          <span class="step-badge">المرحلة 4</span>
-          التنفيذ السريري الدقيق وجدول الأسلاك (Clinical Execution)
-        </div>
-        <p>
-          البرنامج بيطبع للدكتور جدول تشغيلي عيادي (Chairside Table): توالي الأسلاك من NiTi الحراري لـ TMA لـ Stainless Steel، نوع الفصوص والبراكتس (MBT vs Roth vs Damon)، اتجاهات مطاط الفك ومقدار القوة بالأونصة، ومواضع مسامير الـ TADs المطلوبة للغرس بدون فقدان إرساء.
-        </p>
-      </div>
-
-      <div class="journey-step">
-        <div class="step-title">
-          <span class="step-badge">المرحلة 5</span>
-          استوديو الزراعة وحساب أبعاد الفيكستشر والمسامير (Implant Sizing & Torque)
-        </div>
-        <p>
-          لو الحالة فيها مكان ضرس مخلوع: الدكتور بيكتب سمك وارتفاع العظم من الـ CBCT، البرنامج بيحدد كثافة العظم بمقياس Misch (D1-D4)، ويختار الفيكستشر المثالي من بين 14 براند عالمي (Straumann, Nobel, Zimmer, etc.)، ويحدد هل محتاج رفع جيب أنفي Crestal OSFE ولا Lateral Window، وبيطلع عزم ربط مسمار الأباتمنت بدقة (مثلاً 35 Ncm) لتفادي أي كسر مستقبلي.
-        </p>
-      </div>
-
-      <div class="journey-step">
-        <div class="step-title">
-          <span class="step-badge">المرحلة 6</span>
-          تنسيق المعامل وضمان الاستقرار (Lab Sync & Retention)
-        </div>
-        <p>
-          تصدير تقرير فني شامل للمعمل (Lab Prescription Slip) فيه تعليمات الـ IPR بالأعشار من المليمتر، أو تفاصيل الـ Custom Ti-Base في الزراعة. وده بيقضي تماماً على تكرار الشغل (Remakes) اللي بيكلف العيادات آلاف الجنيهات.
-        </p>
       </div>
     </section>
 
     <div class="page-break"></div>
 
-    <!-- SECTION 4: دراسة الجدوى الاقتصادية وعائد الاستثمار لصحاب المركز -->
+    <!-- SECTION 3: ابتكارات ومميزات Odonto AI الرائدة -->
     <section class="section">
-      <span class="section-tag tag-emerald">4. دراسة الجدوى والعائد المالي المباشر (Financial ROI)</span>
-      <h2>الأرقام مبتكدبش: المركز أو العيادة هتوفر وتكسب كام مع Odonto AI؟</h2>
+      <span class="section-tag tag-teal">3. أسلحتنا التنافسية والمميزات الرائدة (Pioneering Edge Features)</span>
+      <h2>ما الذي ينفرد به Odonto AI ولا يملكه أي منافس في العالم؟</h2>
       <p>
-        كصاحب بيزنس عيادة أو مركز أسنان، استثمارك في أي أداة لازم يترجم لأرقام في حسابك البنكي. هنا الحسبة الاقتصادية المباشرة لعيادة تقويم وزراعة بتستقبل 20 حالة جديدة شهرياً:
+        لم نكتفِ بمجرد معالجة الصور، بل بنينا محركاً سريرياً تنفيذياً متكاملاً يتفوق على المنافسين في كافة المحاور:
+      </p>
+
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h4>المحرك السداسي الشامل لخطط العلاج (Master 6-Phase Treatment Plan Engine)</h4>
+          <p>
+            بدلاً من التركيز على تخصص واحد، يولد Odonto AI تسلسلاً علاجياً متكاملاً عبر 6 مراحل متتالية: 
+            <strong>(1) الطوارئ وتسكين الألم</strong> &larr; 
+            <strong>(2) التهيئة اللثوية وصحة الفم</strong> &larr; 
+            <strong>(3) العلاج التحفظي وعلاج الجذور</strong> &larr; 
+            <strong>(4) تقويم الأسنان والبيوميكانيكا المرحلية</strong> &larr; 
+            <strong>(5) زراعة الأسنان والجراحة</strong> &larr; 
+            <strong>(6) التركيبات النهائية والتجميل والتثبيت</strong>.
+          </p>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h4>نمط الطبيب المبتدئ مقابل الاستشاري الأول (Junior Mode vs Senior Consultant Mode)</h4>
+          <p>
+            تخصيص ذكي يتكيف مع خبرة المستخدم:
+            <strong>نمط الخريج الحديث (Fresh Graduate):</strong> يوفر شروحات سريرية خطوة بخطوة، مع تنبيهات بيولوجية صارمة وقواعد بروفيت وتويد لتفادي أي خطأ إكلينيكي.
+            <strong>نمط الاستشاري الأول (Senior Consultant):</strong> واجهة مكثفة عالية الكفاءة تعرض الزوايا والمعادلات وجداول عزم الربط وقوى الأسلاك مباشرة دون إبطاء.
+          </p>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h4>التقرير التشريحي للأسنان المتضررة مع القرار العلاجي (Affected Tooth Decision Matrix)</h4>
+          <p>
+            على عكس Pearl التي تكتفي بنسبة مئوية للتسوس، يقدم Odonto AI قراراً سريرياً مباشراً لكل سن (FDI 11–48): هل يحتاج لحشو كومبوزيت بسيط، أم علاج عصب وتاج، أم خلع وخلق مسافة تقويمية، أم خلع وزراعة فيكستشر مع حساب مستوى العظم المحيط.
+          </p>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <h4>استوديو زراعة الأسنان المتطور (Interdisciplinary Implantology Studio)</h4>
+          <p>
+            جسر مباشر بين التقويم والزراعة: حساب كثافة العظم وفق مقياس Misch (D1–D4) من الهونسفيلد، حساب أبعاد الفيكستشر من 14 كتالوج عالمي مع هامش أمان عصب الفك (2mm) والعظم الخارجي (1.5mm)، تقييم رفع الجيب الأنفي، وتحديد عزم ربط مسامير الأباتمنت بدقة (25–35 Ncm).
+          </p>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <h4>محرك استرجاع الأدلة الحية من NCBI PubMed (Live Evidence RAG)</h4>
+          <p>
+            كل خطوة في العلاج — سواء كانت خلع ضواحك، أو استخدام مسامير TADs، أو تسلسل أسلاك CuNiTi &larr; TMA &larr; SS — مدعومة لحظياً بأحدث الأبحاث السريرية الموثقة بأرقام PMIDs و DOIs من كبرى المجلات (AJODO, Angle Orthodontist, JCO).
+          </p>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num">6</div>
+        <div class="step-content">
+          <h4>الهندسة المزدوجة الآمنة لمنع الهلوسة (Dual-Engine Architecture)</h4>
+          <p>
+            فصل تام بين الذكاء الاصطناعي اللغوي وبين المحرك البيوميكانيكي الحسابي القطعي (Deterministic Engine). حسابات الزوايا (ANB, Wits, IMPA) وقوى العظم والمسافات تحسب رياضياً بمعادلات لا تقبل الهلوسة لحماية الطبيب والمركز قانونياً وطبياً.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <div class="page-break"></div>
+
+    <!-- SECTION 4: المقارنة الشاملة مع عمالقة السوق -->
+    <section class="section">
+      <span class="section-tag tag-rose">4. المقارنة الشاملة مع أكبر 5 منافسين في العالم (Competitor Benchmark)</span>
+      <h2>مقارنة واقعية وعادلة تكشف تفوق Odonto AI الساحق</h2>
+      <p>
+        جدول مقارنة موضوعي ومبني على المواصفات التقنية المعلنة لعام 2026، يوضح الفارق بين منصة تخليق علاجي متكاملة وبين البرمجيات الأحادية أو القديمة:
+      </p>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 28%;">القدرة الإكلينيكية والتشغيلية</th>
+              <th class="highlight-col" style="width: 16%; text-align: center;">Odonto AI</th>
+              <th style="width: 11%; text-align: center;">Overjet</th>
+              <th style="width: 11%; text-align: center;">Pearl</th>
+              <th style="width: 11%; text-align: center;">Dolphin</th>
+              <th style="width: 11%; text-align: center;">ClinCheck</th>
+              <th style="width: 11%; text-align: center;">WebCeph</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>توليد خطط العلاج سداسية المراحل</strong><br><span style="font-size: 11px; color: #64748b;">طوارئ &larr; لثة &larr; حشو &larr; تقويم &larr; زراعة &larr; تثبيت</span></td>
+              <td class="highlight-col" style="text-align: center;"><span class="status-check">✓ متكامل بالكامل</span></td>
+              <td style="text-align: center;"><span class="status-cross">✗ تشخيص فقط</span></td>
+              <td style="text-align: center;"><span class="status-cross">✗ تشخيص فقط</span></td>
+              <td style="text-align: center;"><span class="status-cross">✗ غير متاح</span></td>
+              <td style="text-align: center;"><span class="status-cross">✗ ألاينرز فقط</span></td>
+              <td style="text-align: center;"><span class="status-cross">✗ تريسينج فقط</span></td>
+            </tr>
+            <tr>
+              <td><strong>تسلسل ميكانيكا الأسلاك والبراكتس</strong><br><span style="font-size: 11px; color: #64748b;">CuNiTi &larr; TMA &larr; SS مع وصفات MBT/Roth</span></td>
+              <td class="highlight-col" style="text-align: center;"><span class="status-check">✓ آلي وحسابي</span></td>
+              <td style="text-align: center;"><span class="status-cross">✗</span></td>
+              <td style="text-align: center;"><span class="status-cross">✗</span></td>
+              <td style="text-align: center;">ملاحظات يدوية</td>
+              <td style="text-align: center;"><span class="status-cross">✗</span></td>
+              <td style="text-align: center;"><span class="status-cross">✗</span></td>
+            </tr>
+            <tr>
+              <td><strong>استوديو زراعة الأسنان وعزم المسامير</strong><br><span style="font-size: 11px; color: #64748b;">14 كتالوج + Misch D1-D4 + عزم 25-35 Ncm</span></td>
+              <td class="highlight-col" style="text-align: center;"><span class="status-check">✓ متكامل</span></td>
+              <td style="text-align: center;"><span class="status-cross">✗</span></td>
+              <td style="text-align: center;"><span class="status-cross">✗</span></td>
+              <td style="text-align: center;"><span class="status-cross">✗</span></td>
+              <td style="text-align: center;"><span class="status-cross">✗</span></td>
+              <td style="text-align: center;"><span class="status-cross">✗</span></td>
+            </tr>
+            <tr>
+              <td><strong>تحليل السيفالومترك الآلي وقواعد بولتون</strong><br><span style="font-size: 11px; color: #64748b;">16 نقطة تشريحية + Bolton 3D بالمليمتر</span></td>
+              <td class="highlight-col" style="text-align: center;"><span class="status-check">✓ فوري (ثوانٍ)</span></td>
+              <td style="text-align: center;"><span class="status-cross">✗</span></td>
+              <td style="text-align: center;"><span class="status-cross">✗</span></td>
+              <td style="text-align: center;">✓ يدوي / مكلف</td>
+              <td style="text-align: center;"><span class="status-cross">✗</span></td>
+              <td style="text-align: center;">✓ تريسينج فقط</td>
+            </tr>
+            <tr>
+              <td><strong>التخطيط التقويمي الجراحي (Orthognathic)</strong><br><span style="font-size: 11px; color: #64748b;">Le Fort I, BSSO, Decompensation, SFA</span></td>
+              <td class="highlight-col" style="text-align: center;"><span class="status-check">✓ مدمج بالنظام</span></td>
+              <td style="text-align: center;"><span class="status-cross">✗</span></td>
+              <td style="text-align: center;"><span class="status-cross">✗</span></td>
+              <td style="text-align: center;">إضافة بآلاف $</td>
+              <td style="text-align: center;"><span class="status-cross">✗</span></td>
+              <td style="text-align: center;"><span class="status-cross">✗</span></td>
+            </tr>
+            <tr>
+              <td><strong>الربط اللحظي بأبحاث PubMed الطبية</strong><br><span style="font-size: 11px; color: #64748b;">توثيق مباشر مع أرقام PMIDs و DOIs</span></td>
+              <td class="highlight-col" style="text-align: center;"><span class="status-check">✓ Live RAG</span></td>
+              <td style="text-align: center;"><span class="status-cross">✗</span></td>
+              <td style="text-align: center;"><span class="status-cross">✗</span></td>
+              <td style="text-align: center;"><span class="status-cross">✗</span></td>
+              <td style="text-align: center;"><span class="status-cross">✗</span></td>
+              <td style="text-align: center;"><span class="status-cross">✗</span></td>
+            </tr>
+            <tr>
+              <td><strong>طريقة العمل والتثبيت</strong><br><span style="font-size: 11px; color: #64748b;">Cloud Native vs ديسكتوب ودونجل</span></td>
+              <td class="highlight-col" style="text-align: center;"><strong>سحابي 100%</strong></td>
+              <td style="text-align: center;">سحابي</td>
+              <td style="text-align: center;">سحابي</td>
+              <td style="text-align: center;">ديسكتوب + دونجل</td>
+              <td style="text-align: center;">ويب + تطبيق</td>
+              <td style="text-align: center;">سحابي</td>
+            </tr>
+            <tr>
+              <td><strong>التكلفة المبدئية والرأسمالية (CapEx)</strong><br><span style="font-size: 11px; color: #64748b;">رسوم الشراء وتراخيص السيرفرات</span></td>
+              <td class="highlight-col" style="text-align: center;"><strong>0$ CapEx</strong></td>
+              <td style="text-align: center;">عقود شركات ضخمة</td>
+              <td style="text-align: center;">عقود شركات ضخمة</td>
+              <td style="text-align: center;">8,000$ - 15,000$+</td>
+              <td style="text-align: center;">هامش على الكيس</td>
+              <td style="text-align: center;">اشتراك بسيط</td>
+            </tr>
+            <tr>
+              <td><strong>الحرية وعدم الارتباط بمعمل معين (Agnostic)</strong></td>
+              <td class="highlight-col" style="text-align: center;"><strong>مفتوح 100%</strong></td>
+              <td style="text-align: center;">مفتوح</td>
+              <td style="text-align: center;">مفتوح</td>
+              <td style="text-align: center;">مفتوح</td>
+              <td style="text-align: center;"><span class="status-cross">محتكر (Invisalign)</span></td>
+              <td style="text-align: center;">مفتوح</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout callout-warning">
+        <strong>الخلاصة التنافسية:</strong> Overjet و Pearl يمتلكان أداة تشخيص ممتازة للأشعة 2D، لكنهما <strong>لا يخططان ولا يعالجان</strong>. Dolphin نظام عفا عليه الزمن. ClinCheck نظام احتكاري باهظ. <strong>Odonto AI هو المنصة الوحيدة في العالم التي تأخذ الطبيب من لحظة رفع الأشعة وحتى تسليم خطة علاجية وزراعية سداسية المراحل جاهزة للتنفيذ على الكرسي.</strong>
+      </div>
+    </section>
+
+    <div class="page-break"></div>
+
+    <!-- SECTION 5: رحلة العيادة والمريض -->
+    <section class="section">
+      <span class="section-tag tag-blue">5. رحلة العيادة والمريض خطوة بخطوة (End-to-End Workflow)</span>
+      <h2>كيف تدير العيادة أي حالة معقدة في أقل من 3 دقائق؟</h2>
+      <p>
+        صُمم تدفق العمل (Workflow) ليكون سلساً وسريعاً جداً ليناسب إيقاع العمل المزدحم داخل العيادات والمراكز الكبرى:
+      </p>
+
+      <div class="step-item">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h4>المرحلة 1: الاستقبال والتريسينج الآلي (60 ثانية)</h4>
+          <p>رفع صورة السيفالومترك الجانبية أو البانوراما أو إدخال القياسات السريرية. يقوم الذكاء الاصطناعي برسم 16 نقطة تشريحية تلقائياً وحساب زوايا ANB, Wits, IMPA ومستوى نمو الفقرات العظمية (CVM).</p>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h4>المرحلة 2: الفلترة البيولوجية الصارمة والـ 7 طبقات (30 ثانية)</h4>
+          <p>تمر الحالة عبر خط الأنابيب ذو الـ 7 طبقات: فحص سلامة العظم اللثوي، وتناسق أحجام الأسنان (Bolton 77.2% / 91.3%)، والتأكد من عدم اختراق القواطع لجدار العظم الخارجي (Cortical Limits) لتجنب انحسار اللثة.</p>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h4>المرحلة 3: الإقناع والمحاكاة على الكرسي (Chairside Case Conversion)</h4>
+          <p>عرض محاكاة بصرية ثلاثية الأبعاد فورية للأسنان وحركة الفكين أمام المريض على شاشة العيادة أو الآيباد، مما يرفع ثقة المريض ويؤدي لموافقته الفورية على بدء العلاج وسداد الدفعة المقدمة.</p>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <h4>المرحلة 4: استوديو التخطيط وخطة الـ 6 مراحل التنفيذية</h4>
+          <p>يولد النظام جدولاً سريرياً تنفيذياً يحتوي على وصفة البراكتس (MBT/Roth)، وتسلسل الأسلاك وتواريخ التبديل، وقوى المطاط ومواضع مسامير الـ TADs، بالإضافة إلى قرارات الحشوات والخلع إن لزم الأمر.</p>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <h4>المرحلة 5: استوديو زراعة الأسنان وعزم المسامير (Implant Hub)</h4>
+          <p>إذا كانت الحالة تحتوي على فراغات مفقودة، يتم توجيه السن مباشرة لاستوديو الزراعة لحساب قطر وطول الزرعة، وكثافة العظم (Misch D1-D4)، وبروتوكول رفع الجيب الأنفي، وعزم ربط مسمار الأباتمنت من الكتالوج الأصلي.</p>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num">6</div>
+        <div class="step-content">
+          <h4>المرحلة 6: تقرير المعمل والتثبيت (Lab Sync & Retention)</h4>
+          <p>تصدير تقرير فني شامل للمعمل (Lab Slip) فيه قياسات برد الأسنان (IPR) بالأعشار من المليمتر، أو مواصفات الـ Custom Ti-Base في الزراعة، مع بروتوكول التثبيت النهائي (Essix + Bonded Wire).</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="page-break"></div>
+
+    <!-- SECTION 6: دراسة الجدوى والعائد المالي -->
+    <section class="section">
+      <span class="section-tag tag-emerald">6. دراسة الجدوى والعائد المالي المباشر (Financial ROI)</span>
+      <h2>كم سيوفر ويربح المركز أو العيادة عملياً مع Odonto AI؟</h2>
+      <p>
+        كصاحب بيزنس عيادة أو مركز أسنان، استثمارك في أي منظومة يجب أن يترجم لأرقام واضحة في الحساب البنكي. هنا الحسبة الاقتصادية المباشرة لعيادة تقويم وزراعة تستقبل 20 حالة جديدة شهرياً:
       </p>
 
       <div class="table-container">
@@ -774,140 +875,149 @@
               <th>بند التكلفة والأثر المالي</th>
               <th>بدون Odonto AI (الوضع التقليدي)</th>
               <th>مع Odonto AI</th>
-              <th>مقدار الوفر والربح الشهري</th>
+              <th>مقدار الوفر والربح المباشر</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td><strong>وقت التشخيص والتخطيط</strong></td>
-              <td>45 دقيقة لكل كيس = 15 ساعة شهرياً إهدار وقت استشاري</td>
-              <td>3 دقائق لكل كيس = ساعة واحدة شهرياً</td>
+              <td>45 دقيقة لكل حالة = 15 ساعة شهرياً إهدار وقت استشاري</td>
+              <td>3 دقائق لكل حالة = ساعة واحدة شهرياً</td>
               <td><strong>وفر 14 ساعة شهرياً</strong> (تساوي كشف 28 مريض إضافي = +28,000 ج.م)</td>
             </tr>
             <tr>
-              <td><strong>تراخيص البرامج والدونجل</strong></td>
+              <td><strong>تراخيص البرمجيات والدونجل</strong></td>
               <td>8,000$ - 15,000$ مقدماً + 2,000$ صيانة سنوية</td>
-              <td>اشتراك سحابي مرن بدون أي تكاليف رأسمالية (0$ CapEx)</td>
+              <td>اشتراك سحابي مرن بدون تكاليف رأسمالية (0$ CapEx)</td>
               <td><strong>وفر نقدي مباشر 10,000$+</strong> من أول يوم</td>
             </tr>
             <tr>
               <td><strong>نسبة إقناع المرضى (Case Acceptance)</strong></td>
-              <td>50% من المرضى بيترددوا أو بيأجلوا لبعدين</td>
-              <td>75% - 80% بسبب المحاكاة ثلاثية الأبعاد اللحظية</td>
+              <td>50% من المرضى يترددون أو يؤجلون بسبب غياب المحاكاة</td>
+              <td>75% - 80% بسبب الإقناع البصري الفوري 3D على الكرسي</td>
               <td><strong>زيادة 5 حالات مقبولة شهرياً</strong> (متوسط الحالة 25,000 ج.م = +125,000 ج.م شهرياً)</td>
             </tr>
             <tr>
               <td><strong>إعادة شغل المعامل وتتبع الألاينرز (Refinements)</strong></td>
-              <td>3 إلى 4 حالات شهرياً بتحتاج إعادة طبعات وشغل معمل مهدور</td>
-              <td>تتبع دقيق بحد أقصى 0.2mm لكل مرحلة يقضي على الـ Tracking Loss</td>
+              <td>3 إلى 4 حالات شهرياً تحتاج إعادة طبعات وشغل معمل مهدور</td>
+              <td>تتبع دقيق بحد أقصى 0.2mm لكل مرحلة يمنع الـ Tracking Loss</td>
               <td><strong>وفر تكاليف معملية مباشرة</strong> بنسبة 60% (حوالي 15,000 ج.م شهرياً)</td>
             </tr>
             <tr>
-              <td><strong>فشل الزرعات ومشاكل المسامير</strong></td>
+              <td><strong>فشل الزرعات وارتخاء المسامير</strong></td>
               <td>ارتخاء متكرر للمسامير بسبب عزم ربط تقديري غير معاير</td>
               <td>حساب عزم الربط (Torque) الدقيق لكل سيستم زراعة من كتالوج الشركة</td>
-              <td><strong>حماية سمعة المركز الطبية</strong> وتفادي تعويضات وخسائر إعادة الزراعة</td>
+              <td><strong>حماية سمعة المركز الطبية</strong> وتفادي خسائر وتكاليف إعادة الزراعة</td>
             </tr>
           </tbody>
         </table>
       </div>
 
       <div class="callout callout-warning">
-        <strong>صافي الأثر المالي التراكمي:</strong> المركز المتوسط الحجم اللي بيستخدم Odonto AI بيحقق عائد استثمار مباشر (ROI) يتجاوز <strong>450%</strong> في أول 3 شهور فقط، مع زيادة في دخل العيادة الصافي تتراوح بين <strong>100,000 إلى 150,000 جنيه مصري شهرياً</strong> ناتجة عن رفع نسب قبول الحالات واختصار زمن الجلسات.
+        <strong>صافي الأثر المالي التراكمي:</strong> المركز المتوسط الحجم الذي يستخدم Odonto AI يحقق عائد استثمار مباشر (ROI) يتجاوز <strong>450%</strong> في أول 3 أشهر فقط، مع زيادة في الدخل الصافي للعيادة تتراوح بين <strong>100,000 إلى 150,000 جنيه مصري شهرياً</strong> ناتجة عن رفع نسب قبول الحالات واختصار زمن الجلسات وتفادي إعادة شغل المعامل.
       </div>
     </section>
 
     <div class="page-break"></div>
 
-    <!-- SECTION 5: الرد على الاعتراضات وشكوك الأطباء -->
+    <!-- SECTION 7: الرد على الشكوك والاعتراضات -->
     <section class="section">
-      <span class="section-tag tag-rose">5. دليل مواجهة الشكوك والاعتراضات (Objections & Rebuttals)</span>
-      <h2>إزاي ترد بمنطق علمي واقتصادي حاسم على أي دكتور أو مستثمر متشكك؟</h2>
+      <span class="section-tag tag-rose">7. دليل مواجهة الشكوك والاعتراضات الصعبة (Objections & Tough Rebuttals)</span>
+      <h2>كيف ترد بمنطق علمي واقتصادي حاسم على أي استشاري أو مستثمر متشكك؟</h2>
 
       <div class="qa-box">
         <div class="qa-q">
-          <span>❓ الاعتراض 1: "الذكاء الاصطناعي بيهلوس، إزاي أثق في برنامج يحسبلي مقاس زرعة أو زاوية تقويم جراحي؟"</span>
+          <span>❓ الاعتراض 1: "الذكاء الاصطناعي بيهلوس، إزاي أثق فيه يحسبلي زاوية جراحة أو مقاس زرعة؟"</span>
         </div>
         <div class="qa-a">
-          <strong>الرد الحاسم:</strong> "يا دكتور، حضرتك عندك حق تماماً لو كنا شغالين بـ ChatGPT أو نموذج لغوي عام! Odonto AI مبني على <strong>Dual-Engine Architecture (محرك ثنائي)</strong>. الجزء الذكي بيحلل البيانات ويفهم تفضيلاتك، لكن الجزء اللي بيحسب زوايا الـ Steiner والـ Bolton وأبعاد الزرعات هو <strong>محرك بيوميكانيكي حسابي قطعي (Deterministic Engine)</strong>، يعني معادلات رياضية وهندسية صارمة مفيهاش مجال للهلوسة. البرنامج لو لقى إن سمك العظم في الـ Buccal أقل من 1.5mm أو المسافة من العصب أقل من 2mm بيضرب جرس إنذار فوري ويمنع وضع الزرعة في المكان ده بيولوجياً. البرنامج بيحميك قانونياً وطبياً."
+          <strong>الرد الحاسم:</strong> "يا دكتور، حضرتك عندك حق تماماً لو كنا نستخدم نموذج لغوي عام مثل ChatGPT! لكن Odonto AI مبني على <strong>الهندسة الحسابية المزدوجة (Dual-Engine Architecture)</strong>. الذكاء الاصطناعي يفهم النصوص وينظم البيانات، أما الجزء الذي يحسب زوايا السيفالومترك، وتناسب الأسنان لبولتون، وأبعاد الزرعات فهو <strong>محرك بيوميكانيكي حسابي قطعي (Deterministic Engine)</strong>، أي معادلات رياضية وهندسية صارمة مبرمجة لا تقبل الهلوسة. البرنامج لو وجد أن سمك عظم الـ Buccal أقل من 1.5mm أو المسافة من العصب أقل من 2mm، يطلق تنبيهاً فورياً ويمنع التخطيط بيولوجياً لحمايتك طبياً وقانونياً."
         </div>
       </div>
 
       <div class="qa-box">
         <div class="qa-q">
-          <span>❓ الاعتراض 2: "أنا استشاري تقويم بقالي 20 سنة شغال وبشخص بالعين المجردة، ليه أدفع في سوفت وير؟"</span>
+          <span>❓ الاعتراض 2: "ما الفرق الجوهري بينكم وبين منصات كبرى مثل Overjet و Pearl (Second Opinion)؟"</span>
         </div>
         <div class="qa-a">
-          <strong>الرد الحاسم:</strong> "خبرة حضرتك ورؤيتك هي الأساس اللي مفيش سوفت وير يقدر يستبدله. لكن Odonto AI مش معمول عشان يعلمك تقويم، معمول عشان <strong>يشتريلك وقت ويقفل ديل مع المريض</strong>. حضرتك وقتك على الكرسي بيساوي فلوس؛ لما توفر 40 دقيقة تريسينج يدوي وتستغلها في استقبال حالتين جداد، أنت بتضاعف دخلك. الأهم من كده: مريض النهارده من جيل السوشيال ميديا، لما بيشوف دكتور بيوريه تحليله 3D على شاشة في دقيقة، ثقته بتزيد 10 أضعاف مقارنة بدكتور بيشرح له في الهوا. Odonto هو أداة التسويق والتحويل رقم 1 لعيادتك."
+          <strong>الرد الحاسم:</strong> "Overjet و Pearl شركات ممتازة وحاصلة على موافقات FDA لكشف التسوس وتآكل العظم على أشعة 2D، لكنهما تمثلان <strong>طريقاً تشخيصياً مسدوداً (Diagnostic Dead-End)</strong>. هما يقفان عند حد اكتشاف المرض، ولا يكتبان خطة علاج، ولا يرسمان سيفالومترك، ولا يحسبان بيوميكانيكا تقويمية، ولا يخططان زراعة أسنان! <strong>Odonto AI يكمل المشوار من حيث توقفوا:</strong> يأخذ التشخيص ويحوله فوراً إلى خطة علاج سداسية المراحل، بتسلسل أسلاك، ووصفات براكتس، وأبعاد زرعات، وعزم ربط مسامير، مع نمط خاص بالخريجين ونمط للاستشاريين."
         </div>
       </div>
 
       <div class="qa-box">
         <div class="qa-q">
-          <span>❓ الاعتراض 3: "هل السيستم بيفهم في التقويم الجراحي المعقد وحالات الـ BSSO والـ Le Fort I؟"</span>
+          <span>❓ الاعتراض 3: "أنا استشاري قديم وخبرتي 25 سنة، ليه أحتاج برنامج في عيادتي؟"</span>
         </div>
         <div class="qa-a">
-          <strong>الرد الحاسم:</strong> "بالتأكيد! البرنامج مصمم من الأساس عشان يغطي التقويم الجراحي بالكامل: بيحسبلك الـ 3-Plane Vectors، وبيحدد أهداف الـ Pre-Surgical Decompensation وتعديل زوايا القواطع (IMPA إلى 90° ± 3°)، وبيحسب توقيتات الـ Surgery-First Approach بالاعتماد على ظاهرة الـ RAP لتسريع حركة الأسنان 4 لـ 6 أضعاف، وبيحسب مسافة الأمان الحيوية من عصب الفك (IAN) لمنع أي تنميل دائم بعد الـ Osteotomy."
+          <strong>الرد الحاسم:</strong> "خبرة حضرتك ورؤيتك الإكلينيكية هي الأساس الذي لا يمكن لأي برنامج استبداله. Odonto AI ليس معمولاً ليعلمك المهنة، بل ليشتري لك وقتك ويقفل ديل مع المريض. وقت حضرتك في الكشف بيساوي فلوس؛ توفير 40 دقيقة تريسينج وتخطيط يدوي لكل حالة يعني استقبال 3 حالات إضافية يومياً. والأهم: مريض اليوم من جيل التكنولوجيا، حين يرى محاكاة 3D وتفصيلاً دقيقاً لخطة علاجه على شاشة الكرسي، تتضاعف ثقته في المركز ثلاث مرات ويدفع التعاقد فوراً دون تردد."
         </div>
       </div>
 
       <div class="qa-box">
         <div class="qa-q">
-          <span>❓ الاعتراض 4: "وبالنسبة للزراعة، هيقدر يحسبلي المقاسات وعزم المسامير المطلوبة فعلاً؟"</span>
+          <span>❓ الاعتراض 4: "هل يفهم البرنامج في التقويم الجراحي المعقد وحالات الـ BSSO والـ Le Fort I؟"</span>
         </div>
         <div class="qa-a">
-          <strong>الرد الحاسم:</strong> "نعم وبمنتهى الدقة. البرنامج جواه مكتبة مدمجة لـ 14 نظام زراعة عالمي (Straumann, Nobel Biocare, Zimmer, Dentsply, BioHorizons, Osstem, MegaGen, etc.). بمجرد ما تدخل أبعاد العظم من الـ CBCT، البرنامج بيصنف كثافة العظم بمقياس Misch (D1 لـ D4) بناءً على الـ Hounsfield Units، وبيحسبلك سرعات الدريل وتبريد العظم، ويقترح القطر والطول اللي يحافظ على 1.5mm عظم خارجي، ويحدد عزم ربط مسمار الأباتمنت (Torque) الدقيق (مثلاً 35 Ncm لستراومان أو 30 لـ زيمر) مع بروتوكول إعادة الربط بعد 10 دقائق."
+          <strong>الرد الحاسم:</strong> "بالتأكيد! المنصة مجهزة ببروتوكولات متخصصة للتقويم الجراحي بالتعاون مع جراحي الوجه والفكين: تحسب متجهات Le Fort I و BSSO ثلاثية الأبعاد، وتحدد أهداف الـ Pre-Surgical Decompensation وتعديل زوايا القواطع (IMPA إلى 90° ± 3°)، وتدعم بروتوكول الـ Surgery-First Approach بالاستفادة من ظاهرة الـ RAP لتسريع حركة الأسنان 4 إلى 6 أضعاف، مع حساب مسافة الأمان الحيوية من عصب الفك (IAN)."
         </div>
       </div>
 
       <div class="qa-box">
         <div class="qa-q">
-          <span>❓ الاعتراض 5: "السوق فيه عمالقة زي Dolphin Imaging و ClinCheck، إيه ميزتكم الحقيقية عنهم؟"</span>
+          <span>❓ الاعتراض 5: "وبالنسبة للزراعة، هل يحسب المقاسات وعزم المسامير وفق مواصفات المصنعين؟"</span>
         </div>
         <div class="qa-a">
-          <strong>الرد الحاسم:</strong> "Dolphin برنامج عظيم وله تاريخ، لكنه سجين التسعينات: برنامج ديسكتوب تقيل، محتاج أجهزة معينة بدونجل USB في الكيسة، ورخصته بتعدي 10,000 دولار غير الصيانة السنوية الإجبارية، ومفيهوش ميكانيكا ألاينرز ولا زراعة. أما ClinCheck فهو نظام مقفول بيجبرك تستخدم ألاينرز شركة إنفزلاين فقط بأسعارهم العالية. <strong>Odonto AI هو البديل الحر، السحابي، الأحدث والأشمل:</strong> يشتغل من أي متصفح أو آيباد، مفتوح لأي معمل وأي خامات، بيجمع التقويم والزراعة مع بعض، وتكلفته تمثل أقل من 10% من تكلفة البرمجيات القديمة مع سرعة وإبهار بصري يفوقهم."
+          <strong>الرد الحاسم:</strong> "نعم وبدقة هندسية مطلقة. يتضمن استوديو الزراعة 14 كتالوجاً لأشهر الأنظمة العالمية (Straumann, Nobel Biocare, Zimmer, Dentsply, MegaGen, Osstem, etc.). بمجرد إدخال أبعاد العظم من الـ CBCT، يحدد النظام كثافة العظم Misch (D1 لـ D4) بناءً على الهونسفيلد، ويحدد سرعات الدريل وتبريد العظم، ويقترح القطر والطول الذي يحافظ على عظم خارجي آمن، ويحدد عزم ربط مسمار الأباتمنت بدقة (Torque Ncm) مع بروتوكول إعادة الربط بعد 10 دقائق لتجنب الارتخاء."
         </div>
       </div>
 
       <div class="qa-box">
         <div class="qa-q">
-          <span>❓ الاعتراض 6: "ماذا عن أمان بيانات المرضى والسرية الطبية؟"</span>
+          <span>❓ الاعتراض 6: "كيف يقارن Odonto AI بـ Dolphin Imaging و ClinCheck؟"</span>
         </div>
         <div class="qa-a">
-          <strong>الرد الحاسم:</strong> "النظام مشفر بالكامل بتقنيات التشفير البنكي ومطابق لمعايير HIPAA و GDPR للخصوصية الطبية. بيانات وأشعة مرضاك ملكك أنت فقط ومحمية على خوادم سحابية مؤمنة مع نسخ احتياطي لحظي يضمن إنك مفيش ملف عيادة يضيع منك حتى لو جهاز العيادة اتسرق أو باظ."
+          <strong>الرد الحاسم:</strong> "Dolphin سجين حقبة التسعينات: برنامج ديسكتوب تقيل، يتطلب دونجل فيزيائي، ورخصته تتجاوز 10,000$ غير الصيانة السنوية، وبدون أي دعم للألاينرز أو الزراعة. أما ClinCheck فهو نظام احتكاري مغلق يرغم الطبيب على شراء الألاينرز من إنفزلاين فقط بأسعار باهظة. <strong>Odonto AI هو البديل السحابي الحر والأشمل:</strong> يعمل من أي متصفح، مفتوح لأي معمل وخامات، يجمع التقويم والزراعة معاً، وتكلفته لا تتجاوز 10% من تكلفة البرمجيات القديمة مع سرعة وإبهار بصري فائق."
+        </div>
+      </div>
+
+      <div class="qa-box">
+        <div class="qa-q">
+          <span>❓ الاعتراض 7: "ماذا عن أمان بيانات وسرية المرضى والأشعة؟"</span>
+        </div>
+        <div class="qa-a">
+          <strong>الرد الحاسم:</strong> "المنظومة مشفرة بالكامل بتقنيات تشفير بنكي (256-bit SSL) ومطابقة لمعايير HIPAA و GDPR للخصوصية والسرية الطبية. بيانات وأشعة مرضاك ملكك أنت فقط ومحفوظة على خوادم سحابية آمنة مع نسخ احتياطي لحظي يضمن عدم ضياع أي ملف للعيادة حتى لو تعطل جهاز الكشف."
         </div>
       </div>
     </section>
 
     <div class="page-break"></div>
 
-    <!-- SECTION 6: نموذج العمل والشراكة المستقبلية -->
+    <!-- SECTION 8: نموذج العمل والرؤية الاستثمارية -->
     <section class="section">
-      <span class="section-tag tag-blue">6. نموذج العمل والفرصة الاستثمارية (Business Model & Vision)</span>
-      <h2>كيف يحقق Odonto AI أرباحاً قابلة للتوسع السريع؟</h2>
+      <span class="section-tag tag-blue">8. نموذج العمل والتوسع المستقبلي (Business Model & Scalability)</span>
+      <h2>كيف يحقق Odonto AI عوائد متكررة وقابلة للنمو السريع؟</h2>
       <div class="grid-2">
         <div class="card">
           <div class="card-title">1. اشتراكات الـ SaaS للعيادات الفردية (Solo Orthodontists)</div>
-          <div class="card-desc">باقات شهرية وسنوية مرنة تتيح للطبيب استخدام استوديو التقويم والزراعة بالكامل دون أي استثمار رأسمالي مبدئي.</div>
+          <div class="card-desc">باقات شهرية وسنوية مرنة تتيح للطبيب استخدام استوديو التقويم والزراعة بالكامل دون الحاجة لأي تكاليف رأسمالية مبدئية.</div>
         </div>
         <div class="card">
-          <div class="card-title">2. باقات المراكز وسلاسل العيادات (Multi-Chair DSOs)</div>
-          <div class="card-desc">حسابات مركزية للمراكز الكبيرة تتيح لعدة أطباء العمل بشكل متزامن مع تقارير أداء مركزية وتخزين غير محدود للمرضى.</div>
+          <div class="card-title">2. باقات سلاسل ومراكز الأسنان الكبرى (Multi-Chair DSOs)</div>
+          <div class="card-desc">حسابات مركزية للمراكز الضخمة تتيح لعدة أطباء العمل معاً بالتزامن، مع لوحة تحكم إدارية لتقارير الإنتاجية وسعة تخزين غير محدودة.</div>
         </div>
         <div class="card">
-          <div class="card-title">3. الشراكات مع معامل التقويم ومصنعي الألاينرز (Lab White-Label)</div>
-          <div class="card-desc">توفير المحرك البيوميكانيكي لمعامل التقويم كمنصة رقمية لاستقبال ومراجعة الحالات من الأطباء مباشرة.</div>
+          <div class="card-title">3. الشراكات مع معامل الأسنان ومصنعي الألاينرز (Lab White-Label)</div>
+          <div class="card-desc">توفير المحرك الحسابي كمنصة رقمية لمعامل التقويم والزراعة لاستقبال الحالات ومراجعة الخطط مع الأطباء مباشرة.</div>
         </div>
         <div class="card">
-          <div class="card-title">4. الرخص الأكاديمية والجامعات (Academic & Residency)</div>
-          <div class="card-desc">دمج المنصة في برامج الدراسات العليا والماجستير لتدريب أطباء المستقبل على أحدث أساليب التخطيط البيوميكانيكي.</div>
+          <div class="card-title">4. الرخص الأكاديمية والجامعات (Academic & Residency Programs)</div>
+          <div class="card-desc">دمج المنصة في برامج الماجستير والزمالة لتدريب أطباء المستقبل على أحدث أساليب التخطيط البيوميكانيكي القائم على الأدلة.</div>
         </div>
       </div>
 
       <div class="callout callout-success" style="margin-top: 26px;">
-        <h3 style="margin-top: 0; color: var(--emerald-600);">كلمة ختامية من المؤسس:</h3>
+        <h3 style="margin-top: 0; color: var(--emerald-700);">كلمة ختامية من المؤسس:</h3>
         <p style="margin-bottom: 0; color: #065f46;">
-          "Odonto AI لم يُصنع في مكاتب مبرمجين معزولين عن الواقع. صُنع بأيدي وعقول أطباء تقويم أسنان بيقعدوا على الكرسي يومياً وعارفين حيرة المريض، وصعوبة حسابات العظم، وضغط تكاليف العيادة. هدفنا مش مجرد بيع برنامج، هدفنا وضع أقوى منظومة عيادية رقمية في إيد كل طبيب أسنان لرفع جودة العلاج ومضاعفة أرباح عيادته مع توفير أمان بيولوجي كامل لكل مريض."
+          "Odonto AI لم يُصنع في مكاتب مبرمجين معزولين عن عيادات الأسنان. صُنع بأيدي وعقول أطباء تقويم أسنان يقفون على الكرسي يومياً ويعرفون جيداً قلق المريض، وصعوبة حسابات العظم، وضغط تكاليف العيادة. هدفنا ليس مجرد بيع برنامج، بل وضع أقوى منظومة ذكاء إكلينيكي في يد كل طبيب لرفع جودة العلاج ومضاعفة ربحية عيادته مع توفير أمان بيولوجي حقيقي لكل مريض."
         </p>
       </div>
     </section>

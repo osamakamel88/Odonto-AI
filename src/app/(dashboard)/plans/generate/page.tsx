@@ -854,7 +854,11 @@ function GeneratePlanContent() {
 
         {/* Right Column: AI Treatment Plan Output */}
         <div className="space-y-6">
-          <PlanBuilder plan={generatedPlan} isGenerating={isGenerating} />
+          <PlanBuilder 
+            plan={generatedPlan} 
+            isGenerating={isGenerating} 
+            experienceLevel={experienceLevel}
+          />
         </div>
       </div>
     </div>
