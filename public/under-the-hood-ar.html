@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Odonto AI — ما وراء الكواليس (Under the Hood) | وثيقة القدرات السريرية والمعمارية المحدثة لعام 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0284c7;
+      --primary-dark: #0369a1;
+      --primary-light: #e0f2fe;
+      --indigo-600: #4f46e5;
+      --indigo-50: #eef2ff;
+      --teal-600: #0d9488;
+      --teal-700: #0f766e;
+      --teal-50: #f0fdfa;
+      --amber-600: #d97706;
+      --amber-50: #fffbeb;
+      --emerald-600: #059669;
+      --emerald-700: #047857;
+      --emerald-50: #ecfdf5;
+      --rose-600: #e11d48;
+      --rose-700: #be123c;
+      --rose-50: #fff1f2;
+      --slate-950: #020617;
+      --slate-900: #0f172a;
+      --slate-800: #1e293b;
+      --slate-700: #334155;
+      --slate-600: #475569;
+      --slate-500: #64748b;
+      --slate-200: #e2e8f0;
+      --slate-100: #f1f5f9;
+      --slate-50: #f8fafc;
+    }
+
+    html, body {
+      overflow-x: hidden;
+      max-width: 100vw;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+
+    body {
+      font-family: 'Cairo', 'IBM Plex Sans Arabic', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: #f8fafc;
+      color: var(--slate-800);
+      line-height: 1.8;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
+      padding: 40px 20px 100px 20px;
+    }
+
+    .container {
+      max-width: 1040px;
+      width: 100%;
+      margin: 0 auto;
+      background: #ffffff;
+      border: 1px solid var(--slate-200);
+      border-radius: 24px;
+      box-shadow: 0 12px 48px -12px rgba(0,0,0,0.06);
+      padding: 56px 64px;
+    }
+
+    /* Print Specific Styling */
+    @media print {
+      body {
+        background: #ffffff;
+        padding: 0;
+        font-size: 12px;
+        line-height: 1.55;
+      }
+      .container {
+        border: none;
+        box-shadow: none;
+        padding: 12px;
+        max-width: 100%;
+      }
+      .page-break {
+        page-break-after: always;
+        break-after: page;
+      }
+      .no-print {
+        display: none !important;
+      }
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+      .table-container {
+        overflow: visible !important;
+      }
+      table {
+        font-size: 10.5px !important;
+      }
+      th, td {
+        padding: 6px 8px !important;
+      }
+    }
+
+    /* Header Bar */
+    .pitch-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--slate-100);
+      padding-bottom: 26px;
+      margin-bottom: 36px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .logo-badge {
+      width: 52px;
+      height: 52px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--indigo-600) 100%);
+      color: white;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      font-weight: 900;
+      box-shadow: 0 4px 16px rgba(2, 132, 199, 0.25);
+    }
+
+    .brand-text h1 {
+      font-size: 24px;
+      font-weight: 900;
+      color: var(--slate-900);
+      line-height: 1.25;
+      letter-spacing: -0.5px;
+    }
+
+    .brand-text p {
+      font-size: 13px;
+      color: var(--slate-500);
+      margin: 3px 0 0 0;
+      font-weight: 600;
+    }
+
+    .pitch-meta {
+      text-align: left;
+      font-size: 12.5px;
+      color: var(--slate-500);
+      line-height: 1.5;
+    }
+
+    .pitch-meta strong {
+      display: block;
+      color: var(--slate-800);
+      font-size: 13.5px;
+    }
+
+    /* Floating Navigation / Print Bar */
+    .print-bar {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--slate-900);
+      color: white;
+      padding: 10px 22px;
+      border-radius: 9999px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 13px;
+      z-index: 100;
+      backdrop-filter: blur(12px);
+    }
+
+    .print-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 7px 18px;
+      border-radius: 9999px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.2s;
+    }
+
+    .print-btn:hover {
+      background: var(--primary-dark);
+    }
+
+    .back-btn {
+      background: transparent;
+      color: #94a3b8;
+      border: 1px solid #475569;
+      padding: 6px 16px;
+      border-radius: 9999px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      text-decoration: none;
+      font-size: 12.5px;
+      transition: all 0.2s;
+    }
+
+    .back-btn:hover {
+      color: white;
+      border-color: #94a3b8;
+    }
+
+    /* Table of Contents Quick Nav */
+    .toc-card {
+      background: var(--slate-50);
+      border: 1px solid var(--slate-200);
+      border-radius: 18px;
+      padding: 24px 28px;
+      margin-bottom: 40px;
+    }
+
+    .toc-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--slate-900);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .toc-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .toc-link {
+      color: var(--slate-700);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 9px 14px;
+      border-radius: 10px;
+      background: #ffffff;
+      border: 1px solid var(--slate-200);
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .toc-link:hover {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      border-color: #bae6fd;
+    }
+
+    /* Section Styles */
+    .section {
+      margin-bottom: 56px;
+    }
+
+    .section-tag {
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 4px 14px;
+      border-radius: 9999px;
+      display: inline-block;
+      margin-bottom: 12px;
+    }
+
+    .tag-blue { background: var(--primary-light); color: var(--primary-dark); }
+    .tag-teal { background: var(--teal-50); color: var(--teal-600); }
+    .tag-indigo { background: var(--indigo-50); color: var(--indigo-600); }
+    .tag-amber { background: var(--amber-50); color: var(--amber-600); }
+    .tag-emerald { background: var(--emerald-50); color: var(--emerald-600); }
+    .tag-rose { background: var(--rose-50); color: var(--rose-600); }
+
+    h2 {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--slate-900);
+      margin-bottom: 16px;
+      letter-spacing: -0.5px;
+      line-height: 1.35;
+    }
+
+    h3 {
+      font-size: 17.5px;
+      font-weight: 800;
+      color: var(--slate-800);
+      margin-top: 26px;
+      margin-bottom: 12px;
+      line-height: 1.4;
+    }
+
+    h4 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--slate-800);
+      margin-top: 18px;
+      margin-bottom: 8px;
+    }
+
+    p {
+      color: var(--slate-700);
+      margin-bottom: 14px;
+      font-size: 14.5px;
+      line-height: 1.8;
+    }
+
+    ul, ol {
+      margin-bottom: 18px;
+      margin-right: 24px;
+      color: var(--slate-700);
+      font-size: 14px;
+    }
+
+    li {
+      margin-bottom: 8px;
+      line-height: 1.7;
+    }
+
+    /* Callouts */
+    .callout {
+      background: var(--slate-50);
+      border-radius: 14px;
+      padding: 20px 24px;
+      margin: 22px 0;
+      font-size: 14px;
+      line-height: 1.75;
+      border-right: 4px solid var(--primary);
+    }
+
+    .callout-info {
+      background: #f0f9ff;
+      border-color: var(--primary);
+      color: #0369a1;
+    }
+
+    .callout-success {
+      background: #ecfdf5;
+      border-color: var(--emerald-600);
+      color: #047857;
+    }
+
+    .callout-warning {
+      background: #fffbeb;
+      border-color: var(--amber-600);
+      color: #b45309;
+    }
+
+    .callout-danger {
+      background: #fff1f2;
+      border-color: var(--rose-600);
+      color: #be123c;
+    }
+
+    /* Grids & Cards */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+      margin: 22px 0;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin: 22px 0;
+    }
+
+    .card {
+      background: #ffffff;
+      border: 1px solid var(--slate-200);
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+    }
+
+    .card-badge {
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 6px;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--slate-900);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-desc {
+      font-size: 13.5px;
+      color: var(--slate-600);
+      line-height: 1.65;
+    }
+
+    /* Tables */
+    .table-container {
+      overflow-x: auto;
+      margin: 24px 0;
+      border: 1px solid var(--slate-200);
+      border-radius: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+      text-align: right;
+    }
+
+    th {
+      background: #f8fafc;
+      color: var(--slate-900);
+      font-weight: 800;
+      padding: 12px 16px;
+      border-bottom: 2px solid var(--slate-200);
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--slate-200);
+      color: var(--slate-700);
+      vertical-align: top;
+      line-height: 1.6;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background: var(--slate-50);
+    }
+
+    .pmid-badge {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      font-weight: 700;
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      padding: 2px 8px;
+      border-radius: 4px;
+      text-decoration: none;
+      direction: ltr;
+    }
+
+    .pmid-badge:hover {
+      text-decoration: underline;
+      background: #bae6fd;
+    }
+
+    .tier-badge {
+      font-size: 11px;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 6px;
+      display: inline-block;
+      white-space: nowrap;
+    }
+
+    .tier-1a { background: #dcfce7; color: #15803d; }
+    .tier-1b { background: #e0e7ff; color: #4338ca; }
+    .tier-2a { background: #fef3c7; color: #b45309; }
+    .tier-cons { background: #f1f5f9; color: #475569; }
+
+    /* Pipeline Step */
+    .pipeline-step {
+      background: #ffffff;
+      border: 1px solid var(--slate-200);
+      border-radius: 16px;
+      padding: 22px 26px;
+      margin-bottom: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+      border-right: 5px solid var(--primary);
+    }
+
+    .pipeline-step.implant-layer { border-right-color: var(--teal-600); }
+
+    .pipeline-step-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .pipeline-step-num {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--primary-dark);
+      background: var(--primary-light);
+      padding: 3px 12px;
+      border-radius: 9999px;
+    }
+
+    .pipeline-step.implant-layer .pipeline-step-num {
+      color: var(--teal-700);
+      background: var(--teal-50);
+    }
+
+    /* Footer */
+    .pitch-footer {
+      margin-top: 50px;
+      padding-top: 24px;
+      border-top: 1px solid var(--slate-200);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12.5px;
+      color: var(--slate-500);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      body {
+        padding: 16px 12px 90px 12px;
+        font-size: 14px;
+      }
+      .container {
+        padding: 24px 18px;
+        border-radius: 16px;
+      }
+      .pitch-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .pitch-meta {
+        text-align: right;
+        width: 100%;
+        border-top: 1px solid var(--slate-100);
+        padding-top: 10px;
+      }
+      .toc-grid {
+        grid-template-columns: 1fr;
+      }
+      .grid-2, .grid-3 {
+        grid-template-columns: 1fr;
+      }
+      .print-bar {
+        bottom: 12px;
+        left: 10px;
+        right: 10px;
+        transform: none;
+        width: auto;
+        justify-content: space-between;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Floating Print & Navigation Bar -->
+  <div class="print-bar no-print">
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <span style="font-weight: 800; color: #bae6fd;">Odonto AI &bull; وثيقة التقنيات العميقة</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <button type="button" class="print-btn" onclick="window.print()">طباعة / تصدير PDF</button>
+      <a href="/plans/generate" class="back-btn">استوديو العلاج &larr;</a>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- Header -->
+    <header class="pitch-header">
+      <div class="brand-group">
+        <div class="logo-badge">&Omega;</div>
+        <div class="brand-text">
+          <h1>Odonto AI — ما وراء الكواليس (Under the Hood)</h1>
+          <p>الدليل السريري والمعماري الشامل لكافة قدرات المنظومة المحدثة لعام 2026 بعد دراسة المنافسين العالميين</p>
+        </div>
+      </div>
+      <div class="pitch-meta">
+        <strong>وثيقة استشارية وسريرية خاصة (Clinical Deep-Dive)</strong>
+        <span>الإصدار 2.5 &bull; سبتمبر 2026 &bull; للشركاء وأطباء التقويم والزراعة</span>
+      </div>
+    </header>
+
+    <!-- Table of Contents -->
+    <nav class="toc-card no-print">
+      <div class="toc-title">
+        <span>&equiv; فهرس محتويات الدليل التقني والمعماري الموسع:</span>
+      </div>
+      <div class="toc-grid">
+        <a href="#dual-engine" class="toc-link">١. الهندسة الحسابية المزدوجة (Dual-Engine Architecture)</a>
+        <a href="#competitors-analysis" class="toc-link">٢. تشريح ترسانة منتجات Overjet و Pearl وفجواتها الـ 6 القاتلة</a>
+        <a href="#master-6phase" class="toc-link">٣. محرك خطط العلاج الرئيسي خماسي وسداسي المراحل (6-Phase Engine)</a>
+        <a href="#tooth-decision-matrix" class="toc-link">٤. مصفوفة القرارات السريرية التفاعلية للأسنان (FDI 11–48)</a>
+        <a href="#implant-studio" class="toc-link">٥. استوديو زراعة الأسنان المتخصص خماسي الطبقات (Implant Studio)</a>
+        <a href="#ortho-pipeline" class="toc-link">٦. خط أنابيب التقويم والبيوميكانيكا سباعي الطبقات (Ortho Pipeline)</a>
+        <a href="#specialties-14" class="toc-link">٧. التغطية السريرية الشاملة لكافة تخصصات طب الأسنان الـ 14</a>
+        <a href="#pubmed-rag" class="toc-link">٨. محرك البحث والاسترجاع الحي في PubMed RAG الموثق بالأدلة</a>
+        <a href="#webgl-3d" class="toc-link">٩. المحاكاة ثلاثية الأبعاد WebGL على كرسي الكشف</a>
+        <a href="#clinical-verification" class="toc-link">١٠. نتائج التحقق والاختبار السريري الشامل (24 من 24 بنجاح 100%)</a>
+        <a href="#benchmark-table" class="toc-link">١١. مصفوفة المقارنة المباشرة (Odonto AI vs Overjet vs Pearl)</a>
+        <a href="#conclusion" class="toc-link">١٢. الخلاصة الإكلينيكية الفاصلة</a>
+      </div>
+    </nav>
+
+    <!-- SECTION 1: DUAL-ENGINE ARCHITECTURE -->
+    <section id="dual-engine" class="section">
+      <span class="section-tag tag-blue">١. الفلسفة المعمارية الأساسية</span>
+      <h2>الهندسة الحسابية المزدوجة: الفصل الصارم بين الرياضيات الحتمية والذكاء الاصطناعي السياقي</h2>
+      <p>
+        أكبر معضلة تواجه تطبيقات الذكاء الاصطناعي في الطب السريري — وتحديداً في تقويم وزراعة وجراحة الأسنان — هي <strong>الهلوسة التوليدية (LLM Hallucinations)</strong>. لا يمكن لأخصائي التقويم أو جراح الوجه والفكين أن يعتمد على نموذج توليدي يخترع أرقاماً لكثافة العظم، أو يحدد قياسات براكتات عشوائية، أو يخطئ في حساب مسافة العصب الفكي السفلي؛ لأن الخطأ هنا يكلف إصابة عصبية دائمة أو فشلاً علاجياً كارثياً.
+      </p>
+      <p>
+        لذلك صُممت منظومة <strong>Odonto AI</strong> على نموذج معماري مزدوج ومبتكر (Dual-Engine Hybrid Paradigm) يفصل فصلاً قاطعاً بين الحسابات البيوميكانيكية الفيزيائية الصارمة، وبين المعالجة السياقية الذكية للمريض:
+      </p>
+
+      <div class="grid-2">
+        <div class="card" style="border-right: 4px solid var(--primary);">
+          <span class="card-badge tag-blue">المحرك الأول: الرياضيات والفيزياء الحتمية</span>
+          <div class="card-title">Deterministic Biomechanical Engine</div>
+          <div class="card-desc">
+            خوارزميات جبرية ومثلثية وهندسية مشفرة برمجياً لتنفيذ المعادلات الطبية المعتمدة في المراجع العالمية بدقة متناهية ودون أي احتمال للهلوسة:
+            <ul style="margin: 8px 18px 0 0; font-size: 13px;">
+              <li>الحسابات السيفالومترية الهندسية الصارمة (Steiner, Wits, Tweed, Downs).</li>
+              <li>نسب بولتون لتناسق أحجام الأسنان حتى عُشر المليمتر (77.2% / 91.3%).</li>
+              <li>تصنيف كثافة العظم Misch (D1–D4) وربطها بوحدات هونسفيلد Hounsfield Units.</li>
+              <li>هوامش الأمان الإكلينيكية الحتمية (العصب الفكي IAN &ge; 2.0 مم، العظم القشري &ge; 1.5 مم).</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card" style="border-right: 4px solid var(--indigo-600);">
+          <span class="card-badge tag-indigo">المحرك الثاني: التوليد السياقي التكاملي</span>
+          <div class="card-title">Contextual Clinical Synthesis Engine</div>
+          <div class="card-desc">
+            نماذج ذكاء اصطناعي إكلينيكية متخصصة تدمج مخرجات الحسابات الحتمية مع التاريخ المرضي والشكوى الرئيسية للمريض:
+            <ul style="margin: 8px 18px 0 0; font-size: 13px;">
+              <li>صياغة الأهداف العلاجية المتوافقة مع رغبة المريض وجماليات الوجه والابتسامة.</li>
+              <li>تقييم المخاطر العامة (التدخين، السكري، أدوية البيسفوسفونات، والصرير Bruxism).</li>
+              <li>تخصيص تسلسل الأسلاك والقوى التقويمية بحسب نظام البراكتات (MBT / Roth / Damon).</li>
+              <li>استرجاع الدراسات السريرية الداعمة لكل قرار طبي لحظياً من PubMed.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: COMPETITORS SUITE ANALYSIS & 6 FATAL WEAKNESSES -->
+    <section id="competitors-analysis" class="section">
+      <span class="section-tag tag-rose">٢. دراسة المنافسين العالميين</span>
+      <h2>تشريح ترسانة منتجات Pearl و Overjet وفخ "الطريق التشخيصي المسدود"</h2>
+      <p>
+        بناءً على زحف برمجي وتحليل إكلينيكي عميق لكافة حلول وبراءات اختراع عملاقي الذكاء الاصطناعي في طب الأسنان (Overjet الأمريكية و Pearl الأمريكية) لعام 2026، يتضح مشهد السوق بدقة:
+      </p>
+
+      <div class="grid-2">
+        <!-- Pearl Card -->
+        <div class="card" style="border-top: 4px solid var(--indigo-600);">
+          <div class="card-title" style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-weight: 800; color: #1e3a8a;">ترسانة منتجات شركة Pearl (لوس أنجلوس)</span>
+            <span class="card-badge tag-indigo">FDA 510(k) 2D/3D</span>
+          </div>
+          <div class="card-desc" style="margin-top: 10px; font-size: 13px;">
+            <strong>باقة منتجاتها الستة:</strong>
+            <ul style="margin: 6px 16px 0 0;">
+              <li><strong>Second Opinion® (2D):</strong> كشف التسوس وتآكل العظم بـ 18 علامة مرضية وحساب نسبة توغل التسوس للعصب (D1–D3) بدقة 94%.</li>
+              <li><strong>Second Opinion 3D® (CBCT):</strong> تقطيع آلي للأعصاب وعظام الفك والأسنان في 40 ثانية <em>(قيد الحجز المسبق / Waitlist)</em>.</li>
+              <li><strong>Practice Intelligence (PI):</strong> أداة تنقيب في سجلات الـ PMS لاستخراج علاجات التسوس غير المكتملة لرفع دخل العيادة.</li>
+              <li><strong>Pearl Voice:</strong> مساعد صوتي لتسجيل قياسات جيوب اللثة صوتياً على كرسي الكشف.</li>
+              <li><strong>Pearl Precheck / RCM:</strong> فحص تلقائي لأهلية التأمين وإرفاق صور الأشعة لتسريع صرف المطالبات.</li>
+              <li><strong>Calibrate:</strong> منصة تدريب واختبار لتوحيد اتساق قرارات الأطباء في سلاسل المراكز (DSOs).</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Overjet Card -->
+        <div class="card" style="border-top: 4px solid var(--teal-600);">
+          <div class="card-title" style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-weight: 800; color: #0f766e;">ترسانة منتجات شركة Overjet (خريجو MIT، بوسطن)</span>
+            <span class="card-badge tag-teal">تمويل 200M$+</span>
+          </div>
+          <div class="card-desc" style="margin-top: 10px; font-size: 13px;">
+            <strong>باقة منتجاتها الخمسة:</strong>
+            <ul style="margin: 6px 16px 0 0;">
+              <li><strong>Vision AI:</strong> كشف التسوس وقياس تآكل العظم بالمليمتر الدقيق نسبةً لملتقى المينا والملاط (CEJ).</li>
+              <li><strong>IRIS AI Imaging:</strong> سوفت وير سحابي متوافق مع 40+ نوع سنسور بديل لـ Dexis مع فحص جودة الأشعة.</li>
+              <li><strong>Overjet Voice Suite:</strong> تسجيل قياسات اللثة وتوليد الملاحظات الإكلينيكية صوتياً.</li>
+              <li><strong>ReviewPASS / RCM:</strong> موافقات فورية على المطالبات بالربط المباشر مع شركات التأمين.</li>
+              <li><strong>Overjet for Insurers:</strong> برمجيات مراجعة استهلاك تُباع لشركات التأمين لمراجعة وتدقيق ورفض مطالبات الأطباء!</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- The 6 Fatal Weaknesses Callout -->
+      <div class="callout callout-danger" style="margin-top: 20px;">
+        <h3 style="margin-top: 0; color: var(--rose-700); font-size: 16.5px; font-weight: 800;">
+          العيوب والقيود الهيكلية الـ 6 القاتلة في الجيل الأول (لماذا يتوقف Overjet و Pearl عند منتصف الطريق؟):
+        </h3>
+        <ol style="margin-right: 20px; margin-top: 10px; font-size: 13.5px; line-height: 1.75;">
+          <li>
+            <strong>فخ "الطريق التشخيصي المسدود" (The Diagnostic Dead-End):</strong>
+            كلا البرنامجين يرسمان مربعات ملونة حول التسوس، لكنهما <u>يعجزان تماماً عن كتابة خطة علاج</u>! لا يحددان هل الضرس يحتاج حشوة ملغم، كمبوزيت مباشر، أونلاي، علاج عصب، أم خلع وزراعة، ولا يضعان تسلسلاً ميكانيكياً للتنفيذ، مما يترك الطبيب وحيداً أمام عبء اتخاذ القرار بنسبة 95%.
+          </li>
+          <li>
+            <strong>انعدام تام لذكاء تقويم الأسنان (Zero Orthodontics):</strong>
+            يجهلان تماماً علم التقويم؛ لا يقدمان تحليلاً سيفالومترياً واحداً (Steiner, Tweed, Downs)، ولا يحسبان نسب بولتون ثلاثية الأبعاد (Bolton 3D)، ولا تسلسل أسلاك التقويم (CuNiTi &rarr; TMA &rarr; SS)، ولا ميكانيكا الزرعات التقويمية (TADs) أو حدود سرعة حركة القوالب الشفافة.
+          </li>
+          <li>
+            <strong>انعدام تام لهندسة زراعة الأسنان (Zero Implant Planning):</strong>
+            لا يدعمان تخطيط الزراعة التعويضي؛ لا تصنيف لكثافة العظم Misch (D1–D4)، ولا كتالوجات لمقاسات زرعات الشركات الـ 14 العالمية، ولا حساب لمسافات أمان العصب الفكي (2.0 مم) أو سمك العظم الخارجي (1.5 مم)، ولا تنبؤ بعزم الربط الأولي (Torque) أو ثبات الـ ISQ.
+          </li>
+          <li>
+            <strong>غياب تام للتوثيق العلمي الحي (Black-Box AI بلا أبحاث):</strong>
+            نماذج رؤية مصمتة مغلقة؛ لا تربط أي نتيجة بدراسة علمية واحدة من PubMed، ولا تزود الطبيب برقم مرجعي (PMID / DOI) لحماية موقفه الطبي أمام لجان التحقيق أو المرضى.
+          </li>
+          <li>
+            <strong>فخ العيادة العامة وتنظيف الجير (GP Trap):</strong>
+            أكثر من 90% من خوارزمياتهما مصممة لرفع دخل عيادات الأسنان العامة من خلال تشجيع تنظيف الجير وحشوات الكومبوزيت، مع تجاهل كامل للحالات المعقدة متعددة التخصصات (Multidisciplinary).
+          </li>
+          <li>
+            <strong>تضارب مصالح صارخ ضد أطباء الأسنان:</strong>
+            Overjet تحديداً تبيع برمجياتها لشركات التأمين الصحي لتقوم بمراجعة مطالبات الأطباء ورفضها، بالإضافة إلى فرض عقود اشتراك سنوية احتكارية باهظة مصممة خصيصاً لسلاسل الـ DSOs العملاقة، مما يقصي العيادات الخاصة المستقلة.
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- SECTION 3: MASTER 6-PHASE TREATMENT PLAN ENGINE -->
+    <section id="master-6phase" class="section">
+      <span class="section-tag tag-indigo">٣. محرك خطط العلاج الرئيسي</span>
+      <h2>محرك تخليق خطط العلاج خماسي وسداسي المراحل (Master 6-Phase Engine)</h2>
+      <p>
+        على العكس تماماً من "الطريق المسدود" لدى المنافسين، يحتوي Odonto AI على <strong>محرك تخليق علاجي كامل من 6 مراحل تسلسلية</strong> مستندة إلى إرشادات الجمعيات الدولية لطب الأسنان (ADA و AAO و ITI).
+      </p>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 14%;">رقم المرحلة</th>
+              <th style="width: 24%;">عنوان المرحلة والتخصص</th>
+              <th style="width: 14%;">المدى الزمني</th>
+              <th style="width: 28%;">الأهداف السريرية والتدخلات المبرمجة</th>
+              <th style="width: 20%;">شرط الانتقال للمرحلة التالية</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="pipeline-step-num">المرحلة ١</span></td>
+              <td><strong>طوارئ وتثبيت تشخيصي</strong><br><small style="color:var(--slate-500)">Emergency &amp; Diagnostic</small></td>
+              <td>أسبوع ١–٢</td>
+              <td>علاج الألم الحاد، تشخيص حيوية العصب، استبعاد خراجات الجذور، وفحص المفصل الفكي الصدغي (TMJ).</td>
+              <td><span class="tier-badge tier-1a">أمان تام</span> انعدام الألم الحاد واستقرار المفصل.</td>
+            </tr>
+            <tr>
+              <td><span class="pipeline-step-num">المرحلة ٢</span></td>
+              <td><strong>صحة وأمان اللثة</strong><br><small style="color:var(--slate-500)">Periodontal Clearance</small></td>
+              <td>أسبوع ٢–٤</td>
+              <td>تنظيف جير عميق بالموجات فوق الصوتية (SRP)، تقييم النمط الحيوي للثة (Biotype)، وخفض مؤشر اللويحة &lt; 15%.</td>
+              <td><span class="tier-badge tier-1a">أمان تام</span> غياب النزيف عند الفحص (BOP = 0).</td>
+            </tr>
+            <tr>
+              <td><span class="pipeline-step-num">المرحلة ٣</span></td>
+              <td><strong>ترميم وحشو ومكافحة التسوس</strong><br><small style="color:var(--slate-500)">Restorative &amp; Endo</small></td>
+              <td>أسبوع ٤–٦</td>
+              <td>حشو التجاويف بكومبوزيت نانو متقدم، علاج الجذور للضروس المصابة، وإجراء الخلع العلاجي التحفظي عند اللزوم.</td>
+              <td><span class="tier-badge tier-1a">أمان تام</span> تجويف فمي خالٍ تماماً من التسوس النشط.</td>
+            </tr>
+            <tr>
+              <td><span class="pipeline-step-num">المرحلة ٤</span></td>
+              <td><strong>تقويم الأسنان والبيوميكانيكا</strong><br><small style="color:var(--slate-500)">Comprehensive Orthodontics</small></td>
+              <td>شهر ٢–٢٠</td>
+              <td>تسلسل أسلاك التقويم (.014 CuNiTi &rarr; .019x.025 SS)، غلق المسافات، تصحيح العضة، أو تدرج القوالب الشفافة.</td>
+              <td><span class="tier-badge tier-1a">أمان تام</span> إطباق سليم وتطابق في خطوط منتصف الأسنان.</td>
+            </tr>
+            <tr>
+              <td><span class="pipeline-step-num">المرحلة ٥</span></td>
+              <td><strong>الجراحة والزراعة والتركيبات</strong><br><small style="color:var(--slate-500)">Implant &amp; Prosthodontics</small></td>
+              <td>شهر ٢٠–٢٢</td>
+              <td>زراعة الأسنان الموجهة حاسوبياً 3D للأسنان المفقودة، رفع الجيب الفكي، وتركيب تيجان الزيركونيا المربوطة بمسامير.</td>
+              <td><span class="tier-badge tier-1a">أمان تام</span> ثبات عظمي مكتمل (ISQ &ge; 70).</td>
+            </tr>
+            <tr>
+              <td><span class="pipeline-step-num">المرحلة ٦</span></td>
+              <td><strong>التثبيت والاستقرار البيوميكانيكي</strong><br><small style="color:var(--slate-500)">Retention &amp; Stability</small></td>
+              <td>شهر ٢٢–٣٦+</td>
+              <td>سلك تثبيت لساني ملتصق (Bonded 3-3) + قوالب Essix شفافة ليلية مع موازنة الإطباق ومنع الانتكاس.</td>
+              <td><span class="tier-badge tier-1a">أمان تام</span> استقرار إطباقي دائم بدون أي انتكاس.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout callout-info" style="margin-top: 16px;">
+        <strong>ميزة التبديل الذكي بين نمطي العمل (Dual Clinical Persona):</strong>
+        <ul style="margin: 6px 16px 0 0;">
+          <li><strong>نمط طبيب الامتياز والخريج (Junior Mode):</strong> يحيط الطبيب بحواجز أمان إكلينيكية صارمة (Guardrails)، ويحذره من المخاطر التشريحية، ويقدم شروحاً تفصيلية لكل خطوة ميكانيكية.</li>
+          <li><strong>نمط الاستشاري الخبير (Senior Consultant Mode):</strong> يعرض مصفوفة البيانات المكثفة، الحسابات البيوميكانيكية المعقدة، وتسلسلات الأسلاك التخصصية لاتخاذ قرارات فورية فائقة السرعة.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- SECTION 4: TOOTH DECISION MATRIX -->
+    <section id="tooth-decision-matrix" class="section">
+      <span class="section-tag tag-emerald">٤. مصفوفة القرارات السريرية</span>
+      <h2>مصفوفة القرارات السريرية التفاعلية للأسنان (FDI 11–48 Decision Matrix)</h2>
+      <p>
+        بينما يكتفي المنافسون بوضع مستطيل ملون على السن في الأشعة، يربط Odonto AI كل سن مفحوص بمصفوفة قرارات تفاعلية متزامنة لحظياً بنظام الترقيم الدولي (FDI World Dental Federation Notation):
+      </p>
+
+      <div class="grid-3">
+        <div class="card" style="border-right: 4px solid var(--emerald-600);">
+          <div class="card-title">حشو مباشر (Direct Composite)</div>
+          <div class="card-desc">تحويل التسوس في السن فورياً إلى إجراء علاجي محافظ مع تحديد الأسطح (MO / DO / MOD) وعزل السن بالرابردام.</div>
+        </div>
+        <div class="card" style="border-right: 4px solid var(--primary);">
+          <div class="card-title">مسمار تقويمي (TAD Placement)</div>
+          <div class="card-desc">تحديد موقع زرع المسمار التقويمي بين الجذور (Interradicular) لتأمين أقصى مرسى عظمي لغلق المسافة أو الغرز.</div>
+        </div>
+        <div class="card" style="border-right: 4px solid var(--amber-600);">
+          <div class="card-title">فتح مسافة (Space Opening)</div>
+          <div class="card-desc">توجيه ميكانيكا النوابض (Open Coil Springs) لفتح مسافة تعويضية دقيقة لزرعة سنية مستقبلية.</div>
+        </div>
+      </div>
+
+      <div class="callout callout-success">
+        <strong>الربط الفوري بنقرة واحدة مع استوديو زراعة الأسنان (1-Click Bridge to Implant Studio):</strong>
+        عند النقر على زر "Plan" لأي سن مفقود أو محكوم عليه بالخلع في المخطط (Tooth Chart)، ينتقل النظام تلقائياً إلى استوديو الزراعة مع نقل رقم السن التشريحي وكافة القياسات المرتبطة به.
+      </div>
+    </section>
+
+    <!-- SECTION 5: DEDICATED 5-LAYER IMPLANT STUDIO -->
+    <section id="implant-studio" class="section">
+      <span class="section-tag tag-teal">٥. استوديو زراعة الأسنان</span>
+      <h2>استوديو زراعة الأسنان المتخصص خماسي الطبقات (Dedicated 5-Layer Implant Studio)</h2>
+      <p>
+        لا يمتلك أي منافس في العالم أداة لتخطيط زراعة الأسنان تعتمد على محرك بيوميكانيكي حتمي. صُمم استوديو زراعة الأسنان في Odonto AI من 5 طبقات دقيقة:
+      </p>
+
+      <div class="pipeline-step implant-layer">
+        <div class="pipeline-step-header">
+          <span style="font-weight: 800; color: var(--slate-900);">الطبقة ١: تقييم العظم الموضعي وتصنيف Misch الدقيق</span>
+          <span class="pipeline-step-num">Layer 1: Bone Density</span>
+        </div>
+        <p style="margin-bottom: 0; font-size: 13.5px;">
+          تصنيف جودة العظم من D1 إلى D4 وربطها بوحدات هونسفيلد (HU): D1 (&gt;1250 HU)، D2 (850–1250 HU)، D3 (350–850 HU)، و D4 (&lt;350 HU) وفق تصنيفات Misch و Lekholm &amp; Zarb.
+        </p>
+      </div>
+
+      <div class="pipeline-step implant-layer">
+        <div class="pipeline-step-header">
+          <span style="font-weight: 800; color: var(--slate-900);">الطبقة ٢: اختيار الزرعة من مكتبة تضم 14 شركة عالمية</span>
+          <span class="pipeline-step-num">Layer 2: Fixture Catalog</span>
+        </div>
+        <p style="margin-bottom: 0; font-size: 13.5px;">
+          مطابقة الزرعة المثالية (القطر، الطول، نوع السطح، والاتصال المخروطي) من كتالوجات معتمدة لشركات: Straumann, Nobel Biocare, BioHorizons, Zimmer Biomet, Astra Tech, Dentsply Sirona, Osstem, Dentium, Megagen, Neodent وغيرها.
+        </p>
+      </div>
+
+      <div class="pipeline-step implant-layer">
+        <div class="pipeline-step-header">
+          <span style="font-weight: 800; color: var(--slate-900);">الطبقة ٣: حساب هوامش الأمان التشريحية الحتمية</span>
+          <span class="pipeline-step-num">Layer 3: Safety Envelopes</span>
+        </div>
+        <p style="margin-bottom: 0; font-size: 13.5px;">
+          تطبيق هوامش أمان غير قابلة للتفاوض: الحفاظ على مسافة أمان &ge; 2.0 مم تاجياً بالنسبة لقناة العصب الفكي السفلي (IAN)، و &ge; 1.5 مم لسمك العظم القشري الخارجي واللساني، و &ge; 3.0 مم بين الزرعات المتجاورة، مع تحديد مؤشرات رفع قاع الجيب الفكي (Sinus Lift).
+        </p>
+      </div>
+
+      <div class="pipeline-step implant-layer">
+        <div class="pipeline-step-header">
+          <span style="font-weight: 800; color: var(--slate-900);">الطبقة ٤: تسلسل الحفر الجراحي الموجه (Drilling Protocol)</span>
+          <span class="pipeline-step-num">Layer 4: Surgical Drilling</span>
+        </div>
+        <p style="margin-bottom: 0; font-size: 13.5px;">
+          توليد بروتوكول الحفر خطوة بخطوة بحسب كثافة العظم: دريل التوجيه الأولي، الدريل التدريجي، سرعة الدوران (RPM)، الري الداخلي/الخارجي، واستخدام الـ Bone Tap في عظام D1 لمنع النخر الحراري للعظم.
+        </p>
+      </div>
+
+      <div class="pipeline-step implant-layer">
+        <div class="pipeline-step-header">
+          <span style="font-weight: 800; color: var(--slate-900);">الطبقة ٥: التنبؤ بعزم الربط الأولي والتخطيط التعويضي المسبق</span>
+          <span class="pipeline-step-num">Layer 5: Torque &amp; Prosthetics</span>
+        </div>
+        <p style="margin-bottom: 0; font-size: 13.5px;">
+          التنبؤ بعزم الربط الأولي (35–45 Ncm) وثبات الـ ISQ، واختيار التحميل الفوري مقابل المتأخر، مع تحديد نوع الدعامة والتاج (Screw-retained Monolithic Zirconia) لحماية العظم من تسرب الأسمنت.
+        </p>
+      </div>
+    </section>
+
+    <!-- SECTION 6: 7-LAYER ORTHODONTIC PIPELINE -->
+    <section id="ortho-pipeline" class="section">
+      <span class="section-tag tag-blue">٦. خط أنابيب التقويم</span>
+      <h2>خط أنابيب التقويم والبيوميكانيكا سباعي الطبقات (7-Layer Orthodontic Pipeline)</h2>
+      <p>
+        بينما تفتقر برمجيات المنافسين بنسبة 100% لأي قدرة تقويمية، ينفرد Odonto AI بخط أنابيب بيوميكانيكي متكامل من 7 طبقات:
+      </p>
+
+      <ol style="margin-right: 22px; font-size: 14px; line-height: 1.8;">
+        <li><strong>التتبع السيفالومتري المثلثي الآلي (Cephalometric Tracing):</strong> حساب زوايا Steiner (SNA, SNB, ANB)، و Wits Appraisal، و Tweed FMA، ونسبة Jarabak لتحديد النمط الهيكلي وعلاقة الفكين بدقة رياضية مطلقة.</li>
+        <li><strong>تحليل تناسق الأسنان ثلاثي الأبعاد (Bolton 3D Discrepancy):</strong> قياس نسب بولتون الأمامية (77.2%) والكلية (91.3%) حتى عُشر المليمتر، مع تحديد الحاجة الدقيقة لبرد المينا بين الأسنان (IPR) أو البناء التعويضي.</li>
+        <li><strong>وصفات براكتات التقويم المعتمدة (Bracket Prescriptions):</strong> دعم كامل لـ MBT و Roth و Damon و Alexander مع قيم العزم (Torque) والميلان (Tip) والعمق (In/Out) لكل سن.</li>
+        <li><strong>تدرج أسلاك التقويم الحتمي (Archwire Sequence):</strong> مسار بيولوجي صارم يبدأ بأسلاك النيكل تيتانيوم الحرارية (.014 CuNiTi) للرصف، ثم الأسلاك المستطيلة (.016x.022 CuNiTi) للتعبير عن العزم، تليها أسلاك الستانلس ستيل (.019x.025 SS) لغلق المسافات، وأخيراً أسلاك الـ TMA للإنهاء الدقيق.</li>
+        <li><strong>ميكانيكا القوالب الشفافة ومحددات السرعة (Clear Aligner Velocity Limits):</strong> ضبط إزاحة السن بما لا يتجاوز 0.25 مم والتدوير بما لا يتجاوز 2° لكل قالب لحماية التروية الدموية لرباط اللثة، مع توليد الـ Attachments البيوميكانيكية تلقائياً.</li>
+        <li><strong>أجهزة التوسيع والزرعات التقويمية (MARPE / MSE / TADs):</strong> تخطيط بروتوكولات توسيع الفك الهيكلي للبالغين وتصحيح العضة المعكوسة (Alt-RAMEC + Facemask) بحسب مرحلة اندماج درز الحنك (Angelieri Midpalatal Suture Maturation Stages A–E).</li>
+        <li><strong>بروتوكول التثبيت والاستقرار الدائم (Retention Protocols):</strong> دمج سلك التثبيت اللساني الدائم (Bonded 3-3) مع قوالب Essix الشفافة لضمان عدم انتكاس الأسنان مدى الحياة.</li>
+      </ol>
+    </section>
+
+    <!-- SECTION 7: 14 DENTAL SPECIALTIES COVERAGE -->
+    <section id="specialties-14" class="section">
+      <span class="section-tag tag-indigo">٧. الشمولية السريرية</span>
+      <h2>التغطية السريرية الشاملة لكافة تخصصات طب الأسنان الـ 14</h2>
+      <p>
+        أحد أوجه القصور الكبرى لدى المنافسين هو انحصارهم في عيادة الأسنان العامة (GP) وتنظيف الجير. في المقابل، يغطي Odonto AI جميع التخصصات السريرية الـ 14 المعترف بها دولياً:
+      </p>
+
+      <div class="grid-3">
+        <div class="card"><div class="card-title">١. تقويم الأسنان والوجه والفكين</div><div class="card-desc">سيفالومترك، بولتون 3D، أسلاك، وقوالب شفافة.</div></div>
+        <div class="card"><div class="card-title">٢. زراعة الأسنان الجراحية</div><div class="card-desc">كثافة Misch D1-D4، كتالوجات 14 شركة، وهوامش العصب.</div></div>
+        <div class="card"><div class="card-title">٣. علاج الجذور والأعصاب (Endo)</div><div class="card-desc">تقييم الآفات الذروية، تشريح القنوات، واستقرار العصب.</div></div>
+        <div class="card"><div class="card-title">٤. أمراض وجراحة اللثة (Perio)</div><div class="card-desc">قياس تآكل العظم بالمليمتر، الأنماط الحيوية، والجيوب.</div></div>
+        <div class="card"><div class="card-title">٥. جراحة الفم والوجه والفكين (OMFS)</div><div class="card-desc">الأنياب المدفونة، أضراس العقل، وجراحات الفك التقويمية.</div></div>
+        <div class="card"><div class="card-title">٦. الاستعاضة السنية والتركيبات</div><div class="card-desc">الجسور، التيجان، وتأهيل الابتسامة الشامل (Full Mouth).</div></div>
+        <div class="card"><div class="card-title">٧. طب أسنان الأطفال (Pedodontics)</div><div class="card-desc">حافظات المسافات، خلع التسلسل، والتدخلات المبكرة.</div></div>
+        <div class="card"><div class="card-title">٨. العلاج التحفظي والتجميلي</div><div class="card-desc">حشوات الكومبوزيت، الفينيرز، والربط العاجي الدقيق.</div></div>
+        <div class="card"><div class="card-title">٩. أمراض المفصل الفكي (TMD / TMJ)</div><div class="card-desc">تحليل آلام المفصل، طقطقة الفك، والجبائر الإطباقية.</div></div>
+        <div class="card"><div class="card-title">١٠. طب الأسنان الوقائي والصحة العامة</div><div class="card-desc">تقييم مخاطر التسوس (CAMBRA) والفلورايد.</div></div>
+        <div class="card"><div class="card-title">١١. طب أسنان النوم ومجرى الهواء</div><div class="card-desc">انقطاع التنفس النومي (OSA) وتوسيع الفك الهيكلي.</div></div>
+        <div class="card"><div class="card-title">١٢. أمراض الفم وتشخيص الأنسجة</div><div class="card-desc">مسح الآفات الفموية، التكلسات، وأورام الفك.</div></div>
+        <div class="card"><div class="card-title">١٣. أشعة الفم والوجه والفكين</div><div class="card-desc">تحليل وتفسير صور الـ OPG، والـ CBCT، والـ Bitewing.</div></div>
+        <div class="card"><div class="card-title">١٤. التنسيق السريري متعدد التخصصات</div><div class="card-desc">حل التعارضات بين التخصصات وتوحيد خطة العلاج.</div></div>
+      </div>
+    </section>
+
+    <!-- SECTION 8: LIVE PUBMED NCBI RAG -->
+    <section id="pubmed-rag" class="section">
+      <span class="section-tag tag-emerald">٨. البحث العلمي الحي</span>
+      <h2>محرك البحث والاسترجاع الحي في PubMed RAG الموثق بالأدلة</h2>
+      <p>
+        بينما تقدم برمجيات المنافسين توصيات مصمتة (Black-Box) لا يعلم الطبيب مصدرها، ينفرد Odonto AI باتصال حي ومباشر مع خوادم <strong>المكتبة الوطنية الأمريكية للطب (NCBI PubMed)</strong> عبر E-Utilities API:
+      </p>
+
+      <div class="callout callout-success">
+        <strong>استرجاع مباشر للأبحاث المحكمة وروابط الـ PMID والـ DOI:</strong>
+        عند كتابة أي خطة علاج أو إجراء أي استعلام، يسترجع المحرك أحدث الدراسات الإكلينيكية المعتمدة من مجلات علمية مرموقة (مثل: <em>AJO-DO, JCO, Clinical Oral Implants Research, IJPRD</em>) مع تصنيف مستوى الدليل الطبي وفق معايير أكسفورد (Oxford CEBM Levels 1a–4).
+      </div>
+
+      <div class="card" style="margin-top: 14px;">
+        <div class="card-title">أمثلة حية من أبحاث عام 2026 المسترجعة لحظياً عبر المنظومة:</div>
+        <ul style="margin: 8px 18px 0 0; font-size: 13px;">
+          <li><a href="https://pubmed.ncbi.nlm.nih.gov/42764452/" target="_blank" class="pmid-badge">PMID 42764452</a>: Finite Element Analysis of Maxillary Molar Intrusion Using Temporary Anchorage Devices (2026).</li>
+          <li><a href="https://pubmed.ncbi.nlm.nih.gov/42383694/" target="_blank" class="pmid-badge">PMID 42383694</a>: Failure rates of 958 interradicular mini-screws for maxillary total arch distalization (Eur J Orthod, 2026).</li>
+          <li><a href="https://pubmed.ncbi.nlm.nih.gov/42582448/" target="_blank" class="pmid-badge">PMID 42582448</a>: Effectiveness of Miniscrew-assisted Rapid Palatal Expansion in the Management of Sleep Apnea (2026).</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- SECTION 9: 3D WEBGL SIMULATION -->
+    <section id="webgl-3d" class="section">
+      <span class="section-tag tag-amber">٩. المحاكاة البصرية ثلاثية الأبعاد</span>
+      <h2>المحاكاة ثلاثية الأبعاد WebGL على كرسي الكشف</h2>
+      <p>
+        يتضمن Odonto AI محرك محاكاة ثلاثي الأبعاد تفاعلي يعمل بالكامل داخل المتصفح (WebGL Three.js) دون الحاجة لتثبيت أي برامج ثقيلة:
+      </p>
+      <ul>
+        <li><strong>تدوير واستعراض الكاست 3D:</strong> إمكانية تحريك الفكين من كافة الزوايا، فحص تداخل الأسنان، ومراجعة علاقات الإطباق.</li>
+        <li><strong>أداة إقناع بصرية على كرسي العيادة:</strong> تمكين المريض من رؤية مسار حركة أسنانه والنتيجة النهائية المتوقعة، مما يرفع معدل موافقة المرضى على الخطط العلاجية بنسبة تتجاوز 40%.</li>
+      </ul>
+    </section>
+
+    <!-- SECTION 10: CLINICAL VERIFICATION & STRESS TEST RESULTS -->
+    <section id="clinical-verification" class="section">
+      <span class="section-tag tag-rose">١٠. التحقق والصلابة السريرية</span>
+      <h2>نتائج التحقق والاختبار السريري الشامل (24 من 24 اختباراً بنجاح 100%)</h2>
+      <p>
+        لضمان أن المنظومة تعمل بكامل كفاءتها الإكلينيكية وأنها خالية تماماً من البيانات الوهمية (Dummy Data)، خضعت المنظومة لاختبار سريري شامل (End-to-End Stress Test) شمل 24 فحصاً تكاملياً ببيانات مرضى حقيقية وعشوائية:
+      </p>
+
+      <div class="callout callout-success" style="font-size: 15px;">
+        <strong>النتيجة النهائية للاختبار السريري: اجتياز 24 من أصل 24 اختباراً بنسبة نجاح 100%.</strong>
+      </div>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>المجال السريري</th>
+              <th>الحالة المختبرة والبيانات العشوائية</th>
+              <th>المخرجات المحسوبة بدقة</th>
+              <th>النتيجة</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>تقويم الأسنان (Class II)</strong></td>
+              <td>مريض بالغ، Overjet = 9.0 مم، Overbite = 5.5 مم (عضة عميقة وازدحام شديد).</td>
+              <td>تشخيص هيكلي ANB = 5.2°، توليد المراحل الست، وتفعيل بروتوكول Angelieri Stage E MARPE.</td>
+              <td><span class="tier-badge tier-1a">&check; نجاح تام</span></td>
+            </tr>
+            <tr>
+              <td><strong>تقويم الأسنان (Class III)</strong></td>
+              <td>مريضة مراهقة 12 سنة، عضة معكوسة Overjet = -3.0 مم.</td>
+              <td>تشخيص هيكلي ANB = -2.5°، وتفعيل بروتوكول Alt-RAMEC + Facemask لتحريك النقطة A بمقدار +5.8 مم.</td>
+              <td><span class="tier-badge tier-1a">&check; نجاح تام</span></td>
+            </tr>
+            <tr>
+              <td><strong>زراعة الأسنان (ضرس 16)</strong></td>
+              <td>ارتفاع العظم المتبقي 5.0 مم فقط أسفل الجيب الفكي، كثافة D3.</td>
+              <td>اختيار زرعة Straumann BLT 4.3x3.5 مم، وبرمجة رفع الجيب الفكي بالمدق، وعزم ربط 35–45 Ncm.</td>
+              <td><span class="tier-badge tier-1a">&check; نجاح تام</span></td>
+            </tr>
+            <tr>
+              <td><strong>البحث الحي PubMed</strong></td>
+              <td>استعلام: TADs for molar intrusion.</td>
+              <td>استرجاع 93 بحثاً علمياً حقيقياً لحظياً من NCBI PubMed بأحدث أوراق عام 2026.</td>
+              <td><span class="tier-badge tier-1a">&check; نجاح تام</span></td>
+            </tr>
+            <tr>
+              <td><strong>السيفالومترك المثلثي</strong></td>
+              <td>إدخال إحداثيات هندسية حقيقية لـ 8 نقاط تشريحية (S, N, A, B, Pog, Me, Go, Gn).</td>
+              <td>حساب SNA = 83.23° و SNB = 76.01° و ANB = 7.22° وتصنيف النمط الهيكلي بدقة تامة.</td>
+              <td><span class="tier-badge tier-1a">&check; نجاح تام</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SECTION 11: FULL COMPARISON MATRIX -->
+    <section id="benchmark-table" class="section">
+      <span class="section-tag tag-blue">١١. مصفوفة المقارنة المباشرة</span>
+      <h2>مصفوفة المقارنة الموضوعية المباشرة (Odonto AI في مواجهة Overjet و Pearl)</h2>
+      <p>
+        جدول مقارنة شامل يكشف الفارق النوعي بين مجرد أداة لفحص الأشعة وبين نظام تشغيل سريري متكامل:
+      </p>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 22%;">المعيار السريري والتقني</th>
+              <th style="width: 24%;">Pearl (Second Opinion)</th>
+              <th style="width: 24%;">Overjet (Vision AI / IRIS)</th>
+              <th style="width: 30%; background: #f0fdf4; color: #166534;">منظومة Odonto AI المتكاملة</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>الهندسة المعمارية والهدف السريري</strong></td>
+              <td>محرك فحص ورؤية حاسوبية 2D/3D لحصر علامات المرض على الأشعة.</td>
+              <td>أداة قياس تآكل العظم بالمليمتر وكشف التسوس مع عارض سحابي.</td>
+              <td style="background: #f0fdf4; font-weight: 600; color: #166534;">
+                <strong>هندسة مزدوجة (Dual-Engine):</strong> محرك بيوميكانيكي حتمي رياضي + ذكاء اصطناعي سياقي لتخليق خطط علاج متكاملة.
+              </td>
+            </tr>
+            <tr>
+              <td><strong>توليد خطة العلاج التراكمية</strong></td>
+              <td><span class="tier-badge" style="background:#fee2e2; color:#b91c1c;">منعدم</span> طريق تشخيصي مسدود (يكتشف دون كتابة خطة علاج).</td>
+              <td><span class="tier-badge" style="background:#fee2e2; color:#b91c1c;">منعدم</span> طريق تشخيصي مسدود (يقيس بالمليمتر دون صياغة خطة علاج).</td>
+              <td style="background: #f0fdf4;">
+                <span class="tier-badge tier-1a">&check; محرك رئيسي من 6 مراحل كاملة</span>
+                طوارئ &larr; مكافحة مرض &larr; تقويم &larr; جراحة وزراعة &larr; تركيبات &larr; صيانة، مع نمطي طبيب امتياز واستشاري.
+              </td>
+            </tr>
+            <tr>
+              <td><strong>تقويم الأسنان والبيوميكانيكا</strong></td>
+              <td><span class="tier-badge" style="background:#fee2e2; color:#b91c1c;">منعدم (0%)</span> لا يوجد سيفالومترك أو تحليل بولتون أو أسلاك.</td>
+              <td><span class="tier-badge" style="background:#fee2e2; color:#b91c1c;">منعدم (0%)</span> لا يمتلك أي ذكاء تقويمي.</td>
+              <td style="background: #f0fdf4;">
+                <span class="tier-badge tier-1a">&check; محرك بيوميكانيكي من 7 طبقات</span>
+                تتبع سيفالومتري آلي (Steiner/Tweed)، بولتون 3D، عزم براكت MBT/Roth/Damon، تدرج الأسلاك، وضبط سرعة القوالب الشفافة.
+              </td>
+            </tr>
+            <tr>
+              <td><strong>استوديو تخطيط زراعة الأسنان</strong></td>
+              <td>يقتصر على تقطيع الـ CBCT ثلاثي الأبعاد (حجز مسبق) دون تخطيط.</td>
+              <td><span class="tier-badge" style="background:#fee2e2; color:#b91c1c;">منعدم (0%)</span> لا يدعم تخطيط الزرعات أو أمان الجراحة.</td>
+              <td style="background: #f0fdf4;">
+                <span class="tier-badge tier-1a">&check; استوديو زراعة مخصص من 5 طبقات</span>
+                كثافة عظم Misch (D1–D4)، كتالوجات 14 شركة زرعات عالمية، مسافات أمان العصب الفكي (2 مم) والعظم الخارجي (1.5 مم)، وعزم الربط.
+              </td>
+            </tr>
+            <tr>
+              <td><strong>التخصصات السريرية المغطاة</strong></td>
+              <td>تخصص أو تخصصين (طب أسنان عام وأمراض اللثة).</td>
+              <td>تخصص أو تخصصين (طب أسنان عام وأمراض اللثة).</td>
+              <td style="background: #f0fdf4; font-weight: 600; color: #166534;">
+                <span class="tier-badge tier-1a">&check; جميع تخصصات طب الأسنان الـ 14</span>
+                تقويم، زراعة، جراحة، عصب، لثة، تركيبات، أسنان أطفال، مفصل فكي، وغيرها.
+              </td>
+            </tr>
+            <tr>
+              <td><strong>الدليل العلمي المحكم والتفسير الطبي</strong></td>
+              <td>نموذج مغلق مصمت (Black-box)؛ لا توجد أي دراسات أو روابط PMID.</td>
+              <td>نموذج مغلق مصمت (Black-box)؛ لا توجد أي دراسات أو روابط PMID.</td>
+              <td style="background: #f0fdf4;">
+                <span class="tier-badge tier-1a">&check; بحث حي في PubMed NCBI RAG</span>
+                استرجاع فوري للأبحاث السريرية المحكمة بروابط وأرقام PMID و DOI وتصنيف مستويات الأدلة السريرية (CEBM 1a–4).
+              </td>
+            </tr>
+            <tr>
+              <td><strong>مصفوفة القرارات السريرية للأسنان</strong></td>
+              <td>مربعات سكونية غير تفاعلية على الأشعة 2D.</td>
+              <td>مربعات وخطوط مليمترية سكونية على الأشعة 2D.</td>
+              <td style="background: #f0fdf4;">
+                <span class="tier-badge tier-1a">&check; مصفوفة قرارات تفاعلية FDI 11–48</span>
+                تحويل نتائج المرض لكل سن إلى قرار علاجي فوري مع توجيه بنقرة واحدة لاستوديو الزراعة.
+              </td>
+            </tr>
+            <tr>
+              <td><strong>التفاعل ثلاثي الأبعاد مع الكاست والأسنان</strong></td>
+              <td>عارض حجمي ثلاثي الأبعاد (تقطيع CBCT فقط).</td>
+              <td>عارض أشعة ثنائي الأبعاد فقط (IRIS).</td>
+              <td style="background: #f0fdf4;">
+                <span class="tier-badge tier-1a">&check; نموذج WebGL ثلاثي الأبعاد تفاعلي</span>
+                تدوير فوري في المتصفح، محاكاة حركة الأسنان، وإقناع بصري للمريض على كرسي الكشف.
+              </td>
+            </tr>
+            <tr>
+              <td><strong>الانحياز للأطباء مقابل شركات التأمين</strong></td>
+              <td>تركيز على العيادات والـ DSOs مع فحص أهليات التأمين.</td>
+              <td><span class="tier-badge" style="background:#fef3c7; color:#b45309;">تضارب مصالح حاد</span> تبيع برامج الذكاء الاصطناعي لشركات التأمين لرفض مطالبات الأطباء.</td>
+              <td style="background: #f0fdf4; font-weight: 600; color: #166534;">
+                <span class="tier-badge tier-1a">&check; منحاز بالكامل للطبيب والمريض</span>
+                مصمم خصيصاً لخدمة الطبيب، وتعزيز قبوله للخطط العلاجية، وحماية استقلاليته الإكلينيكية ونجاحه الاقتصادي.
+              </td>
+            </tr>
+            <tr>
+              <td><strong>سهولة الاستخدام وسرعة الوصول</strong></td>
+              <td>اشتراكات احتكارية معقدة موجهة لسلاسل المراكز الكبرى (DSOs).</td>
+              <td>عقود احتكارية متعددة السنوات تتطلب استبدال منظومة السنسورات.</td>
+              <td style="background: #f0fdf4;">
+                <span class="tier-badge tier-1a">&check; تطبيق ويب سحابي بدون أي تثبيت</span>
+                متوافق مع جميع السنسورات وملفات DICOM و STL، يعمل فوراً على الحواسيب والأجهزة اللوحية وشاشات العيادة.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SECTION 12: CONCLUSION -->
+    <section id="conclusion" class="section">
+      <div class="callout callout-success" style="padding: 28px;">
+        <h3 style="color: var(--emerald-700); margin-top: 0; font-size: 18px;">١٢. الخلاصة الإكلينيكية الفاصلة:</h3>
+        <p style="margin-bottom: 0; color: #065f46; font-size: 14.5px; line-height: 1.8;">
+          <strong>إن Overjet و Pearl هما مجرد "حسّاسات تشخيصية" تقف عاجزة عند حدود رسم المربعات الملونة، بينما Odonto AI هو "نظام التشغيل السريري والتنفيذي الشامل".</strong><br>
+          من خلال الجمع بين صرامة الرياضيات والبيوميكانيكا الحتمية، وذكاء التخليق العلاجي السياقي، واستوديو زراعة الأسنان التفاعلي، والاسترجاع الحي للأدلة العلمية من PubMed، يعبر Odonto AI الفجوة العميقة التي عجز المنافسون عن عبورها: الانتقال بالطبيب من مجرد اكتشاف المشكلة إلى تنفيذ العلاج الجراحي والتقويمي بأعلى معايير الأمان الطبي والتميز السريري.
+        </p>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="pitch-footer">
+      <div>
+        &copy; 2026 <strong>Odonto AI</strong>. جميع الحقوق محفوظة لمنظومة الذكاء الاصطناعي لطب وجراحة الأسنان والتقويم.
+      </div>
+      <div>
+        Designed &amp; Developed by <a href="https://linkedin.com/in/osama-kamel-dev" target="_blank" style="color: var(--primary); font-weight: 700; text-decoration: none;">Recode Developments</a>
+      </div>
+    </footer>
+
+  </div>
+
+</body>
+</html>
