@@ -115,6 +115,22 @@ export async function POST(request: Request) {
         aiEngineSource: hasValidKey ? 'Biomechanical Rule-Engine (Network Fallback)' : 'Biomechanical Rule-Engine (Steiner/Downs Verified)',
         generatedAt: new Date().toLocaleTimeString(),
         ...synthesizedPlan,
+        masterPhases: buildDynamicMasterPhases({
+          patientName,
+          patientAge,
+          angleClass: rawAngle,
+          overjet,
+          overbite,
+          crowdingUpper,
+          modality,
+          extractionDecision: synthesizedPlan.extractionDecision,
+          isClass3,
+          isClass2Div1,
+          isClass2Div2,
+          isOpenBite,
+          isCrowding,
+          isImpacted
+        }),
         specializedProtocols: buildSpecializedProtocols({
           patientAge,
           angleClass: rawAngle,
@@ -230,6 +246,149 @@ function buildSpecializedProtocols({
   return protocols;
 }
 
+function buildDynamicMasterPhases({
+  patientName,
+  patientAge,
+  angleClass = 'Class I',
+  overjet = 2.0,
+  overbite = 2.0,
+  crowdingUpper = 'mild',
+  modality = 'fixed_mbt',
+  extractionDecision,
+  isClass3 = false,
+  isClass2Div1 = false,
+  isClass2Div2 = false,
+  isOpenBite = false,
+  isCrowding = false,
+  isImpacted = false
+}: any) {
+  const isAligners = modality === 'clear_aligners' || modality === 'aligners';
+  const isExtraction = extractionDecision?.decision === 'Extraction';
+  const extractionTeeth = extractionDecision?.teeth || (isExtraction ? ['#14', '#24', '#34', '#44'] : []);
+
+  return [
+    {
+      phaseNumber: 1,
+      title: 'Urgent Stabilization & Diagnostic Workup',
+      discipline: 'Emergency Dentistry & Oral Diagnosis',
+      status: 'completed',
+      timeline: 'Weeks 1–2',
+      targetTeeth: isImpacted ? ['#13', '#23'] : ['#18', '#28', '#38', '#48'],
+      clinicalObjectives: `Eliminate acute discomfort, rule out active periapical pathology, and finalize CBCT / cephalometric tracing baseline for ${patientName}.`,
+      interventions: [
+        'Vitality pulp testing on anterior and load-bearing molar teeth',
+        'High-resolution panoramic and lateral cephalometric diagnostic acquisition',
+        'Temporomandibular joint (TMJ) screening: evaluate range of motion and joint clicks'
+      ],
+      clearanceRequired: 'Zero acute pain and stable TMJ baseline prior to orthodontic force application.',
+      notes: 'Initial clinical baseline established with photographic records.'
+    },
+    {
+      phaseNumber: 2,
+      title: 'Periodontal & Hygiene Clearance',
+      discipline: 'Periodontology & Preventive Dentistry',
+      status: 'in_progress',
+      timeline: 'Weeks 2–4',
+      clinicalObjectives: 'Achieve plaque index < 15%, eradicate active bleeding on probing (BOP), and assess gingival biotype.',
+      interventions: [
+        'Full-mouth ultrasonic debridement and subgingival scaling & root planing (SRP)',
+        `Assess labial bone biotype across anterior segments to prevent dehiscence during ${isCrowding ? 'alignment' : 'retraction'}`,
+        'Prescribe 0.12% Chlorhexidine gluconate oral rinse for 10 days'
+      ],
+      clearanceRequired: 'Absolute periodontal stability: active periodontitis contraindicates orthodontic tooth movement.',
+      notes: 'Oral hygiene motivation and interdental brush protocol initiated.'
+    },
+    {
+      phaseNumber: 3,
+      title: 'Restorative & Endodontic Stabilization',
+      discipline: 'Operative Dentistry & Endodontics',
+      status: 'scheduled',
+      timeline: 'Weeks 4–6',
+      targetTeeth: isExtraction ? extractionTeeth : ['#16', '#26', '#36', '#46'],
+      clinicalObjectives: isExtraction
+        ? `Excavate carious lesions and execute therapeutic extractions (${extractionTeeth.join(', ')}) with atraumatic socket preservation.`
+        : 'Arrest all active caries and restore defective margins before bracket/attachment bonding.',
+      interventions: isExtraction
+        ? [
+            `Atraumatic surgical extraction of ${extractionTeeth.join(', ')} preserving buccal cortical plates`,
+            'Restore any shallow occlusal/interproximal caries with nanofilled composite resin',
+            'Allow 10–14 days soft tissue healing prior to initial wire engagement'
+          ]
+        : [
+            'Class II direct composite resin restorations with anatomical proximal contouring',
+            'Pit and fissure sealants on deep grooves of permanent molars',
+            'Verify intact margins and polish all contact areas'
+          ],
+      clearanceRequired: 'Caries-free dentition confirmed clinically and radiographically.',
+      notes: 'Restorative clearances completed to prevent enamel demineralization under appliances.'
+    },
+    {
+      phaseNumber: 4,
+      title: 'Comprehensive Biomechanical Orthodontics',
+      discipline: 'Orthodontics & Dentofacial Orthopedics',
+      status: 'pending',
+      timeline: isAligners ? 'Months 2–16 (14–16 Months)' : 'Months 2–20 (18–20 Months)',
+      clinicalObjectives: isClass3
+        ? `Correct anterior crossbite (Overjet ${overjet}mm), advance maxilla, and coordinate transversal arch discrepancy.`
+        : isOpenBite
+        ? `Intrude posterior molars to allow counter-clockwise mandibular autorotation and close the ${overbite}mm anterior open bite.`
+        : isClass2Div1
+        ? `Normalize ${overjet}mm excessive overjet, reduce deep bite, and achieve Class I canine relationships.`
+        : `De-crowd arches, upright lower incisors over basal bone, and establish harmonic Class I occlusion.`,
+      interventions: isAligners
+        ? [
+            'Staged clear aligners (7–10 days change protocol) with optimized composite attachments',
+            isClass2Div1 ? 'Precision cuts for Class II intermaxillary elastics (3/16" 4.5 oz)' : 'Anterior bite turbos for bite opening',
+            'Progressive interproximal enamel reduction (IPR) according to staged Bolton calibration'
+          ]
+        : [
+            'Initial Leveling: .014" Heat-activated NiTi -> .016" Superelastic NiTi',
+            'Transitional Torque: .016" x .022" Copper-NiTi for 3D root control',
+            isClass3 
+              ? 'Alt-RAMEC suture mobilization + Maxillary protraction protocol'
+              : isOpenBite
+              ? 'Paramedian palatal TADs (2.0x9mm) for skeletal molar intrusion'
+              : isClass2Div1
+              ? 'Working & Space Closure: .019" x .025" Stainless Steel with NiTi closed-coil springs (150g)'
+              : 'Detailing: .019" x .025" TMA with light vertical settling elastics'
+          ],
+      clearanceRequired: 'Superb patient compliance with elastics / aligner wear schedule (22 hours/day).',
+      notes: `Active biomechanics monitored every 4–6 weeks for force decay and anchorage stability.`
+    },
+    {
+      phaseNumber: 5,
+      title: 'Surgical, Dental Implant & Complex Rehabilitation',
+      discipline: 'Oral & Maxillofacial Implantology & Prosthodontics',
+      status: 'pending',
+      timeline: 'Months 20–22',
+      targetTeeth: isImpacted ? ['#13'] : ['#16', '#46'],
+      clinicalObjectives: 'Rehabilitate edentulous spans or congenitally missing units with 3D prosthetically driven dental implants.',
+      interventions: [
+        'CBCT bone density analysis (Misch D1–D4 classification) and cross-sectional ridge mapping',
+        '3D computer-guided implant placement maintaining ≥ 2.0mm IAN canal buffer and ≥ 1.5mm buccal bone plate',
+        'Fabricate screw-retained monolithic zirconia crowns on custom titanium abutments'
+      ],
+      clearanceRequired: 'Orthodontic root parallelism and adequate interradicular space (≥ 7.0mm) confirmed prior to fixture insertion.',
+      notes: 'Direct 1-click bridge to Odonto AI Implant Studio for full surgical guide and drilling protocol.'
+    },
+    {
+      phaseNumber: 6,
+      title: 'Retention & Long-Term Biomechanical Stability',
+      discipline: 'Orthodontics & Occlusal Rehabilitation',
+      status: 'pending',
+      timeline: 'Months 22–36+ (Ongoing)',
+      clinicalObjectives: 'Neutralize periodontal ligament memory, prevent rotational relapse, and maintain functional canine guidance.',
+      interventions: [
+        'Bonded multi-strand stainless steel lingual retainer (canine-to-canine 3-3)',
+        'Vacuum-formed Essix (1.0mm) or Vivera thermoplastic overlay retainers for night-time wear',
+        'Periodic recalls at 1, 3, 6, and 12 months post-debonding to monitor occlusal equilibration'
+      ],
+      clearanceRequired: 'Zero occlusal interferences in centric relation and lateral excursions.',
+      notes: 'Patient advised on lifelong nocturnal retainer wear to counter physiological mesial drift.'
+    }
+  ];
+}
+
 function normalizePlanData(parsed: any, patientData: any, modality: string, patientName: string, overjet: number, overbite: number, rawAngle: string) {
   const patientAge = patientData?.age || 14;
   const complaint = (patientData?.chiefComplaint || '').toLowerCase();
@@ -334,6 +493,23 @@ function normalizePlanData(parsed: any, patientData: any, modality: string, pati
       overjet,
       overbite,
       complaint,
+      isClass3,
+      isOpenBite,
+      isImpacted,
+      isCrowding
+    }),
+    masterPhases: buildDynamicMasterPhases({
+      patientName,
+      patientAge,
+      angleClass: rawAngle,
+      overjet,
+      overbite,
+      crowdingUpper: 'moderate',
+      modality,
+      extractionDecision: {
+        decision: parsed.extractionVsNonExtraction?.recommendation?.toLowerCase().includes('non') ? 'Non-Extraction' : 'Extraction',
+        teeth: parsed.extractionVsNonExtraction?.teeth || ['#14', '#24']
+      },
       isClass3,
       isOpenBite,
       isImpacted,
