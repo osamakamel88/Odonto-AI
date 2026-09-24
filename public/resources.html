@@ -2274,6 +2274,7 @@
       document.documentElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
       try {
         localStorage.setItem('odonto_docs_lang', lang);
+        localStorage.setItem('odonto_lang', lang);
       } catch (e) {}
 
       // Update button states in floating bar
@@ -2303,11 +2304,17 @@
       }
     }
 
-    // Initialize from saved preference or default to English
+    // Initialize from URL param, app language preference, or docs language
     (function() {
       var saved = 'en';
       try {
-        saved = localStorage.getItem('odonto_docs_lang') || 'en';
+        var params = new URLSearchParams(window.location.search);
+        var urlLang = params.get('lang');
+        if (urlLang === 'ar' || urlLang === 'en') {
+          saved = urlLang;
+        } else {
+          saved = localStorage.getItem('odonto_lang') || localStorage.getItem('odonto_docs_lang') || 'en';
+        }
       } catch (e) {}
       setDocLanguage(saved);
     })();

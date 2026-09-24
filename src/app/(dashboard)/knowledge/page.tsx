@@ -13,8 +13,10 @@ import {
   anchorageDevices, 
   bracketSystems, 
   wireSequences, 
-  elasticProtocols 
+  elasticProtocols,
+  interceptiveTreatments
 } from '@/lib/orthodontics/knowledge-base';
+import { KNOWLEDGE_AR_TRANSLATIONS } from '@/lib/orthodontics/knowledge-base/knowledge-ar-translations';
 import { 
   Search, 
   Clock, 
@@ -30,7 +32,7 @@ import { PubMedSearchHub } from '@/components/clinical/pubmed-search-hub';
 import { useLanguage } from '@/lib/i18n/language-context';
 import { APP_DICTIONARY } from '@/lib/i18n/app-dictionary';
 
-type CategoryFilter = 'all' | 'treatment' | 'functional' | 'expansion' | 'surgical' | 'anchorage' | 'retention' | 'brackets' | 'wires' | 'elastics';
+type CategoryFilter = 'all' | 'treatment' | 'functional' | 'expansion' | 'surgical' | 'anchorage' | 'retention' | 'brackets' | 'wires' | 'elastics' | 'interceptive';
 
 export default function KnowledgeBasePage() {
   const [viewMode, setViewMode] = useState<'library' | 'calculators' | 'pubmed'>('library');
@@ -41,113 +43,177 @@ export default function KnowledgeBasePage() {
   const { lang, isAr } = useLanguage();
   const t = APP_DICTIONARY[lang] || APP_DICTIONARY.en;
 
-  // Normalize all items into a unified searchable array
-  const allItems = [
+  // Normalize all raw items into an array
+  const rawItems = [
     ...Object.values(treatmentTypes).map(tr => ({
-      ...tr,
-      type: 'treatment',
+      id: tr.id,
+      name: tr.name,
+      type: 'treatment' as CategoryFilter,
       categoryLabelEn: 'Treatment Modality',
       categoryLabelAr: 'نظام علاجي تقويمي',
-      details: tr.description
+      typicalDuration: tr.typicalDuration,
+      details: tr.description,
+      indications: tr.indications,
+      contraindications: tr.contraindications,
+      advantages: tr.advantages,
+      disadvantages: tr.disadvantages
     })),
     ...Object.values(functionalAppliances).map(f => ({
-      ...f,
-      type: 'functional',
+      id: f.id,
+      name: f.name,
+      type: 'functional' as CategoryFilter,
       categoryLabelEn: 'Functional Appliance',
       categoryLabelAr: 'جهاز وظيفي لنمو الفك',
       typicalDuration: f.wearSchedule,
       details: f.description,
       advantages: [f.mechanism, `Mandibular Advancement: ${f.mandibularAdvancement}`],
       disadvantages: [`Adjustment: ${f.adjustmentProtocol}`],
-      indications: [`Expected Overjet Reduction: ${f.expectedOverjetReduction}`, `Ideal Age: ${f.idealAge}`]
+      indications: [`Expected Overjet Reduction: ${f.expectedOverjetReduction}`, `Ideal Age: ${f.idealAge}`],
+      contraindications: ['Non-growing patient (cervical vertebral stage CS5/CS6)', 'Severe vertical open bite', 'Poor compliance']
     })),
     ...Object.values(expansionDevices).map(e => ({
-      ...e,
-      type: 'expansion',
+      id: e.id,
+      name: e.name,
+      type: 'expansion' as CategoryFilter,
       categoryLabelEn: 'Rapid Expansion Device',
       categoryLabelAr: 'جهاز توسيع الفك السريع',
       typicalDuration: e.retentionPeriod,
       details: e.description,
       advantages: [e.skeletalVsDental, `Expansion rate: ${e.expectedExpansion}`],
       disadvantages: [`Age limit: ${e.ageLimit}`],
-      indications: [`Activation: ${e.activationProtocol}`]
+      indications: [`Activation: ${e.activationProtocol}`],
+      contraindications: ['Fused midpalatal suture without surgical assistance (for conventional RPE)', 'Severe periodontal bone loss', 'Anterior open bite with high mandibular plane angle']
     })),
     ...Object.values(surgicalProtocols).map(s => ({
-      ...s,
-      type: 'surgical',
+      id: s.id,
+      name: s.name,
+      type: 'surgical' as CategoryFilter,
       categoryLabelEn: 'Orthognathic Surgery',
       categoryLabelAr: 'جراحة الفكين التقويمية',
       typicalDuration: `Pre-Op: ${s.typicalPreOpDuration} / Post-Op: ${s.typicalPostOpDuration}`,
       details: s.indications.join(', '),
       advantages: s.preOpOrthoGoals,
       disadvantages: s.risks,
-      indications: s.indications
+      indications: s.indications,
+      contraindications: ['Active skeletal growth remaining (wait until CS6 / serial cephalograms show cessation)', 'Unrealistic aesthetic expectations', 'Uncontrolled systemic disease']
     })),
     ...Object.values(anchorageDevices).map(a => ({
-      ...a,
-      type: 'anchorage',
+      id: a.id,
+      name: a.name,
+      type: 'anchorage' as CategoryFilter,
       categoryLabelEn: 'Anchorage Device / TAD',
       categoryLabelAr: 'مرسى عظمي / زرعات TADs',
       typicalDuration: a.loadingProtocol,
       details: `Insertion Site: ${a.insertionSite} (Success Rate: ${a.successRate})`,
       advantages: [`Type: ${a.anchorageType}`],
       disadvantages: [`Loading: ${a.loadingProtocol}`],
-      indications: a.indications
+      indications: a.indications,
+      contraindications: ['Severe cortical bone deficiency', 'Roots in direct contact with proposed site', 'Poor oral hygiene around screw site']
     })),
     ...Object.values(retentionProtocols).map(r => ({
-      ...r,
-      type: 'retention',
+      id: r.id,
+      name: r.name,
+      type: 'retention' as CategoryFilter,
       categoryLabelEn: 'Retention Protocol',
       categoryLabelAr: 'بروتوكول تثبيت الأسنان',
       typicalDuration: r.wearSchedule,
       details: `Durability: ${r.durability} | Maintenance: ${r.maintenance}`,
       advantages: [r.wearSchedule, `Best for: ${r.bestFor.join(', ')}`],
       disadvantages: [`Maintenance: ${r.maintenance}`],
-      indications: r.bestFor
+      indications: r.bestFor,
+      contraindications: ['Unresolved active periodontal disease', 'Known resin or polymer allergy (for Essix/Vivera)']
     })),
     ...Object.values(bracketSystems).map(b => ({
-      id: b.name.toLowerCase().replace(/\s+/g, '-'),
+      id: b.id,
       name: b.name,
-      type: 'brackets',
+      type: 'brackets' as CategoryFilter,
       categoryLabelEn: 'Bracket Prescription',
       categoryLabelAr: 'وصفة وعزم حاصرات التقويم',
-      typicalDuration: isAr ? 'طوال مدة العلاج' : 'Full Treatment',
+      typicalDuration: 'Full Treatment Duration',
       details: b.description,
       advantages: [b.description],
-      disadvantages: [isAr ? 'يتطلب تطابق قياس الشق (0.018 أو 0.022)' : 'Requires matching slot size'],
-      indications: [isAr ? 'الميكانيكا الشاملة القياسية' : 'Standard comprehensive mechanics']
+      disadvantages: ['Requires matching slot size (0.018 or 0.022 inch)'],
+      indications: ['Standard comprehensive straight-wire mechanics'],
+      contraindications: ['Nickel hypersensitivity (use ceramic or titanium alternatives)']
     })),
     ...Object.values(wireSequences).map(w => ({
-      id: w.name.toLowerCase().replace(/\s+/g, '-'),
+      id: w.id,
       name: w.name,
-      type: 'wires',
+      type: 'wires' as CategoryFilter,
       categoryLabelEn: 'Archwire Progression',
       categoryLabelAr: 'تسلسل أسلاك التقويم',
-      typicalDuration: isAr ? '18–24 شهراً' : '18–24 Months',
-      details: `${isAr ? 'تدرج الأسلاك' : 'Archwire progression'} (${w.slotSize} slot): ${w.steps.map((x: any) => x.dimension).join(' → ')}`,
+      typicalDuration: '18–24 Months Progression',
+      details: `Archwire progression (${w.slotSize} slot): ${w.steps.map((x: any) => x.dimension).join(' → ')}`,
       advantages: w.steps.map((x: any) => `${x.phase}: ${x.dimension} ${x.material} (${x.purpose})`),
-      disadvantages: [isAr ? 'يجب إتمام التسلسل بالترتيب دون تخطي مرحلة' : 'Sequence must be completed sequentially'],
-      indications: [isAr ? 'الرصف، التسوية، تقليل البروز، والإنهاء' : 'Alignment, Leveling, Overjet reduction, Finishing']
+      disadvantages: ['Sequence must be completed sequentially without skipping leveling stages'],
+      indications: ['Alignment, Leveling, Overjet reduction, Space closure, Finishing'],
+      contraindications: ['Applying rectangular heavy steel wires before complete root alignment']
     })),
     ...Object.values(elasticProtocols).map(el => ({
-      id: el.name.toLowerCase().replace(/\s+/g, '-'),
+      id: el.id,
       name: el.name,
-      type: 'elastics',
+      type: 'elastics' as CategoryFilter,
       categoryLabelEn: 'Intermaxillary Elastics',
       categoryLabelAr: 'مطاط بين الفكين',
       typicalDuration: el.wearSchedule,
       details: `${el.indication} (Force: ${el.forceOz} oz, Diameter: ${el.diameterInches}")`,
       advantages: [`Points: ${el.attachmentPoints}`, `Force: ${el.forceOz} oz (${el.diameterInches}")`],
       disadvantages: [`Wear: ${el.wearSchedule}`],
-      indications: [el.indication]
+      indications: [el.indication],
+      contraindications: ['Severe TMJ pain during traction', 'Extreme hyperdivergent growth pattern with open bite']
+    })),
+    ...Object.values(interceptiveTreatments).map(it => ({
+      id: it.id,
+      name: it.name,
+      type: 'interceptive' as CategoryFilter,
+      categoryLabelEn: 'Interceptive Orthodontics',
+      categoryLabelAr: 'التقويم الوقائي والتدخلي المبكر',
+      typicalDuration: it.duration,
+      details: it.description,
+      advantages: [`Indication: ${it.indication}`, `Follow-up: ${it.followUp}`],
+      disadvantages: [`Ideal Age: ${it.idealAge}`],
+      indications: [it.indication],
+      contraindications: ['Late adolescent with completed permanent dentition']
     }))
   ];
 
+  // Apply contextual Arabic translations with bracketed English terms when isAr is active
+  const allItems = rawItems.map(item => {
+    const arTrans = KNOWLEDGE_AR_TRANSLATIONS[item.id];
+    if (isAr && arTrans) {
+      return {
+        ...item,
+        rawName: item.name,
+        rawDetails: item.details,
+        name: arTrans.nameAr,
+        details: arTrans.detailsAr,
+        typicalDuration: arTrans.typicalDurationAr || item.typicalDuration,
+        indications: arTrans.indicationsAr || item.indications,
+        contraindications: arTrans.contraindicationsAr || item.contraindications,
+        advantages: arTrans.advantagesAr || item.advantages,
+        disadvantages: arTrans.disadvantagesAr || item.disadvantages,
+      };
+    }
+    return {
+      ...item,
+      rawName: item.name,
+      rawDetails: item.details
+    };
+  });
+
   const filteredItems = allItems.filter(item => {
     const matchesCategory = selectedCategory === 'all' || item.type === selectedCategory;
-    const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          (item.details && item.details.toLowerCase().includes(searchQuery.toLowerCase())) ||
-                          (item.categoryLabelEn && item.categoryLabelEn.toLowerCase().includes(searchQuery.toLowerCase()));
+    const q = searchQuery.toLowerCase().trim();
+    if (!q) return matchesCategory;
+
+    const matchesSearch = 
+      item.name.toLowerCase().includes(q) ||
+      (item.rawName && item.rawName.toLowerCase().includes(q)) ||
+      (item.details && item.details.toLowerCase().includes(q)) ||
+      (item.rawDetails && item.rawDetails.toLowerCase().includes(q)) ||
+      (item.categoryLabelEn && item.categoryLabelEn.toLowerCase().includes(q)) ||
+      (item.categoryLabelAr && item.categoryLabelAr.toLowerCase().includes(q));
+
     return matchesCategory && matchesSearch;
   });
 
@@ -162,6 +228,7 @@ export default function KnowledgeBasePage() {
     { id: 'brackets', labelEn: 'Bracket Prescriptions', labelAr: 'وصفات عزم البراكتات', count: Object.keys(bracketSystems).length },
     { id: 'wires', labelEn: 'Archwire Sequences', labelAr: 'تسلسل وتدرج الأسلاك', count: Object.keys(wireSequences).length },
     { id: 'elastics', labelEn: 'Intermaxillary Elastics', labelAr: 'مطاط بين الفكين', count: Object.keys(elasticProtocols).length },
+    { id: 'interceptive', labelEn: 'Interceptive Orthodontics', labelAr: 'التقويم الوقائي والمبكر', count: Object.keys(interceptiveTreatments).length },
   ];
 
   return (
@@ -246,7 +313,7 @@ export default function KnowledgeBasePage() {
 
         <div className="flex items-center gap-2 px-1">
           <a
-            href="/resources.html"
+            href={`/resources.html?lang=${lang}`}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-teal-50 text-slate-700 hover:text-teal-700 border border-slate-200 hover:border-teal-200 rounded-lg text-xs font-semibold transition-colors cursor-pointer"

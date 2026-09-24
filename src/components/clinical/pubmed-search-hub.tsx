@@ -32,14 +32,14 @@ interface PubMedArticle {
 }
 
 const PRESET_TOPICS = [
-  { label: 'Adult MARPE / MSE', query: 'maxillary skeletal expander adult midpalatal suture' },
-  { label: 'Canine Impaction Traction', query: 'palatally impacted maxillary canine surgical exposure' },
-  { label: 'Class III Alt-RAMEC', query: 'alternate rapid maxillary expansion and constriction Alt-RAMEC' },
-  { label: 'Aligner Predictability', query: 'clear aligners orthodontic tooth movement predictability' },
-  { label: 'TAD Anchorage Safe Zones', query: 'temporary anchorage devices mini-implants orthodontic' },
-  { label: 'Open Bite TAD Intrusion', query: 'anterior open bite molar intrusion skeletal anchorage' },
-  { label: 'Root Resorption Risks', query: 'orthodontic apical root resorption risk factors' },
-  { label: 'Pharyngeal Airway & Expansion', query: 'rapid palatal expansion pharyngeal airway volume' }
+  { labelEn: 'Adult MARPE / MSE', labelAr: 'توسيع الفك للبالغين (Adult MARPE / MSE)', query: 'maxillary skeletal expander adult midpalatal suture' },
+  { labelEn: 'Canine Impaction Traction', labelAr: 'سحب الأنياب المطمورة (Canine Impaction)', query: 'palatally impacted maxillary canine surgical exposure' },
+  { labelEn: 'Class III Alt-RAMEC', labelAr: 'بروتوكول الصنف الثالث (Class III Alt-RAMEC)', query: 'alternate rapid maxillary expansion and constriction Alt-RAMEC' },
+  { labelEn: 'Aligner Predictability', labelAr: 'دقة التقويم الشفاف (Aligner Predictability)', query: 'clear aligners orthodontic tooth movement predictability' },
+  { labelEn: 'TAD Anchorage Safe Zones', labelAr: 'مناطق أمان زرعات التثبيت (TAD Safe Zones)', query: 'temporary anchorage devices mini-implants orthodontic' },
+  { labelEn: 'Open Bite TAD Intrusion', labelAr: 'غرس الأضراس للعضة المفتوحة (Open Bite Intrusion)', query: 'anterior open bite molar intrusion skeletal anchorage' },
+  { labelEn: 'Root Resorption Risks', labelAr: 'مخاطر امتصاص الجذور (Root Resorption)', query: 'orthodontic apical root resorption risk factors' },
+  { labelEn: 'Pharyngeal Airway & Expansion', labelAr: 'مجرى التنفس وتوسيع الفك (Pharyngeal Airway)', query: 'rapid palatal expansion pharyngeal airway volume' }
 ];
 
 export function PubMedSearchHub() {
@@ -182,7 +182,7 @@ export function PubMedSearchHub() {
               onClick={() => handleTopicClick(topic.query)}
               className="shrink-0 px-2.5 py-1 rounded-full bg-slate-800 hover:bg-indigo-900/60 hover:text-indigo-200 hover:border-indigo-500/40 border border-slate-700 text-slate-300 transition-all cursor-pointer"
             >
-              {topic.label}
+              {isAr ? topic.labelAr : topic.labelEn}
             </button>
           ))}
         </div>
@@ -192,13 +192,13 @@ export function PubMedSearchHub() {
       {/* Results Metadata Bar */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 px-1 text-xs text-muted-foreground">
         <div className="flex items-center gap-2">
-          <span>Results for: <strong className="text-foreground">"{activeQuery}"</strong></span>
+          <span>{isAr ? 'نتائج البحث عن:' : 'Results for:'} <strong className="text-foreground">"{activeQuery}"</strong></span>
           <span className="text-slate-300 dark:text-slate-600">•</span>
-          <span>Source: <strong className="text-indigo-600 dark:text-indigo-400">{source}</strong></span>
+          <span>{isAr ? 'المصدر:' : 'Source:'} <strong className="text-indigo-600 dark:text-indigo-400">{source}</strong></span>
         </div>
         <div className="flex items-center gap-2">
           <Badge variant="secondary" className="font-mono text-[10px]">
-            Showing {articles.length} publications
+            {isAr ? `عرض ${articles.length} دراسة سريرية` : `Showing ${articles.length} publications`}
           </Badge>
         </div>
       </div>
@@ -255,7 +255,7 @@ export function PubMedSearchHub() {
 
                     {/* Authors */}
                     <p className="text-xs text-muted-foreground">
-                      <span className="font-medium text-foreground">Authors:</span> {art.authors}
+                      <span className="font-medium text-foreground">{isAr ? 'الباحثون (Authors):' : 'Authors:'}</span> {art.authors}
                     </p>
                   </div>
 
