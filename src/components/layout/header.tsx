@@ -5,12 +5,18 @@ import { Menu, Plus, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { LogoIcon } from '@/components/brand/logo';
+import { useLanguage } from '@/lib/i18n/language-context';
+import { APP_DICTIONARY } from '@/lib/i18n/app-dictionary';
+import { LanguageSwitcher } from './language-switcher';
 
 interface HeaderProps {
   onOpenMobileMenu?: () => void;
 }
 
 export function Header({ onOpenMobileMenu }: HeaderProps) {
+  const { lang, isAr } = useLanguage();
+  const t = APP_DICTIONARY[lang] || APP_DICTIONARY.en;
+
   return (
     <header className="h-16 border-b bg-white flex items-center justify-between px-3 sm:px-6 lg:px-8 select-none">
       <div className="flex items-center gap-2.5 min-w-0">
@@ -32,14 +38,21 @@ export function Header({ onOpenMobileMenu }: HeaderProps) {
 
         {/* Desktop Suite Title */}
         <div className="hidden lg:flex items-center gap-3">
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Clinical Suite</span>
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+            {t.header.suiteTitle}
+          </span>
           <span className="text-slate-300">|</span>
-          <span className="text-xs font-semibold text-slate-700">AI Treatment Planning &amp; Biomechanics</span>
+          <span className="text-xs font-semibold text-slate-700">
+            {t.header.suiteSubtitle}
+          </span>
         </div>
       </div>
 
-      {/* Header Quick Actions */}
-      <div className="flex items-center space-x-2 sm:space-x-3 shrink-0">
+      {/* Header Quick Actions & Global Language Switcher */}
+      <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+        {/* Prominent Global Language Switcher */}
+        <LanguageSwitcher />
+
         <Link href="/plans/generate">
           <Button 
             size="sm" 
@@ -47,18 +60,19 @@ export function Header({ onOpenMobileMenu }: HeaderProps) {
             className="h-8 px-2.5 sm:px-3 gap-1.5 text-xs text-blue-700 border-blue-200 bg-blue-50/50 hover:bg-blue-100 font-semibold cursor-pointer shadow-xs"
           >
             <Sparkles className="h-3.5 w-3.5 text-blue-600 shrink-0" />
-            <span className="hidden sm:inline">Treatment Studio</span>
-            <span className="sm:hidden">Studio</span>
+            <span className="hidden sm:inline">{t.header.treatmentStudioBtn}</span>
+            <span className="sm:hidden">{t.header.studioShort}</span>
           </Button>
         </Link>
+
         <Link href="/patients/new">
           <Button 
             size="sm" 
             className="h-8 px-2.5 sm:px-3 gap-1.5 text-xs bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-xs cursor-pointer"
           >
             <Plus className="h-3.5 w-3.5 shrink-0" />
-            <span className="hidden sm:inline">New Patient</span>
-            <span className="sm:hidden">New</span>
+            <span className="hidden sm:inline">{t.header.newPatientBtn}</span>
+            <span className="sm:hidden">{t.header.newPatientShort}</span>
           </Button>
         </Link>
       </div>

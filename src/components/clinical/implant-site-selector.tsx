@@ -6,13 +6,11 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { getToothName } from '@/lib/orthodontics/tooth-notation';
 import { 
-  Sparkles, 
-  AlertCircle, 
-  CheckCircle2, 
   Crosshair,
   ShieldAlert,
   Compass
 } from 'lucide-react';
+import { useLanguage } from '@/lib/i18n/language-context';
 
 export interface ImplantSiteSelectorProps {
   selectedFdi: number;
@@ -38,14 +36,21 @@ export function ImplantSiteSelector({
   onToggleMissing
 }: ImplantSiteSelectorProps) {
   const [hoveredTooth, setHoveredTooth] = useState<number | null>(null);
+  const { isAr } = useLanguage();
 
   const getToothRegionName = (fdi: number) => {
     const quad = Math.floor(fdi / 10);
     const tooth = fdi % 10;
     const isUpper = quad === 1 || quad === 2;
     const isAnt = tooth <= 3;
-    if (isUpper) return isAnt ? 'Anterior Maxilla (Aesthetic Zone)' : 'Posterior Maxilla (Sinus Zone)';
-    return isAnt ? 'Anterior Mandible (Interforaminal)' : 'Posterior Mandible (IAN Canal Zone)';
+    if (isUpper) {
+      return isAnt 
+        ? (isAr ? 'الفك العلوي الأمامي (المنطقة الجمالية)' : 'Anterior Maxilla (Aesthetic Zone)')
+        : (isAr ? 'الفك العلوي الخلفي (منطقة الجيب الأنفي)' : 'Posterior Maxilla (Sinus Zone)');
+    }
+    return isAnt 
+      ? (isAr ? 'الفك السفلي الأمامي (بين الثقبتين)' : 'Anterior Mandible (Interforaminal)')
+      : (isAr ? 'الفك السفلي الخلفي (فوق عصب IAN)' : 'Posterior Mandible (IAN Canal Zone)');
   };
 
   const isAestheticZone = (fdi: number) => {
@@ -58,48 +63,61 @@ export function ImplantSiteSelector({
     const quad = Math.floor(fdi / 10);
     const tooth = fdi % 10;
     if ((quad === 1 || quad === 2) && tooth >= 5) {
-      return 'Maxillary sinus floor proximity — CBCT subantral height assessment required';
+      return isAr 
+        ? 'القرب من قاع الجيب الفكي — يلزم فحص ارتفاع العظم المتبقي تحت الجيب بأشعة CBCT' 
+        : 'Maxillary sinus floor proximity — CBCT subantral height assessment required';
     }
     if ((quad === 3 || quad === 4) && tooth >= 5) {
-      return 'Inferior alveolar nerve (IAN) canal proximity — maintain ≥ 2.0mm safety zone';
+      return isAr 
+        ? 'القرب من القناة العصبية السفلية (IAN) — يلزم الحفاظ على هامش أمان لا يقل عن 2.0 مم' 
+        : 'Inferior alveolar nerve (IAN) canal proximity — maintain ≥ 2.0mm safety zone';
     }
     if ((quad === 3 || quad === 4) && tooth === 4) {
-      return 'Mental foramen & anterior loop proximity — verify loop extent on 3D CBCT';
+      return isAr 
+        ? 'القرب من الثقبة الذقنية والتواء العصب — يلزم التحقق من امتداد الالتواء على مقاطع CBCT' 
+        : 'Mental foramen & anterior loop proximity — verify loop extent on 3D CBCT';
     }
     if (isAestheticZone(fdi)) {
-      return 'High aesthetic demand — maintain ≥ 2.0mm facial bone plate to avoid recession';
+      return isAr 
+        ? 'متطلبات جمالية عالية — الحفاظ على صفيحة عظمية خارجية ≥ 2 مم لتجنب انحسار اللثة' 
+        : 'High aesthetic demand — maintain ≥ 2.0mm facial bone plate to avoid recession';
     }
-    return 'Verify adjacent root parallelism (minimum 1.5mm distance)';
+    return isAr 
+      ? 'التحقق من توازي جذور الأسنان المجاورة (مسافة لا تقل عن 1.5 مم)' 
+      : 'Verify adjacent root parallelism (minimum 1.5mm distance)';
   };
 
   return (
-    <Card className="border-slate-200 shadow-sm overflow-hidden">
+    <Card className="border-slate-200 shadow-sm overflow-hidden select-none" dir={isAr ? 'rtl' : 'ltr'}>
       <CardHeader className="p-4 sm:p-5 bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 text-white border-b border-slate-800">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 rounded-lg bg-blue-600/30 border border-blue-400/40 flex items-center justify-center text-blue-300">
+          <div className="flex items-center space-x-2 gap-2">
+            <div className="w-8 h-8 rounded-lg bg-blue-600/30 border border-blue-400/40 flex items-center justify-center text-blue-300 shrink-0">
               <Crosshair className="w-4 h-4" />
             </div>
             <div>
               <CardTitle className="text-base font-bold text-white flex items-center gap-2">
-                FDI Implant Site Selection
+                {isAr ? 'تحديد موضع الزرعة السنخي FDI' : 'FDI Implant Site Selection'}
                 <Badge className="bg-teal-500/20 text-teal-300 border-teal-500/30 text-[10px]">
-                  Interactive Chart
+                  {isAr ? 'مخطط تفاعلي' : 'Interactive Chart'}
                 </Badge>
               </CardTitle>
               <p className="text-xs text-slate-300 mt-0.5">
-                Click any FDI tooth position to select it as the target implant placement site
+                {isAr 
+                  ? 'اضغط على موضع أي سن لتحديده كموضع مستهدف للغرس الجراحي' 
+                  : 'Click any FDI tooth position to select it as the target implant placement site'
+                }
               </p>
             </div>
           </div>
-          <div className="flex items-center gap-2 text-xs">
+          <div className="flex items-center gap-3 text-xs">
             <span className="flex items-center gap-1.5 text-slate-300">
-              <span className="w-2.5 h-2.5 rounded-full bg-blue-500 ring-2 ring-blue-300"></span>
-              Selected Site
+              <span className="w-2.5 h-2.5 rounded-full bg-blue-500 ring-2 ring-blue-300 shrink-0"></span>
+              {isAr ? 'الموضع المختار' : 'Selected Site'}
             </span>
             <span className="flex items-center gap-1.5 text-slate-300">
-              <span className="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
-              Missing / Edentulous
+              <span className="w-2.5 h-2.5 rounded-full bg-amber-400 shrink-0"></span>
+              {isAr ? 'سن مفقود / فراغ سنخي' : 'Missing / Edentulous'}
             </span>
           </div>
         </div>
@@ -110,10 +128,12 @@ export function ImplantSiteSelector({
         <div>
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
-              <Compass className="w-3.5 h-3.5 text-blue-600" />
-              Maxillary Arch (Upper Jaw)
+              <Compass className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+              {isAr ? 'القوس السنخي العلوي (الفك العلوي)' : 'Maxillary Arch (Upper Jaw)'}
             </span>
-            <span className="text-[11px] text-slate-600 font-medium">Right → Midline → Left</span>
+            <span className="text-[11px] text-slate-600 font-medium">
+              {isAr ? 'يمين ← الخط الأوسط ← يسار' : 'Right → Midline → Left'}
+            </span>
           </div>
           <div className="grid grid-cols-16 gap-1 sm:gap-1.5 overflow-x-auto pb-1">
             {UPPER_TEETH.map((tooth) => {
@@ -157,10 +177,12 @@ export function ImplantSiteSelector({
         <div>
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
-              <Compass className="w-3.5 h-3.5 text-teal-600" />
-              Mandibular Arch (Lower Jaw)
+              <Compass className="w-3.5 h-3.5 text-teal-600 shrink-0" />
+              {isAr ? 'القوس السنخي السفلي (الفك السفلي)' : 'Mandibular Arch (Lower Jaw)'}
             </span>
-            <span className="text-[11px] text-slate-600 font-medium">Right → Midline → Left</span>
+            <span className="text-[11px] text-slate-600 font-medium">
+              {isAr ? 'يمين ← الخط الأوسط ← يسار' : 'Right → Midline → Left'}
+            </span>
           </div>
           <div className="grid grid-cols-16 gap-1 sm:gap-1.5 overflow-x-auto pb-1">
             {LOWER_TEETH.map((tooth) => {
@@ -225,9 +247,12 @@ export function ImplantSiteSelector({
                 variant="outline"
                 size="sm"
                 onClick={() => onToggleMissing(selectedFdi)}
-                className="text-xs text-slate-600 hover:text-slate-900"
+                className="text-xs text-slate-600 hover:text-slate-900 cursor-pointer"
               >
-                {missingTeeth.includes(selectedFdi) ? 'Mark as Present' : 'Mark as Edentulous Gap'}
+                {missingTeeth.includes(selectedFdi) 
+                  ? (isAr ? 'تحديد كسن موجود' : 'Mark as Present') 
+                  : (isAr ? 'تحديد كفراغ خلع / مفقود' : 'Mark as Edentulous Gap')
+                }
               </Button>
             )}
           </div>

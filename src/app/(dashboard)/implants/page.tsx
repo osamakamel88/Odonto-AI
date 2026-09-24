@@ -12,21 +12,19 @@ import { OnboardingTour, DEFAULT_IMPLANT_TOUR_STEPS } from '@/components/clinica
 import { 
   Sparkles, 
   Drill, 
-  Layers, 
-  Ruler, 
-  Activity, 
-  ShieldCheck, 
-  Zap, 
   CheckCircle2, 
   RotateCcw,
   Sliders,
   UserCheck,
-  Building2,
-  FileText,
-  AlertTriangle
+  ShieldCheck
 } from 'lucide-react';
+import { useLanguage } from '@/lib/i18n/language-context';
+import { APP_DICTIONARY } from '@/lib/i18n/app-dictionary';
 
 export default function ImplantPlanningPage() {
+  const { lang, isAr } = useLanguage();
+  const t = APP_DICTIONARY[lang] || APP_DICTIONARY.en;
+
   // Tour state
   const [showTour, setShowTour] = useState<boolean>(false);
 
@@ -34,7 +32,9 @@ export default function ImplantPlanningPage() {
   const [patientName, setPatientName] = useState('Sarah Jenkins');
   const [patientAge, setPatientAge] = useState<number>(42);
   const [patientGender, setPatientGender] = useState<'male' | 'female'>('female');
-  const [chiefComplaint, setChiefComplaint] = useState('Replacement of fractured upper molar with dental implant');
+  const [chiefComplaint, setChiefComplaint] = useState(
+    'Replacement of fractured upper molar with dental implant'
+  );
 
   // Site parameters state
   const [selectedFdi, setSelectedFdi] = useState<number>(16);
@@ -76,10 +76,10 @@ export default function ImplantPlanningPage() {
   // Presets
   const applyPreset = (presetKey: 'anterior-aesthetic' | 'posterior-sinus' | 'mandibular-molar' | 'immediate-socket') => {
     if (presetKey === 'anterior-aesthetic') {
-      setPatientName('Emily Vance');
+      setPatientName(isAr ? 'إيميلي فانس (منطقة جمالية)' : 'Emily Vance');
       setPatientAge(29);
       setPatientGender('female');
-      setChiefComplaint('Missing upper front tooth after sports trauma; wants natural smile restoration');
+      setChiefComplaint(isAr ? 'فقدان قاطع علوي أمامي إثر صدمة رياضية مع رغبة في استعادة الابتسامة الطبيعية' : 'Missing upper front tooth after sports trauma; wants natural smile restoration');
       setSelectedFdi(11);
       setBoneWidth(6.0);
       setBoneHeight(12.0);
@@ -90,38 +90,38 @@ export default function ImplantPlanningPage() {
       setDiabetesStatus('none');
       setBruxism(false);
     } else if (presetKey === 'posterior-sinus') {
-      setPatientName('Robert Miller');
+      setPatientName(isAr ? 'روبرت ميلر (رفع جيب أنفي)' : 'Robert Miller');
       setPatientAge(58);
       setPatientGender('male');
-      setChiefComplaint('Missing upper right first molar for 4 years; chewing difficulty');
+      setChiefComplaint(isAr ? 'فقدان الضرس الأول العلوي الأيمن منذ 4 سنوات مع صعوبة في مضغ الطعام' : 'Missing upper right first molar for 4 years; chewing difficulty');
       setSelectedFdi(16);
       setBoneWidth(7.0);
       setBoneHeight(5.5); // Requires crestal sinus lift
       setBoneDensity('D3');
       setIsImmediateSocket(false);
-      setPreferredBrand('Nobel Biocare');
+      setPreferredBrand('Straumann');
       setSmokingStatus('non-smoker');
       setDiabetesStatus('none');
       setBruxism(false);
     } else if (presetKey === 'mandibular-molar') {
-      setPatientName('David Chen');
-      setPatientAge(51);
+      setPatientName(isAr ? 'ديفيد كلارك (ضرس سفلي وعظم كثيف)' : 'David Clark');
+      setPatientAge(45);
       setPatientGender('male');
-      setChiefComplaint('Extracted lower first molar; needs strong implant restoration');
+      setChiefComplaint(isAr ? 'كسر غير قابل للعلاج في الضرس الأول السفلي الأيسر مع جز شديد على الأسنان' : 'Non-restorable fracture on lower left first molar; severe bruxism history');
       setSelectedFdi(36);
-      setBoneWidth(7.5);
-      setBoneHeight(10.5);
+      setBoneWidth(8.0);
+      setBoneHeight(11.0);
       setBoneDensity('D1');
       setIsImmediateSocket(false);
-      setPreferredBrand('Zimmer Biomet');
-      setSmokingStatus('non-smoker');
-      setDiabetesStatus('none');
+      setPreferredBrand('Nobel Biocare');
+      setSmokingStatus('light-smoker');
+      setDiabetesStatus('controlled-hba1c-under-7');
       setBruxism(true);
     } else if (presetKey === 'immediate-socket') {
-      setPatientName('Sophia Al-Mansoor');
+      setPatientName(isAr ? 'صوفيا المنصور (خلع وزراعة فورية)' : 'Sophia Al-Mansoor');
       setPatientAge(35);
       setPatientGender('female');
-      setChiefComplaint('Vertical root fracture on premolar; desires same-day extraction and implant');
+      setChiefComplaint(isAr ? 'كسر جذري طولي في الضاحك ورغبة في الخلع والزراعة في نفس الجلسة' : 'Vertical root fracture on premolar; desires same-day extraction and implant');
       setSelectedFdi(24);
       setBoneWidth(6.5);
       setBoneHeight(13.0);
@@ -140,10 +140,10 @@ export default function ImplantPlanningPage() {
     setPipelineStep(1);
 
     // Visual progression animation through 5 implant planning layers
-    const timer1 = setTimeout(() => setPipelineStep(2), 350);
-    const timer2 = setTimeout(() => setPipelineStep(3), 700);
-    const timer3 = setTimeout(() => setPipelineStep(4), 1050);
-    const timer4 = setTimeout(() => setPipelineStep(5), 1400);
+    setTimeout(() => setPipelineStep(2), 350);
+    setTimeout(() => setPipelineStep(3), 700);
+    setTimeout(() => setPipelineStep(4), 1050);
+    setTimeout(() => setPipelineStep(5), 1400);
 
     try {
       const payload = {
@@ -205,7 +205,13 @@ export default function ImplantPlanningPage() {
     handleGeneratePlan();
   }, []);
 
-  const pipelineLayers = [
+  const pipelineLayers = isAr ? [
+    { step: 1, name: 'تخطيط CBCT', detail: 'الأبعاد ثلاثية الأبعاد وهامش الأمان' },
+    { step: 2, name: 'كثافة Misch', detail: 'وحدات هاونسفيلد وجودة العظم' },
+    { step: 3, name: 'هندسة الفيكستشر', detail: 'القطر، الطول وتصميم التدرج' },
+    { step: 4, name: 'البروتوكول الجراحي', detail: 'سرعات الدريل وعزم التثبيت' },
+    { step: 5, name: 'تخليق التركيبات', detail: 'الأباتمنت ومواصفات البرغي' }
+  ] : [
     { step: 1, name: 'CBCT Mapping', detail: '3D Dimensions & Margins' },
     { step: 2, name: 'Misch Density', detail: 'Hounsfield Units & Quality' },
     { step: 3, name: 'Fixture Geometry', detail: 'Diameter, Length & Taper' },
@@ -214,21 +220,21 @@ export default function ImplantPlanningPage() {
   ];
 
   return (
-    <div className="space-y-6 max-w-7xl mx-auto pb-12">
+    <div className="space-y-6 max-w-7xl mx-auto pb-12" dir={isAr ? 'rtl' : 'ltr'}>
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-4 sm:p-6 rounded-xl border border-slate-200 shadow-xs">
         <div>
           <div className="flex flex-wrap items-center gap-2">
             <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
               <Drill className="w-6 h-6 text-blue-600" />
-              Dental Implant Planning Studio
+              {t.implants.pageTitle}
             </h1>
             <Badge className="bg-teal-100 text-teal-800 border-none font-semibold text-xs">
-              AI Biomechanical Engine
+              {isAr ? 'محرك بيوميكانيكي ذكي' : 'AI Biomechanical Engine'}
             </Badge>
           </div>
           <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            Precision fixture selection, bone density protocols, sinus lift calculations, and prosthetic screw specifications
+            {t.implants.pageSubtitle}
           </p>
         </div>
 
@@ -238,10 +244,10 @@ export default function ImplantPlanningPage() {
             size="sm"
             onClick={() => setShowTour(true)}
             className="text-xs font-bold gap-1.5 border-blue-300 text-blue-700 bg-blue-50/80 hover:bg-blue-100 cursor-pointer shadow-2xs h-9 px-3"
-            title="جولة تعريفية تفاعلية لتوضيح خطوات تخطيط الزرعات"
+            title={isAr ? "جولة تعريفية تفاعلية لتوضيح خطوات تخطيط الزرعات" : "Interactive walkthrough of implant planning"}
           >
             <Sparkles className="w-3.5 h-3.5 text-blue-600" />
-            جولة تعريفية (Tour)
+            {t.implants.tourBtn}
           </Button>
 
           <Button
@@ -253,12 +259,12 @@ export default function ImplantPlanningPage() {
             {isGenerating ? (
               <>
                 <RotateCcw className="w-4 h-4 animate-spin" />
-                <span>Computing Biomechanics...</span>
+                <span>{t.implants.generatingText}</span>
               </>
             ) : (
               <>
                 <Sparkles className="w-4 h-4" />
-                <span>Generate Surgical Plan</span>
+                <span>{t.implants.generatePlanBtn}</span>
               </>
             )}
           </Button>
@@ -278,37 +284,37 @@ export default function ImplantPlanningPage() {
 
       {/* Preset Case Quick-Select Strip */}
       <div className="flex flex-wrap items-center gap-2 p-3 bg-slate-50 border border-slate-200 rounded-xl">
-        <span className="text-xs font-bold uppercase tracking-wider text-slate-500 pl-1 flex items-center gap-1.5">
+        <span className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
           <Sliders className="w-3.5 h-3.5 text-blue-600" />
-          Clinical Benchmark Cases:
+          {t.implants.presetsLabel}
         </span>
         <button
           type="button"
           onClick={() => applyPreset('anterior-aesthetic')}
-          className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white text-slate-700 hover:bg-blue-50 hover:text-blue-700 border border-slate-200 transition-all cursor-pointer"
+          className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white text-slate-700 hover:bg-blue-50 hover:text-blue-700 border border-slate-200 transition-all cursor-pointer shadow-xs"
         >
-          #11 Anterior Aesthetic Zone
+          {t.implants.presets.anterior}
         </button>
         <button
           type="button"
           onClick={() => applyPreset('posterior-sinus')}
-          className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white text-slate-700 hover:bg-blue-50 hover:text-blue-700 border border-slate-200 transition-all cursor-pointer"
+          className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white text-slate-700 hover:bg-blue-50 hover:text-blue-700 border border-slate-200 transition-all cursor-pointer shadow-xs"
         >
-          #16 Sinus Lift (OSFE Crestal)
+          {t.implants.presets.posteriorSinus}
         </button>
         <button
           type="button"
           onClick={() => applyPreset('mandibular-molar')}
-          className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white text-slate-700 hover:bg-blue-50 hover:text-blue-700 border border-slate-200 transition-all cursor-pointer"
+          className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white text-slate-700 hover:bg-blue-50 hover:text-blue-700 border border-slate-200 transition-all cursor-pointer shadow-xs"
         >
-          #36 Mandibular Molar / Bruxism
+          {t.implants.presets.mandibularMolar}
         </button>
         <button
           type="button"
           onClick={() => applyPreset('immediate-socket')}
-          className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white text-slate-700 hover:bg-blue-50 hover:text-blue-700 border border-slate-200 transition-all cursor-pointer"
+          className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white text-slate-700 hover:bg-blue-50 hover:text-blue-700 border border-slate-200 transition-all cursor-pointer shadow-xs"
         >
-          #24 Immediate Socket (Type 1)
+          {t.implants.presets.immediateSocket}
         </button>
       </div>
 
@@ -319,9 +325,11 @@ export default function ImplantPlanningPage() {
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-bold text-blue-900 flex items-center gap-1.5">
                 <Sparkles className="w-4 h-4 text-blue-600 animate-spin" />
-                Synthesizing 5-Layer Implant Plan
+                {isAr ? 'جاري تشغيل محرك تخطيط الزرعات خماسي الطبقات...' : 'Synthesizing 5-Layer Implant Plan'}
               </span>
-              <span className="text-xs text-blue-700 font-semibold font-mono">Layer {pipelineStep} of 5</span>
+              <span className="text-xs text-blue-700 font-semibold font-mono">
+                {isAr ? `الطبقة ${pipelineStep} من 5` : `Layer ${pipelineStep} of 5`}
+              </span>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
               {pipelineLayers.map((layer) => {
@@ -360,12 +368,12 @@ export default function ImplantPlanningPage() {
           <CardHeader className="p-4 sm:p-5 border-b border-slate-100">
             <CardTitle className="text-sm font-bold text-slate-900 flex items-center gap-2">
               <UserCheck className="w-4 h-4 text-blue-600" />
-              Patient & System Preferences
+              {isAr ? 'بيانات المريض وماركة الزرعات المفضلة' : 'Patient & System Preferences'}
             </CardTitle>
           </CardHeader>
           <CardContent className="p-4 sm:p-5 space-y-4 text-xs">
             <div>
-              <label className="font-semibold text-slate-700">Patient Full Name</label>
+              <label className="font-semibold text-slate-700">{isAr ? 'اسم المريض بالكامل' : 'Patient Full Name'}</label>
               <input
                 type="text"
                 value={patientName}
@@ -376,29 +384,30 @@ export default function ImplantPlanningPage() {
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="font-semibold text-slate-700">Age</label>
+                <label className="font-semibold text-slate-700">{isAr ? 'العمر (بالسنوات)' : 'Age'}</label>
                 <input
                   type="number"
                   value={patientAge}
                   onChange={(e) => setPatientAge(parseInt(e.target.value) || 30)}
                   className="w-full mt-1 px-3 py-2 border rounded-lg border-slate-200 focus:outline-none focus:ring-1 focus:ring-blue-500 font-medium text-slate-900"
+                  dir="ltr"
                 />
               </div>
               <div>
-                <label className="font-semibold text-slate-700">Gender</label>
+                <label className="font-semibold text-slate-700">{isAr ? 'النوع' : 'Gender'}</label>
                 <select
                   value={patientGender}
                   onChange={(e) => setPatientGender(e.target.value as any)}
                   className="w-full mt-1 px-3 py-2 border rounded-lg border-slate-200 focus:outline-none focus:ring-1 focus:ring-blue-500 font-medium text-slate-900 bg-white"
                 >
-                  <option value="female">Female</option>
-                  <option value="male">Male</option>
+                  <option value="female">{isAr ? 'أنثى' : 'Female'}</option>
+                  <option value="male">{isAr ? 'ذكر' : 'Male'}</option>
                 </select>
               </div>
             </div>
 
             <div>
-              <label className="font-semibold text-slate-700">Preferred Implant System</label>
+              <label className="font-semibold text-slate-700">{isAr ? 'نظام وماركة الزرعات المفضل' : 'Preferred Implant System'}</label>
               <select
                 value={preferredBrand}
                 onChange={(e) => setPreferredBrand(e.target.value)}
@@ -415,7 +424,7 @@ export default function ImplantPlanningPage() {
             </div>
 
             <div>
-              <label className="font-semibold text-slate-700">Chief Complaint & Clinical Notes</label>
+              <label className="font-semibold text-slate-700">{isAr ? 'الشكوى الرئيسية وملاحظات الحالة' : 'Chief Complaint & Clinical Notes'}</label>
               <textarea
                 rows={2}
                 value={chiefComplaint}
@@ -431,52 +440,54 @@ export default function ImplantPlanningPage() {
           <CardHeader className="p-4 sm:p-5 border-b border-slate-100 flex flex-row items-center justify-between">
             <CardTitle className="text-sm font-bold text-slate-900 flex items-center gap-2">
               <ShieldCheck className="w-4 h-4 text-teal-600" />
-              Medical History & Biomechanical Risk Screening
+              {isAr ? 'الفحص الطبي وموانع الجراحة البيولوجية' : 'Medical History & Biomechanical Risk Screening'}
             </CardTitle>
-            <span className="text-[11px] text-slate-500">Evidence-based complication scoring</span>
+            <span className="text-[11px] text-slate-500">
+              {isAr ? 'تقييم عوامل ومخاطر الفشل وفق الأبحاث' : 'Evidence-based complication scoring'}
+            </span>
           </CardHeader>
           <CardContent className="p-4 sm:p-5 space-y-4 text-xs">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               {/* Tobacco */}
               <div className="p-3 rounded-xl border border-slate-200 bg-slate-50/50 space-y-1">
-                <label className="font-bold text-slate-700 block">Tobacco Smoking</label>
+                <label className="font-bold text-slate-700 block">{isAr ? 'التدخين والتبغ' : 'Tobacco Smoking'}</label>
                 <select
                   value={smokingStatus}
                   onChange={(e) => setSmokingStatus(e.target.value as any)}
                   className="w-full px-2 py-1.5 border rounded-md border-slate-200 bg-white text-xs font-medium"
                 >
-                  <option value="non-smoker">Non-smoker</option>
-                  <option value="light-smoker">Light (&lt;10 cig/day)</option>
-                  <option value="heavy-smoker">Heavy (&gt;10 cig/day)</option>
+                  <option value="non-smoker">{isAr ? 'غير مدخن' : 'Non-smoker'}</option>
+                  <option value="light-smoker">{isAr ? 'تدخين خفيف (<10 سجائر/يوم)' : 'Light (<10 cig/day)'}</option>
+                  <option value="heavy-smoker">{isAr ? 'تدخين كثيف (>10 سجائر/يوم)' : 'Heavy (>10 cig/day)'}</option>
                 </select>
               </div>
 
               {/* Diabetes */}
               <div className="p-3 rounded-xl border border-slate-200 bg-slate-50/50 space-y-1">
-                <label className="font-bold text-slate-700 block">Diabetes / Glycemic Control</label>
+                <label className="font-bold text-slate-700 block">{isAr ? 'سكر الدم التراكمي (HbA1c)' : 'Diabetes / Glycemic Control'}</label>
                 <select
                   value={diabetesStatus}
                   onChange={(e) => setDiabetesStatus(e.target.value as any)}
                   className="w-full px-2 py-1.5 border rounded-md border-slate-200 bg-white text-xs font-medium"
                 >
-                  <option value="none">No Diabetes</option>
-                  <option value="controlled-hba1c-under-7">Controlled (HbA1c &lt; 7.0%)</option>
-                  <option value="moderate-hba1c-7-8">Moderate (HbA1c 7.0 - 8.0%)</option>
-                  <option value="uncontrolled-hba1c-over-8">Uncontrolled (HbA1c &gt; 8.0%)</option>
+                  <option value="none">{isAr ? 'لا يوجد سكري' : 'No Diabetes'}</option>
+                  <option value="controlled-hba1c-under-7">{isAr ? 'منضبط (HbA1c < 7.0%)' : 'Controlled (HbA1c < 7.0%)'}</option>
+                  <option value="moderate-hba1c-7-8">{isAr ? 'متوسط (7.0 - 8.0%)' : 'Moderate (HbA1c 7.0 - 8.0%)'}</option>
+                  <option value="uncontrolled-hba1c-over-8">{isAr ? 'غير منضبط (> 8.0%)' : 'Uncontrolled (HbA1c > 8.0%)'}</option>
                 </select>
               </div>
 
               {/* Periodontitis */}
               <div className="p-3 rounded-xl border border-slate-200 bg-slate-50/50 space-y-1">
-                <label className="font-bold text-slate-700 block">Periodontal Disease History</label>
+                <label className="font-bold text-slate-700 block">{isAr ? 'أمراض ودواعم الأسنان (الـ Perio)' : 'Periodontal Disease History'}</label>
                 <select
                   value={historyOfPeriodontitis}
                   onChange={(e) => setHistoryOfPeriodontitis(e.target.value as any)}
                   className="w-full px-2 py-1.5 border rounded-md border-slate-200 bg-white text-xs font-medium"
                 >
-                  <option value="none">Healthy Periodontium</option>
-                  <option value="treated-stable">Treated &amp; Stable (SPT)</option>
-                  <option value="active-untreated">Active Untreated</option>
+                  <option value="none">{isAr ? 'لثة سليمة تماماً' : 'Healthy Periodontium'}</option>
+                  <option value="treated-stable">{isAr ? 'معالج ومستقر سريرياً (SPT)' : 'Treated & Stable (SPT)'}</option>
+                  <option value="active-untreated">{isAr ? 'التهاب لثوي نشط غير معالج' : 'Active Untreated'}</option>
                 </select>
               </div>
             </div>
@@ -492,7 +503,7 @@ export default function ImplantPlanningPage() {
                   onChange={(e) => setBruxism(e.target.checked)}
                   className="rounded border-slate-300 text-blue-600 focus:ring-blue-500"
                 />
-                <span>Bruxism / Parafunction</span>
+                <span>{isAr ? 'الجز على الأسنان (Bruxism)' : 'Bruxism / Parafunction'}</span>
               </label>
 
               <label className={`flex items-center gap-2 p-2.5 rounded-lg border cursor-pointer transition-all ${
@@ -504,7 +515,7 @@ export default function ImplantPlanningPage() {
                   onChange={(e) => setBisphosphonates(e.target.checked)}
                   className="rounded border-slate-300 text-rose-600 focus:ring-rose-500"
                 />
-                <span>Bisphosphonate / MRONJ</span>
+                <span>{isAr ? 'أدوية بيسفوسفونات (MRONJ)' : 'Bisphosphonate / MRONJ'}</span>
               </label>
 
               <label className={`flex items-center gap-2 p-2.5 rounded-lg border cursor-pointer transition-all ${
@@ -516,12 +527,12 @@ export default function ImplantPlanningPage() {
                   onChange={(e) => setAnticoagulants(e.target.checked)}
                   className="rounded border-slate-300 text-amber-600 focus:ring-amber-500"
                 />
-                <span>Anticoagulant Therapy</span>
+                <span>{isAr ? 'أدوية سيولة الدم' : 'Anticoagulant Therapy'}</span>
               </label>
 
               <div className="flex items-center justify-between p-2 rounded-lg border border-slate-200 bg-slate-50">
-                <span className="text-slate-600 font-medium">Interarch Space:</span>
-                <span className="font-bold font-mono text-slate-900">{interarchSpace} mm</span>
+                <span className="text-slate-600 font-medium">{isAr ? 'المسافة بين الفكين:' : 'Interarch Space:'}</span>
+                <span className="font-bold font-mono text-slate-900" dir="ltr">{interarchSpace} mm</span>
               </div>
             </div>
           </CardContent>

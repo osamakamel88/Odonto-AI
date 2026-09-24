@@ -30,9 +30,11 @@ import {
   Zap, 
   Layers 
 } from 'lucide-react';
+import { useLanguage } from '@/lib/i18n/language-context';
 
 export function KnowledgeCalculators() {
   const [activeTool, setActiveTool] = useState<'cvm' | 'mixed' | 'tad' | 'aligner'>('cvm');
+  const { isAr } = useLanguage();
 
   // --- Tool 1: CVM Growth Stager State ---
   const [cvmFeatures, setCvmFeatures] = useState<VertebralCharacteristics>({
@@ -64,7 +66,7 @@ export function KnowledgeCalculators() {
   const tadDetails = TAD_SITE_PROTOCOLS[selectedTADSite];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 select-none" dir={isAr ? 'rtl' : 'ltr'}>
       {/* Tool Navigation Bar */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-2 bg-slate-100 p-1.5 rounded-xl border border-slate-200">
         <button
@@ -77,7 +79,7 @@ export function KnowledgeCalculators() {
           )}
         >
           <Activity className="w-3.5 h-3.5 text-blue-600" />
-          <span>CVM Growth Stager</span>
+          <span>{isAr ? 'مرحلة نمو الفقرات CVM' : 'CVM Growth Stager'}</span>
         </button>
 
         <button
@@ -90,7 +92,7 @@ export function KnowledgeCalculators() {
           )}
         >
           <Ruler className="w-3.5 h-3.5 text-teal-600" />
-          <span>Mixed Dentition Space</span>
+          <span>{isAr ? 'مسافات الأسنان المختلطة' : 'Mixed Dentition Space'}</span>
         </button>
 
         <button
@@ -103,7 +105,7 @@ export function KnowledgeCalculators() {
           )}
         >
           <Anchor className="w-3.5 h-3.5 text-indigo-600" />
-          <span>TAD Safe-Zone Matrix</span>
+          <span>{isAr ? 'مناطق أمان زرعات TADs' : 'TAD Safe-Zone Matrix'}</span>
         </button>
 
         <button
@@ -116,9 +118,10 @@ export function KnowledgeCalculators() {
           )}
         >
           <Layers className="w-3.5 h-3.5 text-amber-600" />
-          <span>Aligner Velocity Limits</span>
+          <span>{isAr ? 'السرعات البيولوجية للألاينرز' : 'Aligner Velocity Limits'}</span>
         </button>
       </div>
+
 
       {/* TOOL 1: CVM Growth Maturation Calculator */}
       {activeTool === 'cvm' && (

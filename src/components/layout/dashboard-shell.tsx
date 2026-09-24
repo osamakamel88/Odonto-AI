@@ -3,12 +3,16 @@
 import * as React from 'react';
 import { Sidebar } from './sidebar';
 import { Header } from './header';
+import { useLanguage } from '@/lib/i18n/language-context';
+import { APP_DICTIONARY } from '@/lib/i18n/app-dictionary';
 
 export function DashboardShell({ children }: { children: React.ReactNode }) {
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+  const { lang, isAr } = useLanguage();
+  const t = APP_DICTIONARY[lang] || APP_DICTIONARY.en;
 
   return (
-    <div className="flex min-h-screen bg-slate-50">
+    <div className="flex min-h-screen bg-slate-50" dir={isAr ? 'rtl' : 'ltr'}>
       {/* Responsive Sidebar (Desktop Permanent + Mobile Slide-Over) */}
       <Sidebar 
         isOpen={mobileMenuOpen} 
@@ -27,17 +31,17 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
           <div className="flex items-center gap-2">
             <span className="font-bold text-slate-800">Odonto AI</span>
             <span className="text-slate-300">•</span>
-            <span>7-Layer Clinical Orthodontic AI Suite</span>
+            <span>{t.footer.tagline}</span>
           </div>
           <div>
-            Developed &amp; Designed by{' '}
+            {t.footer.developedBy}{' '}
             <a 
               href="https://linkedin.com/in/osama-kamel-dev" 
               target="_blank" 
               rel="noopener noreferrer"
               className="font-bold text-blue-600 hover:text-blue-800 hover:underline transition-colors"
             >
-              Recode Developments
+              {t.footer.company}
             </a>
           </div>
         </footer>

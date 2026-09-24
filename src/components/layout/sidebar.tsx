@@ -2,12 +2,11 @@
 
 import React, { useEffect } from 'react';
 import { 
-  SmilePlus, 
+  Sparkles, 
   LayoutDashboard, 
   Users, 
   FileText, 
   BookOpen, 
-  Sparkles, 
   Scale, 
   Drill,
   Microscope,
@@ -17,6 +16,8 @@ import {
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Logo } from '@/components/brand/logo';
+import { useLanguage } from '@/lib/i18n/language-context';
+import { APP_DICTIONARY } from '@/lib/i18n/app-dictionary';
 
 interface SidebarProps {
   isOpen?: boolean;
@@ -25,6 +26,8 @@ interface SidebarProps {
 
 export function Sidebar({ isOpen, onClose }: SidebarProps) {
   const pathname = usePathname();
+  const { lang, isAr } = useLanguage();
+  const t = APP_DICTIONARY[lang] || APP_DICTIONARY.en;
 
   // Close mobile drawer on route change
   useEffect(() => {
@@ -32,20 +35,20 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
   }, [pathname]);
 
   const navItems = [
-    { label: 'Treatment Studio', href: '/plans/generate', icon: Sparkles, badge: 'Main' },
-    { label: 'Implant Planning', href: '/implants', icon: Drill, badge: 'New' },
-    { label: 'Patients', href: '/patients', icon: Users },
-    { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-    { label: 'Treatment Plans', href: '/plans', icon: FileText },
-    { label: 'Comparison Studio', href: '/compare', icon: Scale },
-    { label: 'Knowledge Base', href: '/knowledge', icon: BookOpen },
+    { label: t.nav.treatmentStudio, href: '/plans/generate', icon: Sparkles, badge: t.nav.treatmentStudioBadge },
+    { label: t.nav.implantPlanning, href: '/implants', icon: Drill, badge: t.nav.implantPlanningBadge },
+    { label: t.nav.patients, href: '/patients', icon: Users },
+    { label: t.nav.dashboard, href: '/dashboard', icon: LayoutDashboard },
+    { label: t.nav.treatmentPlans, href: '/plans', icon: FileText },
+    { label: t.nav.comparisonStudio, href: '/compare', icon: Scale },
+    { label: t.nav.knowledgeBase, href: '/knowledge', icon: BookOpen },
   ];
 
   const sidebarContent = (
     <div className="flex flex-col h-full bg-slate-900 text-slate-100 select-none">
       {/* Brand Header */}
       <div className="p-4 sm:p-5 flex items-center justify-between border-b border-slate-800/80">
-        <Logo href="/" size="md" subtitle="Orthodontic SaaS" variant="dark" />
+        <Logo href="/" size="md" subtitle={t.nav.brandSubtitle} variant="dark" />
 
         {/* Mobile close button */}
         {onClose && (
@@ -77,7 +80,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                   : 'text-slate-300 hover:bg-slate-800 hover:text-white'
               }`}
             >
-              <div className="flex items-center space-x-3">
+              <div className="flex items-center gap-3">
                 <Icon className={`h-4 w-4 shrink-0 ${isActive ? 'text-white' : 'text-slate-400'}`} />
                 <span>{item.label}</span>
               </div>
@@ -95,7 +98,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
         {/* Resources & Clinical References Section */}
         <div className="pt-4 pb-1">
           <p className="px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">
-            Reference &amp; Evidence
+            {t.nav.referenceSection}
           </p>
         </div>
 
@@ -105,9 +108,9 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
           rel="noopener noreferrer"
           className="flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-slate-300 hover:bg-slate-800 hover:text-white transition-all group"
         >
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center gap-3">
             <Microscope className="h-4 w-4 shrink-0 text-teal-400 group-hover:text-teal-300" />
-            <span>Resources &amp; References</span>
+            <span>{t.nav.resourcesReferences}</span>
           </div>
           <ExternalLink className="h-3 w-3 text-slate-500 group-hover:text-slate-300" />
         </a>
@@ -115,13 +118,13 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 
       {/* Clinician Profile */}
       <div className="p-4 border-t border-slate-800/80 flex items-center justify-between bg-slate-950/40">
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center gap-3">
           <div className="h-9 w-9 rounded-lg bg-blue-600/30 border border-blue-500/30 flex items-center justify-center text-xs font-bold text-blue-300 shrink-0">
             JD
           </div>
           <div>
-            <div className="text-xs font-bold text-white">Dr. John Doe</div>
-            <div className="text-[10px] text-teal-400 font-medium">Orthodontic Specialist</div>
+            <div className="text-xs font-bold text-white">{t.nav.clinicianName}</div>
+            <div className="text-[10px] text-teal-400 font-medium">{t.nav.clinicianTitle}</div>
           </div>
         </div>
       </div>
@@ -131,20 +134,20 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
   return (
     <>
       {/* 1. Desktop Static Sidebar: Always visible on lg screens (>= 1024px) */}
-      <aside className="hidden lg:flex w-64 h-screen sticky top-0 border-r border-slate-800 flex-shrink-0 z-30">
+      <aside className={`hidden lg:flex w-64 h-screen sticky top-0 ${isAr ? 'border-l' : 'border-r'} border-slate-800 flex-shrink-0 z-30`}>
         {sidebarContent}
       </aside>
 
       {/* 2. Mobile Slide-Over Drawer: Only shown when isOpen is true on mobile */}
       {isOpen && (
         <div className="fixed inset-0 z-50 lg:hidden">
-          {/* Backdrop Blur */}
+          {/* Backdrop */}
           <div 
-            className="fixed inset-0 bg-slate-950/70 backdrop-blur-xs transition-opacity animate-in fade-in"
+            className="fixed inset-0 bg-slate-950/80 backdrop-blur-xs transition-opacity"
             onClick={onClose}
           />
-          {/* Slide-over panel */}
-          <div className="fixed inset-y-0 left-0 w-72 max-w-[85vw] shadow-2xl z-50 animate-in slide-in-from-left duration-200">
+          {/* Drawer */}
+          <div className={`fixed inset-y-0 ${isAr ? 'right-0' : 'left-0'} w-72 max-w-[85vw] bg-slate-900 shadow-2xl z-50 flex flex-col`}>
             {sidebarContent}
           </div>
         </div>

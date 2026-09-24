@@ -28,32 +28,16 @@ import {
 import Link from 'next/link';
 import { OnboardingTour } from '@/components/clinical/onboarding-tour';
 import { STUDIO_DICTIONARY, StudioLanguage } from '@/lib/i18n/studio-dictionary';
+import { useLanguage } from '@/lib/i18n/language-context';
 
 function GeneratePlanContent() {
   const searchParams = useSearchParams();
   const urlPatientId = searchParams.get('patientId');
 
-  // Bilingual State (persisted in localStorage)
-  const [lang, setLang] = useState<StudioLanguage>('en');
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const savedLang = localStorage.getItem('odonto_studio_lang') as StudioLanguage;
-      if (savedLang === 'en' || savedLang === 'ar') {
-        setLang(savedLang);
-      }
-    }
-  }, []);
-
-  const switchLanguage = (newLang: StudioLanguage) => {
-    setLang(newLang);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('odonto_studio_lang', newLang);
-    }
-  };
-
+  // Use Global Language Context
+  const { lang, isAr, switchLanguage } = useLanguage();
   const t = STUDIO_DICTIONARY[lang] || STUDIO_DICTIONARY.en;
-  const isAr = lang === 'ar';
+
 
   const [patients, setPatients] = useState<StoredPatient[]>([]);
   const [selectedPatientId, setSelectedPatientId] = useState<string>('');

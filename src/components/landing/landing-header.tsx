@@ -12,6 +12,7 @@ import {
   Drill, 
   ShieldCheck 
 } from 'lucide-react';
+import { LanguageSwitcher } from '@/components/layout/language-switcher';
 
 export function LandingHeader() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -71,6 +72,8 @@ export function LandingHeader() {
 
         {/* Desktop Actions & Primary CTA */}
         <div className="hidden md:flex items-center space-x-3">
+          <LanguageSwitcher />
+
           <Link href="/implants">
             <Button
               variant="outline"
@@ -97,6 +100,7 @@ export function LandingHeader() {
 
         {/* Mobile Hamburger Button */}
         <div className="flex md:hidden items-center space-x-2">
+          <LanguageSwitcher />
           <Link href="/plans/generate">
             <Button
               size="sm"
@@ -114,6 +118,7 @@ export function LandingHeader() {
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
+
       </div>
 
       {/* Mobile Light Drawer */}

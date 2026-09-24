@@ -3,11 +3,9 @@
 import React from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { 
   BoneDensity, 
-  MISCH_BONE_DENSITY,
-  SEIBERT_CLASSIFICATION 
+  MISCH_BONE_DENSITY
 } from '@/lib/implantology/knowledge-base/bone-classification';
 import { 
   Layers, 
@@ -15,11 +13,10 @@ import {
   Activity, 
   AlertTriangle, 
   CheckCircle2, 
-  HelpCircle,
-  ShieldCheck,
-  Zap,
-  Info
+  ShieldCheck, 
+  Zap 
 } from 'lucide-react';
+import { useLanguage } from '@/lib/i18n/language-context';
 
 export interface BoneAssessmentCardProps {
   fdiPosition: number;
@@ -44,14 +41,13 @@ export function BoneAssessmentCard({
   boneDensity,
   isImmediateSocket,
   socketType = 'Type-1',
-  sinusFloorDistance,
-  ianDistance,
   onWidthChange,
   onHeightChange,
   onDensityChange,
   onImmediateSocketChange,
   onSocketTypeChange
 }: BoneAssessmentCardProps) {
+  const { isAr } = useLanguage();
   const quad = Math.floor(fdiPosition / 10);
   const tooth = fdiPosition % 10;
   const isUpper = quad === 1 || quad === 2;
@@ -61,16 +57,16 @@ export function BoneAssessmentCard({
   const currentDensityProfile = MISCH_BONE_DENSITY[boneDensity];
 
   // Derive Seibert Classification
-  let seibertType = 'None (Sufficient)';
+  let seibertType = isAr ? 'سليم (كافٍ تماماً)' : 'None (Sufficient)';
   let seibertColor = 'bg-emerald-100 text-emerald-800 border-emerald-200';
   if (boneWidth < 5.5 && boneHeight >= 10.0) {
-    seibertType = 'Seibert Class I (Horizontal Defect)';
+    seibertType = isAr ? 'سيبيرت 1 (نقص أفقي)' : 'Seibert Class I (Horizontal Defect)';
     seibertColor = 'bg-amber-100 text-amber-800 border-amber-200';
   } else if (boneWidth >= 5.5 && boneHeight < 8.0) {
-    seibertType = 'Seibert Class II (Vertical Defect)';
+    seibertType = isAr ? 'سيبيرت 2 (نقص رأسي)' : 'Seibert Class II (Vertical Defect)';
     seibertColor = 'bg-orange-100 text-orange-800 border-orange-200';
   } else if (boneWidth < 5.5 && boneHeight < 8.0) {
-    seibertType = 'Seibert Class III (Combined Defect)';
+    seibertType = isAr ? 'سيبيرت 3 (نقص مركب)' : 'Seibert Class III (Combined Defect)';
     seibertColor = 'bg-rose-100 text-rose-800 border-rose-200';
   }
 
@@ -79,28 +75,33 @@ export function BoneAssessmentCard({
   const isBuccalSafe = predictedBuccal >= 1.5;
 
   return (
-    <Card className="border-slate-200 shadow-sm overflow-hidden">
+    <Card className="border-slate-200 shadow-sm overflow-hidden select-none" dir={isAr ? 'rtl' : 'ltr'}>
       <CardHeader className="p-4 sm:p-5 bg-white border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-        <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 rounded-lg bg-teal-50 border border-teal-200 flex items-center justify-center text-teal-600">
+        <div className="flex items-center space-x-2 gap-2">
+          <div className="w-8 h-8 rounded-lg bg-teal-50 border border-teal-200 flex items-center justify-center text-teal-600 shrink-0">
             <Layers className="w-4 h-4" />
           </div>
           <div>
             <CardTitle className="text-base font-bold text-slate-900 flex items-center gap-2">
-              Bone Architecture & Density
+              {isAr ? 'بنية وكثافة العظم السنخي' : 'Bone Architecture & Density'}
               <Badge className={seibertColor + ' text-[10px] border'}>
                 {seibertType}
               </Badge>
             </CardTitle>
             <p className="text-xs text-slate-500">
-              Misch bone classification and CBCT bone dimensional analysis for site #{fdiPosition}
+              {isAr
+                ? `تصنيف Misch وتحليل أبعاد العظم بأشعة CBCT للموضع #${fdiPosition}`
+                : `Misch bone classification and CBCT bone dimensional analysis for site #${fdiPosition}`
+              }
             </p>
           </div>
         </div>
 
         {/* Immediate Socket Toggle */}
         <div className="flex items-center gap-2 bg-slate-50 p-1.5 rounded-lg border border-slate-200 text-xs">
-          <span className="font-medium text-slate-600 pl-1">Socket Status:</span>
+          <span className="font-medium text-slate-600 px-1">
+            {isAr ? 'حالة السنخ:' : 'Socket Status:'}
+          </span>
           <button
             type="button"
             onClick={() => onImmediateSocketChange(false)}
@@ -110,7 +111,7 @@ export function BoneAssessmentCard({
                 : 'text-slate-500 hover:text-slate-900'
             }`}
           >
-            Healed Ridge
+            {isAr ? 'عظم ملتئم' : 'Healed Ridge'}
           </button>
           <button
             type="button"
@@ -121,7 +122,7 @@ export function BoneAssessmentCard({
                 : 'text-slate-500 hover:text-slate-900'
             }`}
           >
-            Immediate Extraction
+            {isAr ? 'غرس فوري عقب الخلع' : 'Immediate Extraction'}
           </button>
         </div>
       </CardHeader>
@@ -132,22 +133,36 @@ export function BoneAssessmentCard({
           <div className="p-3.5 rounded-xl bg-blue-50/60 border border-blue-200 animate-in fade-in">
             <div className="flex items-center justify-between mb-2">
               <span className="text-xs font-bold text-blue-900 flex items-center gap-1.5">
-                <ShieldCheck className="w-3.5 h-3.5 text-blue-600" />
-                Elian Immediate Socket Classification
+                <ShieldCheck className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+                {isAr ? 'تصنيف Elian للغرس الفوري في جيب الخلع' : 'Elian Immediate Socket Classification'}
               </span>
-              <span className="text-[11px] text-blue-700">Dictates gap management and provisionalization</span>
+              <span className="text-[11px] text-blue-700 hidden sm:inline">
+                {isAr ? 'يحدد طريقة ملء الفراغ والتركيب المؤقت' : 'Dictates gap management and provisionalization'}
+              </span>
             </div>
             <div className="grid grid-cols-3 gap-2">
               {[
-                { type: 'Type-1' as const, label: 'Type 1 (Ideal)', desc: 'Intact bone & soft tissue' },
-                { type: 'Type-2' as const, label: 'Type 2 (Reduced Bone)', desc: 'Intact soft tissue, reduced bone' },
-                { type: 'Type-3' as const, label: 'Type 3 (Deficient)', desc: 'Both bone & soft tissue deficient' }
+                { 
+                  type: 'Type-1' as const, 
+                  label: isAr ? 'النوع 1 (مثالي)' : 'Type 1 (Ideal)', 
+                  desc: isAr ? 'عظم ولثة سليمين تماماً' : 'Intact bone & soft tissue' 
+                },
+                { 
+                  type: 'Type-2' as const, 
+                  label: isAr ? 'النوع 2 (عظم متناقص)' : 'Type 2 (Reduced Bone)', 
+                  desc: isAr ? 'لثة سليمة مع نقص بالعظم' : 'Intact soft tissue, reduced bone' 
+                },
+                { 
+                  type: 'Type-3' as const, 
+                  label: isAr ? 'النوع 3 (عجز حاد)' : 'Type 3 (Deficient)', 
+                  desc: isAr ? 'فقدان بالعظم والأنسجة الرخوة' : 'Both bone & soft tissue deficient' 
+                }
               ].map((s) => (
                 <button
                   key={s.type}
                   type="button"
                   onClick={() => onSocketTypeChange(s.type)}
-                  className={`p-2 rounded-lg border text-left transition-all cursor-pointer ${
+                  className={`p-2 rounded-lg border text-start transition-all cursor-pointer ${
                     socketType === s.type
                       ? 'bg-blue-600 text-white border-blue-600 shadow-sm'
                       : 'bg-white text-slate-700 border-blue-200 hover:border-blue-300'
@@ -166,8 +181,8 @@ export function BoneAssessmentCard({
         {/* Misch Density 4-Card Selector */}
         <div>
           <label className="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5 mb-2.5">
-            <Activity className="w-3.5 h-3.5 text-teal-600" />
-            Misch Bone Density Classification
+            <Activity className="w-3.5 h-3.5 text-teal-600 shrink-0" />
+            {isAr ? 'تصنيف كثافة العظم وفقاً لـ Misch' : 'Misch Bone Density Classification'}
           </label>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5">
             {(['D1', 'D2', 'D3', 'D4'] as BoneDensity[]).map((d) => {
@@ -179,7 +194,7 @@ export function BoneAssessmentCard({
                   key={d}
                   type="button"
                   onClick={() => onDensityChange(d)}
-                  className={`p-3 rounded-xl border text-left transition-all cursor-pointer relative ${
+                  className={`p-3 rounded-xl border text-start transition-all cursor-pointer relative ${
                     isSelected
                       ? 'bg-teal-50 border-teal-500 ring-2 ring-teal-200 text-teal-950 shadow-sm'
                       : 'bg-white border-slate-200 hover:border-slate-300 text-slate-700 hover:bg-slate-50/50'
@@ -211,8 +226,8 @@ export function BoneAssessmentCard({
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <label className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
-                <Ruler className="w-3.5 h-3.5 text-blue-600" />
-                Crestal Ridge Width (Bucco-Lingual)
+                <Ruler className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+                {isAr ? 'عرض الحافة السنخية (دهليزي - لساني)' : 'Crestal Ridge Width (Bucco-Lingual)'}
               </label>
               <div className="flex items-center gap-1.5">
                 <input
@@ -222,9 +237,11 @@ export function BoneAssessmentCard({
                   step={0.5}
                   value={boneWidth}
                   onChange={(e) => onWidthChange(parseFloat(e.target.value) || 2.0)}
-                  className="w-16 px-2 py-1 text-right text-xs font-bold font-mono border rounded-md border-slate-300 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="w-16 px-2 py-1 text-center text-xs font-bold font-mono border rounded-md border-slate-300 focus:outline-none focus:ring-1 focus:ring-blue-500"
                 />
-                <span className="text-xs font-semibold text-slate-500">mm</span>
+                <span className="text-xs font-semibold text-slate-500">
+                  {isAr ? 'مم' : 'mm'}
+                </span>
               </div>
             </div>
 
@@ -240,12 +257,18 @@ export function BoneAssessmentCard({
 
             {/* Visual Margin Feedback */}
             <div className="flex items-center justify-between text-[11px] pt-1">
-              <span className="text-slate-500">Predicted Facial Plate:</span>
+              <span className="text-slate-500">
+                {isAr ? 'الصفيحة العظمية الخارجية المتوقعة:' : 'Predicted Facial Plate:'}
+              </span>
               <span className={`font-semibold flex items-center gap-1 ${
                 isBuccalSafe ? 'text-emerald-700' : 'text-amber-700'
               }`}>
-                {isBuccalSafe ? <CheckCircle2 className="w-3 h-3" /> : <AlertTriangle className="w-3 h-3" />}
-                {predictedBuccal.toFixed(1)} mm {isBuccalSafe ? '(Safe ≥ 1.5mm)' : '(Deficient < 1.5mm)'}
+                {isBuccalSafe ? <CheckCircle2 className="w-3 h-3 shrink-0" /> : <AlertTriangle className="w-3 h-3 shrink-0" />}
+                {predictedBuccal.toFixed(1)} {isAr ? 'مم' : 'mm'}{' '}
+                {isBuccalSafe 
+                  ? (isAr ? '(آمن ≥ 1.5 مم)' : '(Safe ≥ 1.5mm)') 
+                  : (isAr ? '(ناقص < 1.5 مم)' : '(Deficient < 1.5mm)')
+                }
               </span>
             </div>
           </div>
@@ -254,8 +277,8 @@ export function BoneAssessmentCard({
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <label className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
-                <Ruler className="w-3.5 h-3.5 text-teal-600" />
-                Available Bone Height (Crestal to Hazard)
+                <Ruler className="w-3.5 h-3.5 text-teal-600 shrink-0" />
+                {isAr ? 'ارتفاع العظم المتاح فوق العصب/الجيب' : 'Available Bone Height (Crestal to Hazard)'}
               </label>
               <div className="flex items-center gap-1.5">
                 <input
@@ -265,9 +288,11 @@ export function BoneAssessmentCard({
                   step={0.5}
                   value={boneHeight}
                   onChange={(e) => onHeightChange(parseFloat(e.target.value) || 3.0)}
-                  className="w-16 px-2 py-1 text-right text-xs font-bold font-mono border rounded-md border-slate-300 focus:outline-none focus:ring-1 focus:ring-teal-500"
+                  className="w-16 px-2 py-1 text-center text-xs font-bold font-mono border rounded-md border-slate-300 focus:outline-none focus:ring-1 focus:ring-teal-500"
                 />
-                <span className="text-xs font-semibold text-slate-500">mm</span>
+                <span className="text-xs font-semibold text-slate-500">
+                  {isAr ? 'مم' : 'mm'}
+                </span>
               </div>
             </div>
 
@@ -284,12 +309,22 @@ export function BoneAssessmentCard({
             {/* Anatomical Hazard Feedback */}
             <div className="flex items-center justify-between text-[11px] pt-1">
               <span className="text-slate-500">
-                {isPosteriorUpper ? 'Subantral Floor:' : isPosteriorLower ? 'IAN Canal Margin:' : 'Apical Cortex:'}
+                {isPosteriorUpper 
+                  ? (isAr ? 'قاع الجيب الفكي:' : 'Subantral Floor:') 
+                  : isPosteriorLower 
+                  ? (isAr ? 'هامش القناة العصبية IAN:' : 'IAN Canal Margin:') 
+                  : (isAr ? 'قشرة العظم الذروية:' : 'Apical Cortex:')
+                }
               </span>
               <span className={`font-semibold ${
                 boneHeight >= 10.0 ? 'text-emerald-700' : boneHeight >= 6.0 ? 'text-amber-700' : 'text-rose-700'
               }`}>
-                {boneHeight >= 10.0 ? 'Standard 10-12mm fixture feasible' : boneHeight >= 6.0 ? 'Short fixture or elevation required' : 'Extensive vertical grafting needed'}
+                {boneHeight >= 10.0 
+                  ? (isAr ? 'زرعة قياسية 10-12 مم متاحة بأمان' : 'Standard 10-12mm fixture feasible') 
+                  : boneHeight >= 6.0 
+                  ? (isAr ? 'زرعة قصيرة أو رفع جيب بسيط مطلوب' : 'Short fixture or elevation required') 
+                  : (isAr ? 'يلزم تطعيم عظمي رأسي واسع' : 'Extensive vertical grafting needed')
+                }
               </span>
             </div>
           </div>
@@ -302,10 +337,15 @@ export function BoneAssessmentCard({
           </div>
           <div className="space-y-1">
             <div className="font-bold text-slate-900">
-              Drilling Strategy for {boneDensity} ({currentDensityProfile.name}):
+              {isAr 
+                ? `استراتيجية الحفر والتجهيز لكثافة ${boneDensity} (${currentDensityProfile.name}):` 
+                : `Drilling Strategy for ${boneDensity} (${currentDensityProfile.name}):`
+              }
             </div>
             <p className="text-slate-600">
-              {currentDensityProfile.drillingProtocol} Expected Primary Stability ISQ: {currentDensityProfile.expectedISQ.min} - {currentDensityProfile.expectedISQ.max}.
+              {currentDensityProfile.drillingProtocol}{' '}
+              {isAr ? 'الثبات الأولي المتوقع:' : 'Expected Primary Stability ISQ:'}{' '}
+              {currentDensityProfile.expectedISQ.min} - {currentDensityProfile.expectedISQ.max} ISQ.
             </p>
           </div>
         </div>

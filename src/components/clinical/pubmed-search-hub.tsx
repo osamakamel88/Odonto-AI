@@ -17,6 +17,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
+import { useLanguage } from '@/lib/i18n/language-context';
+
 
 interface PubMedArticle {
   pmid: string;
@@ -49,6 +51,7 @@ export function PubMedSearchHub() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [copiedPmid, setCopiedPmid] = useState<string | null>(null);
+  const { isAr } = useLanguage();
 
   const fetchArticles = async (searchQuery: string) => {
     if (!searchQuery.trim()) return;
@@ -63,10 +66,10 @@ export function PubMedSearchHub() {
         setSource(data.source || 'NCBI PubMed');
         setActiveQuery(searchQuery);
       } else {
-        setError(data.error || 'Failed to fetch citations');
+        setError(data.error || (isAr ? 'تعذر جلب الأبحاث الطبية' : 'Failed to fetch citations'));
       }
     } catch (err: any) {
-      setError('Network communication failed. Check your internet connection.');
+      setError(isAr ? 'فشل الاتصال بالشبكة. يرجى التحقق من اتصال الإنترنت.' : 'Network communication failed. Check your internet connection.');
     } finally {
       setLoading(false);
     }
@@ -94,7 +97,7 @@ export function PubMedSearchHub() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 select-none" dir={isAr ? 'rtl' : 'ltr'}>
       {/* Header Banner */}
       <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white p-6 rounded-2xl border border-indigo-500/20 shadow-xl relative overflow-hidden">
         <div className="absolute right-0 top-0 bottom-0 w-1/3 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-indigo-500/10 via-transparent to-transparent pointer-events-none" />
@@ -105,23 +108,26 @@ export function PubMedSearchHub() {
                 <Database className="h-5 w-5" />
               </span>
               <span className="text-xs font-mono tracking-wider text-indigo-300 uppercase font-semibold">
-                Live Biomedical RAG Literature Explorer
+                {isAr ? 'محرك استرجاع الأبحاث الطبية المباشر' : 'Live Biomedical RAG Literature Explorer'}
               </span>
               <Badge variant="outline" className="text-[10px] text-emerald-400 border-emerald-500/30 bg-emerald-500/10">
                 NCBI E-Utilities v2.0
               </Badge>
             </div>
             <h2 className="text-xl md:text-2xl font-bold tracking-tight">
-              Peer-Reviewed Orthodontic Evidence Retrieval
+              {isAr ? 'استرجاع الأدلة السريرية المحكمة لحظياً من PubMed' : 'Peer-Reviewed Orthodontic Evidence Retrieval'}
             </h2>
             <p className="text-sm text-slate-300 max-w-2xl mt-1">
-              Live querying of 36+ million National Library of Medicine records. Ground clinical diagnosis and biomechanical planning directly in verified literature.
+              {isAr 
+                ? 'بحث فوري في أكثر من 36 مليون دراسة منشورة بالمكتبة الوطنية للطب (NLM). استند في خططك التقويمية وقرارات الخلع على أحدث الأبحاث السريرية.' 
+                : 'Live querying of 36+ million National Library of Medicine records. Ground clinical diagnosis and biomechanical planning directly in verified literature.'
+              }
             </p>
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="text-right hidden sm:block">
-              <div className="text-xs text-slate-400">Indexed Sources</div>
+            <div className={`hidden sm:block ${isAr ? 'text-left' : 'text-right'}`}>
+              <div className="text-xs text-slate-400">{isAr ? 'المجلات المفهرسة' : 'Indexed Sources'}</div>
               <div className="text-sm font-semibold text-indigo-200">AJO-DO • Angle • EJO • Cochrane</div>
             </div>
           </div>
@@ -130,28 +136,34 @@ export function PubMedSearchHub() {
         {/* Search Bar Form */}
         <form onSubmit={handleSearch} className="mt-6 flex flex-col sm:flex-row gap-2 relative z-10">
           <div className="relative flex-1">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+            <Search className={`absolute top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 ${isAr ? 'right-3.5' : 'left-3.5'}`} />
             <Input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search clinical topics (e.g., MARPE adult, canine impaction, Class III Alt-RAMEC)..."
-              className="pl-10 bg-slate-800/80 border-slate-700 text-white placeholder:text-slate-400 h-11 focus-visible:ring-indigo-500"
+              placeholder={
+                isAr
+                  ? 'ابحث في موضوعات التقويم السريرية (مثل: MARPE، سحب الأنياب، علاج الصنف الثالث)...'
+                  : 'Search clinical topics (e.g., MARPE adult, canine impaction, Class III Alt-RAMEC)...'
+              }
+              className={`bg-slate-800/80 border-slate-700 text-white placeholder:text-slate-400 h-11 focus-visible:ring-indigo-500 ${
+                isAr ? 'pr-10 pl-3 text-right' : 'pl-10 pr-3 text-left'
+              }`}
             />
           </div>
           <Button 
             type="submit" 
             disabled={loading}
-            className="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-6 h-11 gap-2 shadow-lg shadow-indigo-600/20"
+            className="bg-indigo-600 hover:bg-indigo-500 text-white font-medium px-6 h-11 gap-2 shadow-lg shadow-indigo-600/20 cursor-pointer"
           >
             {loading ? (
               <>
                 <RefreshCw className="h-4 w-4 animate-spin" />
-                Querying PubMed...
+                {isAr ? 'جاري الاتصال بـ PubMed...' : 'Querying PubMed...'}
               </>
             ) : (
               <>
                 <Search className="h-4 w-4" />
-                Search Literature
+                {isAr ? 'بحث في الأبحاث' : 'Search Literature'}
               </>
             )}
           </Button>
@@ -160,7 +172,8 @@ export function PubMedSearchHub() {
         {/* Topic Filter Chips */}
         <div className="mt-4 pt-4 border-t border-slate-800 flex items-center gap-2 overflow-x-auto pb-1 text-xs text-slate-400">
           <span className="flex items-center gap-1 font-medium text-slate-300 shrink-0">
-            <Filter className="h-3 w-3 text-indigo-400" /> Quick Topics:
+            <Filter className="h-3 w-3 text-indigo-400" /> 
+            {isAr ? 'موضوعات شائعة:' : 'Quick Topics:'}
           </span>
           {PRESET_TOPICS.map((topic, i) => (
             <button
@@ -174,6 +187,7 @@ export function PubMedSearchHub() {
           ))}
         </div>
       </div>
+
 
       {/* Results Metadata Bar */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 px-1 text-xs text-muted-foreground">
@@ -251,9 +265,9 @@ export function PubMedSearchHub() {
                       href={art.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center rounded-md font-medium transition-colors bg-indigo-600 hover:bg-indigo-700 text-white text-xs h-8 px-3 gap-1.5 shadow-sm"
+                      className="inline-flex items-center justify-center rounded-md font-medium transition-colors bg-indigo-600 hover:bg-indigo-700 text-white text-xs h-8 px-3 gap-1.5 shadow-sm cursor-pointer"
                     >
-                      <span>PubMed</span>
+                      <span>{isAr ? 'عرض في PubMed' : 'PubMed'}</span>
                       <ExternalLink className="h-3.5 w-3.5" />
                     </a>
 
@@ -261,17 +275,19 @@ export function PubMedSearchHub() {
                       variant="outline"
                       size="sm"
                       onClick={() => copyCitation(art)}
-                      className="text-xs h-8 gap-1 border-slate-300 dark:border-slate-700"
+                      className="text-xs h-8 gap-1 border-slate-300 dark:border-slate-700 cursor-pointer"
                     >
                       {copiedPmid === art.pmid ? (
                         <>
                           <Check className="h-3.5 w-3.5 text-emerald-500" />
-                          <span className="text-emerald-600 dark:text-emerald-400 font-medium">Copied</span>
+                          <span className="text-emerald-600 dark:text-emerald-400 font-medium">
+                            {isAr ? 'تم النسخ' : 'Copied'}
+                          </span>
                         </>
                       ) : (
                         <>
                           <Copy className="h-3.5 w-3.5 text-muted-foreground" />
-                          <span>Cite</span>
+                          <span>{isAr ? 'توثيق' : 'Cite'}</span>
                         </>
                       )}
                     </Button>
@@ -287,12 +303,18 @@ export function PubMedSearchHub() {
       {!loading && articles.length === 0 && !error && (
         <div className="p-12 text-center rounded-2xl border border-dashed border-slate-300 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/30">
           <BookOpen className="h-10 w-10 text-slate-400 mx-auto mb-3" />
-          <h4 className="text-base font-semibold text-foreground">No literature found</h4>
+          <h4 className="text-base font-semibold text-foreground">
+            {isAr ? 'لم يتم العثور على أبحاث مطابقة' : 'No literature found'}
+          </h4>
           <p className="text-sm text-muted-foreground max-w-sm mx-auto mt-1">
-            Try searching for common orthodontic keywords such as "clear aligner", "rapid palatal expansion", or "canine impaction".
+            {isAr
+              ? 'جرّب البحث بكلمات تقويمية بالإنجليزية مثل "clear aligner" أو "rapid palatal expansion" أو "canine impaction".'
+              : 'Try searching for common orthodontic keywords such as "clear aligner", "rapid palatal expansion", or "canine impaction".'
+            }
           </p>
         </div>
       )}
     </div>
   );
 }
+
