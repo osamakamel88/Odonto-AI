@@ -36,7 +36,8 @@ export function ImplantSiteSelector({
   onToggleMissing
 }: ImplantSiteSelectorProps) {
   const [hoveredTooth, setHoveredTooth] = useState<number | null>(null);
-  const { isAr } = useLanguage();
+  const { lang, isAr } = useLanguage();
+
 
   const getToothRegionName = (fdi: number) => {
     const quad = Math.floor(fdi / 10);
@@ -155,7 +156,7 @@ export function ImplantSiteSelector({
                       ? 'bg-amber-50 text-amber-900 border-amber-300 hover:bg-amber-100 hover:border-amber-400'
                       : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50 hover:border-slate-300'
                   }`}
-                  title={`${tooth} - ${getToothName(String(tooth))}`}
+                  title={`${tooth} - ${getToothName(String(tooth), lang)}`}
                 >
                   <span className="text-[10px] sm:text-xs font-bold">{tooth}</span>
                   {isSelected && (
@@ -203,7 +204,7 @@ export function ImplantSiteSelector({
                       ? 'bg-amber-50 text-amber-900 border-amber-300 hover:bg-amber-100 hover:border-amber-400'
                       : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50 hover:border-slate-300'
                   }`}
-                  title={`${tooth} - ${getToothName(String(tooth))}`}
+                  title={`${tooth} - ${getToothName(String(tooth), lang)}`}
                 >
                   <span className="text-[10px] sm:text-xs font-bold">{tooth}</span>
                   {isSelected && (
@@ -227,8 +228,9 @@ export function ImplantSiteSelector({
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-sm font-bold text-slate-900">
-                  {getToothName(String(selectedFdi))}
+                  {getToothName(String(selectedFdi), lang)}
                 </span>
+
                 <Badge className={isAestheticZone(selectedFdi) ? 'bg-indigo-100 text-indigo-800' : 'bg-slate-100 text-slate-700'}>
                   {getToothRegionName(selectedFdi)}
                 </Badge>

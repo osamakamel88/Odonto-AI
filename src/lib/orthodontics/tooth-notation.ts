@@ -57,11 +57,38 @@ export function fdiToPalmer(fdi: string): string {
   return `${quadrantSymbol}${toothName}`;
 }
 
-export function getToothName(fdi: string): string {
+export function getToothName(fdi: string, lang: 'en' | 'ar' = 'en'): string {
   const digit2 = fdi[1];
   const q = parseInt(fdi[0]);
   const isPrimary = q >= 5 && q <= 8;
   
+  if (lang === 'ar') {
+    const namesPermanentAr: Record<string, string> = {
+      '1': 'القاطع المركزي (الثنية)',
+      '2': 'القاطع الجانبي (الرباعية)',
+      '3': 'الناب',
+      '4': 'الضاحك الأول',
+      '5': 'الضاحك الثاني',
+      '6': 'الضرس الأول',
+      '7': 'الضرس الثاني',
+      '8': 'ضرس العقل'
+    };
+
+    const namesPrimaryAr: Record<string, string> = {
+      '1': 'القاطع المركزي اللبني',
+      '2': 'القاطع الجانبي اللبني',
+      '3': 'الناب اللبني',
+      '4': 'الضرس اللبني الأول',
+      '5': 'الضرس اللبني الثاني'
+    };
+
+    const toothName = isPrimary ? namesPrimaryAr[digit2] : namesPermanentAr[digit2];
+    const arch = (q === 1 || q === 2 || q === 5 || q === 6) ? 'العلوي' : 'السفلي';
+    const side = (q === 1 || q === 4 || q === 5 || q === 8) ? 'الأيمن' : 'الأيسر';
+    
+    return `${toothName} ${arch} ${side}`;
+  }
+
   const namesPermanent: Record<string, string> = {
     '1': 'Central Incisor',
     '2': 'Lateral Incisor',
@@ -88,6 +115,7 @@ export function getToothName(fdi: string): string {
   
   return `${isPrimary ? 'Primary ' : ''}${arch} ${side} ${toothName}`;
 }
+
 
 // Simplified SVGs for tooth rendering
 export const TOOTH_SVG_PATHS = {

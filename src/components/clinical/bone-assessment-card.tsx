@@ -18,6 +18,29 @@ import {
 } from 'lucide-react';
 import { useLanguage } from '@/lib/i18n/language-context';
 
+export const MISCH_BONE_DENSITY_AR: Record<BoneDensity, { name: string; description: string; drillingProtocol: string }> = {
+  'D1': {
+    name: 'عظم قشري كثيف (Dense Cortical)',
+    description: 'عظم قشري فائق الكثافة، يشبه خشب البلوط، مقاومة عالية للثقب.',
+    drillingProtocol: 'تبريد ملحي غزير مع سرعات حفر بطيئة (800 لفة/دقيقة) لتفادي النخر الحراري. عمل تسنين كامل لنفق العظم (Bone Tapping).'
+  },
+  'D2': {
+    name: 'عظم قشري مسامي / لب خشن (D2)',
+    description: 'قشرة عظمية مسامية سميكة مع لب إسفنجي خشن، يشبه خشب الصنوبر. مثالي للزراعة.',
+    drillingProtocol: 'بروتوكول حفر قياسي متدرج بتبريد ملحي معتاد. إحساس لمسي ممتاز وثبات أولي متوقع عالي مناسب للتحميل الفوري.'
+  },
+  'D3': {
+    name: 'عظم قشري رقيق / لب ناعم (D3)',
+    description: 'قشرة عظمية رقيقة مع لب إسفنجي ناعم، يشبه خشب البلسا. شائع في الفك العلوي.',
+    drillingProtocol: 'يوصى بتجهيز نفق حفر أصغر من قطر الزرعة (Undersized Drilling) أو استخدام مكثفات عظمية (Osteotomes) لرفع الكثافة.'
+  },
+  'D4': {
+    name: 'عظم إسفنجي مسامي رخو (D4)',
+    description: 'عظم إسفنجي رخو مع انعدام شبه تام للقشرة العظمية، شبيه برغوة البوليسترين (الفوم).',
+    drillingProtocol: 'الاكتفاء بدريل التوجيه الأولي فقط ثم التكثيف اليدوي بالأوستيوتوم (Bone Condensation). يمنع الحفر النهائي مع تأخير التحميل لـ 6 أشهر.'
+  }
+};
+
 export interface BoneAssessmentCardProps {
   fdiPosition: number;
   boneWidth: number;
@@ -209,10 +232,10 @@ export function BoneAssessmentCard({
                     </Badge>
                   </div>
                   <div className="text-xs font-semibold mt-1 text-slate-900 truncate">
-                    {profile.name}
+                    {isAr ? MISCH_BONE_DENSITY_AR[d].name : profile.name}
                   </div>
                   <p className="text-[11px] text-slate-500 mt-1 line-clamp-2">
-                    {profile.description}
+                    {isAr ? MISCH_BONE_DENSITY_AR[d].description : profile.description}
                   </p>
                 </button>
               );
@@ -338,12 +361,12 @@ export function BoneAssessmentCard({
           <div className="space-y-1">
             <div className="font-bold text-slate-900">
               {isAr 
-                ? `استراتيجية الحفر والتجهيز لكثافة ${boneDensity} (${currentDensityProfile.name}):` 
+                ? `استراتيجية الحفر والتجهيز لكثافة ${boneDensity} (${MISCH_BONE_DENSITY_AR[boneDensity].name}):` 
                 : `Drilling Strategy for ${boneDensity} (${currentDensityProfile.name}):`
               }
             </div>
             <p className="text-slate-600">
-              {currentDensityProfile.drillingProtocol}{' '}
+              {isAr ? MISCH_BONE_DENSITY_AR[boneDensity].drillingProtocol : currentDensityProfile.drillingProtocol}{' '}
               {isAr ? 'الثبات الأولي المتوقع:' : 'Expected Primary Stability ISQ:'}{' '}
               {currentDensityProfile.expectedISQ.min} - {currentDensityProfile.expectedISQ.max} ISQ.
             </p>
