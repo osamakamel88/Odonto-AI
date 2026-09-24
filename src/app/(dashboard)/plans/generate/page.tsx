@@ -19,28 +19,41 @@ import {
   Sliders, 
   RefreshCw, 
   CheckCircle2, 
-  Edit3, 
-  UserPlus, 
-  SlidersHorizontal,
-  Plus,
-  Zap,
-  HelpCircle,
-  X,
-  ChevronRight,
-  ChevronLeft,
-  Info,
-  Layers,
-  Ruler,
-  Scan,
-  Maximize2,
-  Box
+  Plus, 
+  Zap, 
+  Layers, 
+  Ruler, 
+  Languages 
 } from 'lucide-react';
 import Link from 'next/link';
 import { OnboardingTour } from '@/components/clinical/onboarding-tour';
+import { STUDIO_DICTIONARY, StudioLanguage } from '@/lib/i18n/studio-dictionary';
 
 function GeneratePlanContent() {
   const searchParams = useSearchParams();
   const urlPatientId = searchParams.get('patientId');
+
+  // Bilingual State (persisted in localStorage)
+  const [lang, setLang] = useState<StudioLanguage>('en');
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const savedLang = localStorage.getItem('odonto_studio_lang') as StudioLanguage;
+      if (savedLang === 'en' || savedLang === 'ar') {
+        setLang(savedLang);
+      }
+    }
+  }, []);
+
+  const switchLanguage = (newLang: StudioLanguage) => {
+    setLang(newLang);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('odonto_studio_lang', newLang);
+    }
+  };
+
+  const t = STUDIO_DICTIONARY[lang] || STUDIO_DICTIONARY.en;
+  const isAr = lang === 'ar';
 
   const [patients, setPatients] = useState<StoredPatient[]>([]);
   const [selectedPatientId, setSelectedPatientId] = useState<string>('');
@@ -128,10 +141,10 @@ function GeneratePlanContent() {
     setIsCustomMode(true);
     if (preset === 'class3') {
       setCustomPatient({
-        name: 'John Doe',
+        name: isAr ? 'أحمد حسن (صنف ثالث)' : 'John Doe',
         age: 15,
         gender: 'male',
-        chiefComplaint: 'Severe underbite and lower teeth in front of upper teeth',
+        chiefComplaint: isAr ? 'عضة معكوسة وبروز الفك السفلي أمام العلوي' : 'Severe underbite and lower teeth in front of upper teeth',
         angleClass: 'Class III',
         overjet: -4.0,
         overbite: 1.0,
@@ -140,10 +153,10 @@ function GeneratePlanContent() {
       });
     } else if (preset === 'class2') {
       setCustomPatient({
-        name: 'Sarah Severe Class II',
+        name: isAr ? 'سارة محمود (بروز حاد صنف ثانٍ)' : 'Sarah Severe Class II',
         age: 14,
         gender: 'female',
-        chiefComplaint: 'Severe overjet, upper teeth stick out significantly',
+        chiefComplaint: isAr ? 'بروز شديد في الأسنان العلوية وصعوبة قفل الشفاه' : 'Severe overjet, upper teeth stick out significantly',
         angleClass: 'Class II div 1',
         overjet: 8.5,
         overbite: 5.0,
@@ -152,10 +165,10 @@ function GeneratePlanContent() {
       });
     } else if (preset === 'bimax') {
       setCustomPatient({
-        name: 'Adam Bimaxillary Case',
+        name: isAr ? 'آدم كريم (بروز ثنائي للفكين)' : 'Adam Bimaxillary Case',
         age: 22,
         gender: 'male',
-        chiefComplaint: 'Protruding lips and crowded teeth',
+        chiefComplaint: isAr ? 'بروز في الشفاه وتزاحم في الأسنان العلوية والسفلية' : 'Protruding lips and crowded teeth',
         angleClass: 'Class I',
         overjet: 6.0,
         overbite: 3.0,
@@ -164,10 +177,10 @@ function GeneratePlanContent() {
       });
     } else if (preset === 'openbite') {
       setCustomPatient({
-        name: 'Elena Open Bite',
+        name: isAr ? 'إلينا ماجد (عضة مفتوحة)' : 'Elena Open Bite',
         age: 18,
         gender: 'female',
-        chiefComplaint: 'Front teeth do not touch when biting',
+        chiefComplaint: isAr ? 'الأسنان الأمامية لا تتلامس عند العض مع صعوبة في بلع الطعام' : 'Front teeth do not touch when biting',
         angleClass: 'Class I',
         overjet: 2.5,
         overbite: -4.5,
@@ -248,47 +261,69 @@ function GeneratePlanContent() {
     }
   };
 
-  const layersStatus = [
-    { num: 1, name: 'Ceph Tracing', detail: 'Skeletal ANB/Wits' },
-    { num: 2, name: 'Panoramic OPG', detail: 'FDI Segmentation' },
-    { num: 3, name: 'Pathology AI', detail: 'Pre-Ortho Clearance' },
-    { num: 4, name: '3D Arch Space', detail: 'Bolton & Perimeter' },
-    { num: 5, name: 'CBCT Boundary', detail: 'Cortical Limits' },
-    { num: 6, name: 'Clinical CoT', detail: 'Orthodontic Logic' },
-    { num: 7, name: 'Plan Synthesis', detail: 'Staged Biomechanics' },
-  ];
-
   return (
-    <div className="space-y-6 max-w-7xl mx-auto pb-12">
+    <div className="space-y-6 max-w-7xl mx-auto pb-12" dir={isAr ? 'rtl' : 'ltr'}>
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-4 sm:p-6 rounded-xl border border-slate-200 shadow-sm">
         <div>
           <div className="flex flex-wrap items-center gap-2">
-            <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Treatment Planning Studio</h1>
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">
+              {t.studioTitle}
+            </h1>
             <Badge className="bg-blue-100 text-blue-800 border-none font-semibold text-xs">
-              7-Layer AI Pipeline
+              {t.pipelineBadge}
             </Badge>
           </div>
           <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            Synthesizing evidence-based biomechanics, archwire progressions, and extraction protocols
+            {t.studioSubtitle}
           </p>
         </div>
 
         <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+          {/* Authentic Bilingual Language Switcher Pill */}
+          <div className="flex items-center p-1 bg-slate-100 rounded-lg border border-slate-200 shadow-2xs">
+            <button
+              type="button"
+              onClick={() => switchLanguage('en')}
+              className={`px-2.5 py-1 text-xs font-bold rounded-md transition-all cursor-pointer flex items-center gap-1 ${
+                lang === 'en'
+                  ? 'bg-white text-blue-700 shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+              title="Switch to English"
+            >
+              <span>🇺🇸</span>
+              <span>English</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => switchLanguage('ar')}
+              className={`px-2.5 py-1 text-xs font-bold rounded-md transition-all cursor-pointer flex items-center gap-1 ${
+                lang === 'ar'
+                  ? 'bg-blue-600 text-white shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+              title="التبديل إلى المصطلحات الطبية العربية المصرية"
+            >
+              <span>🇪🇬</span>
+              <span>العربية</span>
+            </button>
+          </div>
+
           <Button 
             variant="outline" 
             size="sm"
             onClick={() => setShowTour(true)} 
             className="flex-1 sm:flex-initial text-xs font-bold gap-1.5 border-blue-300 text-blue-700 bg-blue-50/80 hover:bg-blue-100 cursor-pointer shadow-2xs"
-            title="جولة تعريفية تفاعلية لتوضيح خطوات الاستخدام"
+            title={isAr ? "جولة تعريفية تفاعلية لتوضيح خطوات الاستخدام" : "Interactive walkthrough of the studio"}
           >
             <Sparkles className="w-3.5 h-3.5 text-blue-600" />
-            جولة تعريفية (Tour)
+            {t.tourBtn}
           </Button>
 
           <Link href="/patients/new" className="flex-1 sm:flex-initial">
             <Button variant="outline" size="sm" className="w-full text-xs font-semibold gap-1.5 border-slate-300 cursor-pointer">
-              <Plus className="w-3.5 h-3.5 text-blue-600" /> Intake
+              <Plus className="w-3.5 h-3.5 text-blue-600" /> {t.intakeBtn}
             </Button>
           </Link>
 
@@ -302,12 +337,12 @@ function GeneratePlanContent() {
             {isGenerating ? (
               <>
                 <RefreshCw className="w-3.5 h-3.5 animate-spin text-white" />
-                <span>Layer {currentStep || 1} of 7...</span>
+                <span>{t.synthesizingText.replace('{X}', String(currentStep || 1))}</span>
               </>
             ) : (
               <>
                 <Sparkles className="w-3.5 h-3.5" />
-                <span>Synthesize Plan with AI</span>
+                <span>{t.synthesizeBtn}</span>
               </>
             )}
           </Button>
@@ -325,7 +360,7 @@ function GeneratePlanContent() {
 
       {/* 7-Layer Progress Pipeline Bar */}
       <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2">
-        {layersStatus.map((l) => {
+        {t.layers.map((l) => {
           const isCurrent = isGenerating && currentStep === l.num;
           const isPassed = isGenerating && currentStep > l.num;
           const isDone = !isGenerating && generatedPlan !== undefined;
@@ -342,7 +377,7 @@ function GeneratePlanContent() {
               }`}
             >
               <div className="flex items-center justify-between text-[10px] text-slate-400 font-bold uppercase mb-0.5">
-                <span>Layer {l.num}</span>
+                <span>{t.layerTitle} {l.num}</span>
                 {isPassed || isDone ? (
                   <CheckCircle2 className="w-3 h-3 text-emerald-600" />
                 ) : isCurrent ? (
@@ -360,8 +395,8 @@ function GeneratePlanContent() {
       <Card id="tour-patient-section" className="shadow-sm border-slate-200">
         <CardHeader className="pb-2 border-b bg-slate-50/50 flex flex-row items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-bold text-slate-800 uppercase tracking-wider">Clinical Case Input</span>
-            <span className="text-[11px] text-slate-500">— Test with preset patients or enter custom numbers</span>
+            <span className="text-xs font-bold text-slate-800 uppercase tracking-wider">{t.caseInputTitle}</span>
+            <span className="text-[11px] text-slate-500">{t.caseInputSubtitle}</span>
           </div>
 
           {/* Preset vs Custom Mode Toggle */}
@@ -372,7 +407,7 @@ function GeneratePlanContent() {
                 !isCustomMode ? 'bg-white text-blue-700 shadow-xs' : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              Select Patient Case
+              {t.selectPatientTab}
             </button>
             <button
               onClick={() => setIsCustomMode(true)}
@@ -380,7 +415,7 @@ function GeneratePlanContent() {
                 isCustomMode ? 'bg-white text-blue-700 shadow-xs' : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              Custom Patient Form
+              {t.customPatientTab}
             </button>
           </div>
         </CardHeader>
@@ -394,10 +429,10 @@ function GeneratePlanContent() {
                   <label className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center justify-between">
                     <span className="flex items-center gap-1.5">
                       <UserCheck className="w-3.5 h-3.5 text-blue-600" />
-                      Patient Record
+                      {t.patientRecordLabel}
                     </span>
                     <Link href="/patients/new" className="text-[11px] text-blue-600 hover:underline flex items-center gap-0.5">
-                      <Plus className="w-3 h-3" /> Add New
+                      <Plus className="w-3 h-3" /> {t.addNewPatient}
                     </Link>
                   </label>
                   <select 
@@ -417,7 +452,7 @@ function GeneratePlanContent() {
                   <div className="space-y-1.5">
                     <label className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
                       <Stethoscope className="w-3.5 h-3.5 text-indigo-600" />
-                      Clinician Experience Level
+                      {t.clinicianLevelLabel}
                     </label>
                     <div className="grid grid-cols-2 gap-2">
                       <button
@@ -429,7 +464,7 @@ function GeneratePlanContent() {
                             : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
                         }`}
                       >
-                        Fresh Graduate (Rationale)
+                        {t.juniorModeBtn}
                       </button>
                       <button
                         type="button"
@@ -440,7 +475,7 @@ function GeneratePlanContent() {
                             : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
                         }`}
                       >
-                        Specialist (Concise)
+                        {t.seniorModeBtn}
                       </button>
                     </div>
                   </div>
@@ -448,17 +483,17 @@ function GeneratePlanContent() {
                   <div className="space-y-1.5">
                     <label className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
                       <Sliders className="w-3.5 h-3.5 text-teal-600" />
-                      Target Modality Preference
+                      {t.modalityLabel}
                     </label>
                     <select 
                       value={modality} 
                       onChange={(e) => setModality(e.target.value as any)}
                       className="w-full text-xs bg-slate-50 border border-slate-300 rounded-lg p-2.5 font-medium text-slate-800"
                     >
-                      <option value="fixed_mbt">Fixed MBT 0.022" Appliance (Standard)</option>
-                      <option value="aligners">Clear Aligner Therapy (Staged Protocol)</option>
-                      <option value="functional">Functional Appliance (Twin Block / Herbst)</option>
-                      <option value="surgical">Combined Orthognathic Surgery</option>
+                      <option value="fixed_mbt">{t.modalities.fixed_mbt}</option>
+                      <option value="aligners">{t.modalities.aligners}</option>
+                      <option value="functional">{t.modalities.functional}</option>
+                      <option value="surgical">{t.modalities.surgical}</option>
                     </select>
                   </div>
                 </div>
@@ -469,17 +504,17 @@ function GeneratePlanContent() {
                 <div className="flex items-center gap-2">
                   <span className="font-bold text-blue-900 flex items-center gap-1.5">
                     <Ruler className="w-3.5 h-3.5 text-blue-600" />
-                    Clinical Baseline:
+                    {t.clinicalBaselineLabel}
                   </span>
                   <Badge variant="outline" className="bg-white text-blue-800 border-blue-200 font-bold px-2 py-0.5 shadow-2xs">
                     {currentAngle}
                   </Badge>
                 </div>
                 <div className="flex flex-wrap items-center gap-4 text-slate-700">
-                  <span>Overjet: <strong className="text-slate-900 font-mono">{currentOverjet > 0 ? `+${currentOverjet}` : currentOverjet} mm</strong></span>
-                  <span>Overbite: <strong className="text-slate-900 font-mono">{currentOverbite > 0 ? `+${currentOverbite}` : currentOverbite} mm</strong></span>
-                  <span>Crowding: <strong className="text-slate-900 capitalize font-medium">{currentCrowding}</strong></span>
-                  <span className="text-[11px] text-slate-400">IMPA: ~86°</span>
+                  <span>{isAr ? 'البروز الأفقي (Overjet):' : 'Overjet:'} <strong className="text-slate-900 font-mono" dir="ltr">{currentOverjet > 0 ? `+${currentOverjet}` : currentOverjet} mm</strong></span>
+                  <span>{isAr ? 'التراكب الرأسي (Overbite):' : 'Overbite:'} <strong className="text-slate-900 font-mono" dir="ltr">{currentOverbite > 0 ? `+${currentOverbite}` : currentOverbite} mm</strong></span>
+                  <span>{isAr ? 'التزاحم السنخي:' : 'Crowding:'} <strong className="text-slate-900 capitalize font-medium">{currentCrowding}</strong></span>
+                  <span className="text-[11px] text-slate-400" dir="ltr">IMPA: ~86°</span>
                 </div>
               </div>
             </div>
@@ -489,7 +524,7 @@ function GeneratePlanContent() {
               {/* Quick Preset Buttons in Custom Form */}
               <div className="flex flex-wrap items-center justify-between gap-2 p-2.5 bg-blue-50/70 rounded-lg border border-blue-200">
                 <span className="text-xs font-bold text-blue-900 flex items-center gap-1">
-                  <Zap className="w-3.5 h-3.5 text-amber-500" /> Load Preset Numbers:
+                  <Zap className="w-3.5 h-3.5 text-amber-500" /> {t.presetsLabel}
                 </span>
                 <div className="flex flex-wrap gap-1.5">
                   <button
@@ -497,45 +532,45 @@ function GeneratePlanContent() {
                     onClick={() => applyCustomPreset('class3')}
                     className="px-2.5 py-1 text-xs font-semibold bg-white text-blue-700 border border-blue-300 rounded-md hover:bg-blue-100 transition-all cursor-pointer shadow-xs"
                   >
-                    Class III Underbite (-4mm)
+                    {t.presetClass3}
                   </button>
                   <button
                     type="button"
                     onClick={() => applyCustomPreset('class2')}
                     className="px-2.5 py-1 text-xs font-semibold bg-white text-blue-700 border border-blue-300 rounded-md hover:bg-blue-100 transition-all cursor-pointer shadow-xs"
                   >
-                    Severe Class II (+8.5mm Overjet)
+                    {t.presetClass2}
                   </button>
                   <button
                     type="button"
                     onClick={() => applyCustomPreset('bimax')}
                     className="px-2.5 py-1 text-xs font-semibold bg-white text-blue-700 border border-blue-300 rounded-md hover:bg-blue-100 transition-all cursor-pointer shadow-xs"
                   >
-                    Bimaxillary Protrusion (+6mm)
+                    {t.presetBimax}
                   </button>
                   <button
                     type="button"
                     onClick={() => applyCustomPreset('openbite')}
                     className="px-2.5 py-1 text-xs font-semibold bg-white text-blue-700 border border-blue-300 rounded-md hover:bg-blue-100 transition-all cursor-pointer shadow-xs"
                   >
-                    Open Bite (-4.5mm)
+                    {t.presetOpenBite}
                   </button>
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
                 <div>
-                  <label className="font-bold text-slate-700 block mb-1">Patient Name</label>
+                  <label className="font-bold text-slate-700 block mb-1">{t.fullNameLabel}</label>
                   <input
                     type="text"
                     value={customPatient.name}
                     onChange={(e) => setCustomPatient({ ...customPatient, name: e.target.value })}
                     className="w-full border rounded-lg p-2 bg-slate-50 font-medium"
-                    placeholder="Patient full name"
+                    placeholder={t.fullNamePlaceholder}
                   />
                 </div>
                 <div>
-                  <label className="font-bold text-slate-700 block mb-1">Age & Gender</label>
+                  <label className="font-bold text-slate-700 block mb-1">{t.ageLabel} &amp; {t.genderLabel}</label>
                   <div className="grid grid-cols-2 gap-2">
                     <input
                       type="number"
@@ -549,32 +584,32 @@ function GeneratePlanContent() {
                       onChange={(e) => setCustomPatient({ ...customPatient, gender: e.target.value })}
                       className="border rounded-lg p-2 bg-slate-50 font-medium"
                     >
-                      <option value="male">Male</option>
-                      <option value="female">Female</option>
+                      <option value="male">{t.genderMale}</option>
+                      <option value="female">{t.genderFemale}</option>
                     </select>
                   </div>
                 </div>
                 <div>
-                  <label className="font-bold text-slate-700 block mb-1">Angle Classification</label>
+                  <label className="font-bold text-slate-700 block mb-1">{t.angleClassLabel}</label>
                   <select
                     value={customPatient.angleClass}
                     onChange={(e) => setCustomPatient({ ...customPatient, angleClass: e.target.value })}
                     className="w-full border rounded-lg p-2 bg-slate-50 font-medium"
                   >
-                    <option value="Class I">Class I Malocclusion</option>
-                    <option value="Class II div 1">Class II Division 1 (Severe Overjet)</option>
-                    <option value="Class II div 2">Class II Division 2 (Deep Bite)</option>
-                    <option value="Class III">Class III (Underbite / Crossbite)</option>
+                    <option value="Class I">{t.angleClasses.class1}</option>
+                    <option value="Class II div 1">{t.angleClasses.class2_1}</option>
+                    <option value="Class II div 2">{t.angleClasses.class2_2}</option>
+                    <option value="Class III">{t.angleClasses.class3}</option>
                   </select>
                 </div>
                 <div>
-                  <label className="font-bold text-slate-700 block mb-1">Chief Complaint</label>
+                  <label className="font-bold text-slate-700 block mb-1">{t.complaintLabel}</label>
                   <input
                     type="text"
                     value={customPatient.chiefComplaint}
                     onChange={(e) => setCustomPatient({ ...customPatient, chiefComplaint: e.target.value })}
                     className="w-full border rounded-lg p-2 bg-slate-50 font-medium"
-                    placeholder="Patient chief complaint"
+                    placeholder={t.complaintPlaceholder}
                   />
                 </div>
               </div>
@@ -582,7 +617,7 @@ function GeneratePlanContent() {
               <div id="tour-clinical-measurements" className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs bg-slate-50 p-3 rounded-lg border">
                 <div>
                   <label className="font-bold text-slate-700 block mb-1">
-                    Overjet (mm) <span className="text-slate-400 font-normal">(- for underbite, + for protrusion)</span>
+                    {t.overjetLabel} <span className="text-slate-400 font-normal">{t.overjetSub}</span>
                   </label>
                   <input
                     type="number"
@@ -590,11 +625,12 @@ function GeneratePlanContent() {
                     value={customPatient.overjet}
                     onChange={(e) => setCustomPatient({ ...customPatient, overjet: Number(e.target.value) })}
                     className="w-full border rounded-lg p-2 bg-white font-bold text-blue-700"
+                    dir="ltr"
                   />
                 </div>
                 <div>
                   <label className="font-bold text-slate-700 block mb-1">
-                    Overbite (mm) <span className="text-slate-400 font-normal">(- for open bite, + for deep bite)</span>
+                    {t.overbiteLabel} <span className="text-slate-400 font-normal">{t.overbiteSub}</span>
                   </label>
                   <input
                     type="number"
@@ -602,19 +638,20 @@ function GeneratePlanContent() {
                     value={customPatient.overbite}
                     onChange={(e) => setCustomPatient({ ...customPatient, overbite: Number(e.target.value) })}
                     className="w-full border rounded-lg p-2 bg-white font-bold text-blue-700"
+                    dir="ltr"
                   />
                 </div>
                 <div>
-                  <label className="font-bold text-slate-700 block mb-1">Arch Crowding</label>
+                  <label className="font-bold text-slate-700 block mb-1">{t.crowdingUpperLabel}</label>
                   <select
                     value={customPatient.crowdingUpper}
                     onChange={(e) => setCustomPatient({ ...customPatient, crowdingUpper: e.target.value })}
                     className="w-full border rounded-lg p-2 bg-white font-medium"
                   >
-                    <option value="none">None / Spaced</option>
-                    <option value="mild">Mild (1–3mm)</option>
-                    <option value="moderate">Moderate (4–6mm)</option>
-                    <option value="severe">Severe (7mm+)</option>
+                    <option value="none">{t.crowdingOptions.none}</option>
+                    <option value="mild">{t.crowdingOptions.mild}</option>
+                    <option value="moderate">{t.crowdingOptions.moderate}</option>
+                    <option value="severe">{t.crowdingOptions.severe}</option>
                   </select>
                 </div>
               </div>
@@ -638,26 +675,26 @@ function GeneratePlanContent() {
                 <div className="min-w-0">
                   <div className="flex items-center gap-2">
                     <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
-                      Diagnostic Records Hub
+                      {t.diagHubTitle}
                     </h3>
                     <span className="text-[10px] px-1.5 py-0.2 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded font-bold flex items-center gap-1 shrink-0">
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                      Live Sync
+                      {t.liveSyncBadge}
                     </span>
                   </div>
                   <p className="text-[11px] text-slate-500 truncate">
-                    Case: <strong className="text-slate-800">{isCustomMode ? customPatient.name : `${activePatient?.firstName} ${activePatient?.lastName}`}</strong> • {currentAngle} • OJ: {currentOverjet}mm
+                    {isAr ? 'الحالة: ' : 'Case: '}<strong className="text-slate-800">{isCustomMode ? customPatient.name : `${activePatient?.firstName} ${activePatient?.lastName}`}</strong> • {currentAngle} • OJ: {currentOverjet}mm
                   </p>
                 </div>
               </div>
 
               <div className="shrink-0 flex items-center gap-1.5">
                 <Badge variant="outline" className="text-[11px] bg-white text-slate-700 border-slate-200 font-bold px-2 py-0.5 shadow-2xs">
-                  {activeDiagnosticTab === 'ceph' && '📐 Ceph Tracing'}
-                  {activeDiagnosticTab === 'odontogram' && '🦷 FDI Chart'}
-                  {activeDiagnosticTab === 'panoramic' && '🩻 OPG X-Ray'}
-                  {activeDiagnosticTab === 'bolton' && '📊 Bolton Space'}
-                  {activeDiagnosticTab === 'model3d' && '🧊 3D Digital Cast'}
+                  {activeDiagnosticTab === 'ceph' && (isAr ? '📐 التتبع السيفالومتري' : '📐 Ceph Tracing')}
+                  {activeDiagnosticTab === 'odontogram' && (isAr ? '🦷 مخطط الأسنان FDI' : '🦷 FDI Chart')}
+                  {activeDiagnosticTab === 'panoramic' && (isAr ? '🩻 أشعة البانوراما' : '🩻 OPG X-Ray')}
+                  {activeDiagnosticTab === 'bolton' && (isAr ? '📊 تحليل بولتون 3D' : '📊 Bolton Space')}
+                  {activeDiagnosticTab === 'model3d' && (isAr ? '🧊 مجسم الأسنان 3D' : '🧊 3D Digital Cast')}
                 </Badge>
               </div>
             </div>
@@ -676,8 +713,8 @@ function GeneratePlanContent() {
                   }`}
                 >
                   <span className="text-base leading-none mb-1">📐</span>
-                  <span className="text-xs font-bold leading-tight">Ceph</span>
-                  <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded-full mt-1 bg-blue-50 text-blue-700 uppercase tracking-wider">
+                  <span className="text-xs font-bold leading-tight">{t.tabCephShort}</span>
+                  <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded-full mt-1 bg-blue-50 text-blue-700 uppercase tracking-wider" dir="ltr">
                     {cephPresetCase}
                   </span>
                 </button>
@@ -693,9 +730,9 @@ function GeneratePlanContent() {
                   }`}
                 >
                   <span className="text-base leading-none mb-1">🦷</span>
-                  <span className="text-xs font-bold leading-tight">FDI Chart</span>
+                  <span className="text-xs font-bold leading-tight">{t.tabOdontogramShort}</span>
                   <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded-full mt-1 bg-slate-100 text-slate-700">
-                    32 Teeth
+                    {isAr ? '32 سناً' : '32 Teeth'}
                   </span>
                 </button>
 
@@ -710,9 +747,9 @@ function GeneratePlanContent() {
                   }`}
                 >
                   <span className="text-base leading-none mb-1">🩻</span>
-                  <span className="text-xs font-bold leading-tight">OPG X-Ray</span>
+                  <span className="text-xs font-bold leading-tight">{t.tabPanoramicShort}</span>
                   <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded-full mt-1 bg-emerald-50 text-emerald-700">
-                    HD Clear
+                    {isAr ? 'أمان تام' : 'HD Clear'}
                   </span>
                 </button>
 
@@ -727,8 +764,8 @@ function GeneratePlanContent() {
                   }`}
                 >
                   <span className="text-base leading-none mb-1">📊</span>
-                  <span className="text-xs font-bold leading-tight">Bolton</span>
-                  <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded-full mt-1 bg-teal-50 text-teal-700">
+                  <span className="text-xs font-bold leading-tight">{t.tabBoltonShort}</span>
+                  <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded-full mt-1 bg-teal-50 text-teal-700" dir="ltr">
                     77.2% Norm
                   </span>
                 </button>
@@ -745,7 +782,7 @@ function GeneratePlanContent() {
                 >
                   <span className="text-base leading-none mb-1">🧊</span>
                   <span className="text-xs font-bold leading-tight flex items-center gap-0.5">
-                    3D Model
+                    {t.tabModel3dShort}
                   </span>
                   <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full mt-1 bg-indigo-600 text-white flex items-center gap-0.5 shadow-2xs">
                     <Sparkles className="w-2.5 h-2.5" />
@@ -762,7 +799,7 @@ function GeneratePlanContent() {
               <CephViewer presetCase={cephPresetCase} />
             )}
             {activeDiagnosticTab === 'odontogram' && (
-              <ToothChart />
+              <ToothChart lang={lang} />
             )}
             {activeDiagnosticTab === 'panoramic' && (
               <PanoramicViewer />
@@ -773,6 +810,7 @@ function GeneratePlanContent() {
                 overbite={currentOverbite} 
                 crowdingUpper={currentCrowding} 
                 angleClass={currentAngle} 
+                lang={lang}
               />
             )}
             {activeDiagnosticTab === 'model3d' && (
@@ -788,10 +826,10 @@ function GeneratePlanContent() {
                 activeDiagnosticTab === 'ceph' ? 'bg-blue-50/80 border-blue-300 shadow-xs' : 'border-slate-100 hover:bg-slate-50'
               }`}
             >
-              <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Ceph Sagittal</div>
+              <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">{isAr ? 'سيفالومتري سهمي' : 'Ceph Sagittal'}</div>
               <div className="font-bold text-slate-800 text-xs mt-0.5 flex items-center justify-between gap-1">
                 <span className="whitespace-nowrap">ANB / Wits</span>
-                <span className="text-blue-600 text-[11px] font-semibold uppercase shrink-0">{cephPresetCase}</span>
+                <span className="text-blue-600 text-[11px] font-semibold uppercase shrink-0" dir="ltr">{cephPresetCase}</span>
               </div>
             </div>
 
@@ -801,10 +839,10 @@ function GeneratePlanContent() {
                 activeDiagnosticTab === 'odontogram' ? 'bg-blue-50/80 border-blue-300 shadow-xs' : 'border-slate-100 hover:bg-slate-50'
               }`}
             >
-              <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Odontogram</div>
+              <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">{isAr ? 'مخطط الأسنان' : 'Odontogram'}</div>
               <div className="font-bold text-slate-800 text-xs mt-0.5 flex items-center justify-between gap-1">
-                <span className="whitespace-nowrap">FDI Chart</span>
-                <span className="text-slate-600 text-[11px] font-semibold shrink-0">32 Teeth</span>
+                <span className="whitespace-nowrap">{t.tabOdontogramShort}</span>
+                <span className="text-slate-600 text-[11px] font-semibold shrink-0">{isAr ? '32 سناً' : '32 Teeth'}</span>
               </div>
             </div>
 
@@ -814,10 +852,10 @@ function GeneratePlanContent() {
                 activeDiagnosticTab === 'panoramic' ? 'bg-blue-50/80 border-blue-300 shadow-xs' : 'border-slate-100 hover:bg-slate-50'
               }`}
             >
-              <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Panoramic OPG</div>
+              <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">{isAr ? 'أشعة بانوراما' : 'Panoramic OPG'}</div>
               <div className="font-bold text-slate-800 text-xs mt-0.5 flex items-center justify-between gap-1">
-                <span className="whitespace-nowrap">Pathology</span>
-                <span className="text-emerald-600 text-[11px] font-semibold shrink-0">Cleared</span>
+                <span className="whitespace-nowrap">{isAr ? 'الفحص اللثوي' : 'Pathology'}</span>
+                <span className="text-emerald-600 text-[11px] font-semibold shrink-0">{isAr ? 'سليم' : 'Cleared'}</span>
               </div>
             </div>
 
@@ -827,10 +865,10 @@ function GeneratePlanContent() {
                 activeDiagnosticTab === 'bolton' ? 'bg-teal-50/80 border-teal-300 shadow-xs' : 'border-slate-100 hover:bg-slate-50'
               }`}
             >
-              <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Bolton Ratio</div>
+              <div className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">{isAr ? 'نسب بولتون' : 'Bolton Ratio'}</div>
               <div className="font-bold text-slate-800 text-xs mt-0.5 flex items-center justify-between gap-1">
-                <span className="whitespace-nowrap">Anterior</span>
-                <span className="text-teal-700 text-[11px] font-semibold shrink-0">77.2%</span>
+                <span className="whitespace-nowrap">{isAr ? 'الأسنان الأمامية' : 'Anterior'}</span>
+                <span className="text-teal-700 text-[11px] font-semibold shrink-0" dir="ltr">77.2%</span>
               </div>
             </div>
 
@@ -841,11 +879,11 @@ function GeneratePlanContent() {
               }`}
             >
               <div className="text-[10px] text-indigo-600 font-bold uppercase tracking-wider flex items-center gap-1">
-                <span>3D Study Cast</span>
+                <span>{isAr ? 'مجسم كاست 3D' : '3D Study Cast'}</span>
                 <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
               </div>
               <div className="font-bold text-slate-800 text-xs mt-0.5 flex items-center justify-between gap-1">
-                <span className="whitespace-nowrap">Dual Arch</span>
+                <span className="whitespace-nowrap">{isAr ? 'الفكين معاً' : 'Dual Arch'}</span>
                 <span className="text-indigo-700 text-[11px] font-bold shrink-0">WebGL 3D</span>
               </div>
             </div>
@@ -858,6 +896,7 @@ function GeneratePlanContent() {
             plan={generatedPlan} 
             isGenerating={isGenerating} 
             experienceLevel={experienceLevel}
+            lang={lang}
           />
         </div>
       </div>
