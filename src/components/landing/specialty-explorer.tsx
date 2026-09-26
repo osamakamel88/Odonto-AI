@@ -287,10 +287,22 @@ export const SPECIALTIES: SpecialtyData[] = [
   }
 ];
 
+import { useLanguage } from '@/lib/i18n/language-context';
+
 export function SpecialtyExplorer() {
   const [activeTab, setActiveTab] = useState<string>('surgical');
+  const { lang, isAr } = useLanguage();
   const activeSpecialty = SPECIALTIES.find(s => s.id === activeTab) || SPECIALTIES[0];
   const Icon = activeSpecialty.icon;
+
+  const tabTitlesAr: Record<string, string> = {
+    surgical: 'جراحة تقويم الفكين',
+    aligners: 'التقويم الشفاف الرقمي',
+    fixed: 'التقويم الثابت الشامل',
+    interceptive: 'التقويم الوقائي والمبكر',
+    tads: 'المرسى الهيكلي وزرعات TADs',
+    implants: 'استوديو زراعة الأسنان'
+  };
 
   return (
     <section id="specialties" className="py-24 sm:py-32 bg-slate-50/60 border-t border-b border-slate-200/80 relative overflow-hidden">
@@ -301,13 +313,15 @@ export function SpecialtyExplorer() {
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-4">
           <Badge className="bg-blue-50 text-blue-700 border-blue-200 text-xs px-3.5 py-1 font-semibold rounded-full shadow-xs">
-            By Orthodontists, For Orthodontists
+            {isAr ? 'من أطباء التقويم، لأطباء التقويم' : 'By Orthodontists, For Orthodontists'}
           </Badge>
           <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 leading-tight">
-            Engineered for Every Discipline of Tooth Movement.
+            {isAr ? 'مصممة لكافة تخصصات تحريك الأسنان والفكين.' : 'Engineered for Every Discipline of Tooth Movement.'}
           </h2>
           <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-2xl mx-auto">
-            From surgical decompensation to digital aligner velocity control and restorative implant sizing, Odonto AI provides specialty-specific clinical intelligence grounded in biological reality.
+            {isAr
+              ? 'من إزالة التعويض الجراحي إلى التحكم في سرعة التقويم الشفاف وحسابات الزرعات، توفر Odonto AI ذكاءً سريرياً مبنياً على الحقائق البيولوجية.'
+              : 'From surgical decompensation to digital aligner velocity control and restorative implant sizing, Odonto AI provides specialty-specific clinical intelligence grounded in biological reality.'}
           </p>
         </div>
 
@@ -328,7 +342,7 @@ export function SpecialtyExplorer() {
                 }`}
               >
                 <SpecIcon className={`w-3.5 h-3.5 ${isActive ? 'text-teal-400' : 'text-slate-500'}`} />
-                <span>{spec.title}</span>
+                <span>{isAr ? (tabTitlesAr[spec.id] || spec.title) : spec.title}</span>
               </button>
             );
           })}
@@ -361,7 +375,7 @@ export function SpecialtyExplorer() {
               {/* Key Biomechanical Principles */}
               <div className="space-y-2.5 pt-2 border-t border-slate-100">
                 <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 block">
-                  Biomechanical Standard of Care:
+                  {isAr ? 'معايير الأمان البيوميكانيكي السريرية:' : 'Biomechanical Standard of Care:'}
                 </span>
                 <ul className="space-y-2">
                   {activeSpecialty.biomechanicalHighlights.map((item, idx) => (
@@ -376,7 +390,7 @@ export function SpecialtyExplorer() {
               {/* Literature Citations */}
               <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 space-y-1">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">
-                  Foundational Clinical Literature:
+                  {isAr ? 'المراجع والأدلة السريرية المعتمدة:' : 'Foundational Clinical Literature:'}
                 </span>
                 {activeSpecialty.evidenceCitations.map((cite, i) => (
                   <div key={i} className="text-[11px] text-slate-600 italic">
@@ -389,8 +403,8 @@ export function SpecialtyExplorer() {
               <div className="pt-2">
                 <Link href={activeSpecialty.ctaHref}>
                   <Button className="h-11 px-6 text-xs sm:text-sm font-semibold bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-md shadow-blue-600/20 transition-all cursor-pointer group flex items-center gap-2">
-                    <span>{activeSpecialty.ctaText}</span>
-                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    <span>{isAr ? 'فتح الحالة في الاستوديو السريري' : activeSpecialty.ctaText}</span>
+                    <ArrowRight className={`w-4 h-4 transition-transform ${isAr ? 'group-hover:-translate-x-1 rotate-180' : 'group-hover:translate-x-1'}`} />
                   </Button>
                 </Link>
               </div>

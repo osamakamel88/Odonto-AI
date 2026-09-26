@@ -16,49 +16,37 @@ import {
   CheckCircle2, 
   ShieldCheck, 
   Layers, 
-  Ruler, 
   BrainCircuit, 
   ArrowRight, 
-  Activity, 
-  Zap, 
   BookOpen, 
-  ExternalLink,
-  Plus,
-  Minus,
-  Check,
-  Stethoscope,
-  Compass,
-  Anchor
+  Plus, 
+  Minus, 
+  Compass 
 } from 'lucide-react';
+import { useLanguage } from '@/lib/i18n/language-context';
+import { LANDING_DICTIONARY } from '@/lib/i18n/landing-dictionary';
 
 export default function LandingPage() {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const { lang, isAr } = useLanguage();
+  const t = LANDING_DICTIONARY[lang];
 
-  const faqs = [
-    {
-      q: 'What can Odonto AI do that Overjet and Pearl cannot?',
-      a: 'Overjet and Pearl are excellent FDA-cleared diagnostic tools that detect caries, bone loss, and periapical pathology on X-rays. However, they stop at detection — they do not generate treatment plans, do not perform cephalometric analysis, do not plan orthodontic biomechanics, and do not cover implantology. Odonto AI picks up where they leave off: it synthesizes complete staged treatment plans with archwire sequences, extraction algorithms, surgical protocols, and implant fixture sizing.'
-    },
-    {
-      q: 'Does Odonto AI handle orthognathic surgical cases?',
-      a: 'Yes, absolutely. Odonto AI includes dedicated surgical protocols for Le Fort I osteotomies (advancement, impaction, downgrafting), BSSO (mandibular setback and advancement), sliding genioplasty, and Surgery-First Approaches (SFA) utilizing the Regional Acceleratory Phenomenon (RAP). It automatically models pre-surgical incisor decompensation goals and arch width coordination.'
-    },
-    {
-      q: 'Can it calculate dental implant fixture dimensions?',
-      a: 'Yes! The newly built Dental Implant Planning Studio evaluates CBCT bone width and height to calculate safe fixture diameters and lengths honoring the 1.5mm buccal cortical plate rule and 2.0mm IAN safety clearance. It calculates Misch D1–D4 bone density drilling speeds, subantral sinus lift requirements (OSFE crestal vs lateral window), and exact manufacturer prosthetic screw torque values (25–35 Ncm).'
-    },
-    {
-      q: 'How does Odonto AI prevent clinical hallucination?',
-      a: 'Unlike generic language models, Odonto AI runs a dual-engine architecture: an AI reasoning layer backed by a deterministic biomechanical engine. All skeletal cephalometrics (SNA, SNB, ANB, Wits), arch perimeter calculations, Bolton tooth-size ratios, and wire progressions are mathematically calculated before clinical plan synthesis.'
-    },
-    {
-      q: 'Which bracket systems and archwire progressions are supported?',
-      a: 'The system includes standard and custom bracket prescriptions for MBT (McLaughlin-Bennett-Trevisi), Roth, and Damon systems in .022" and .018" slot sizes. Wire progression sequences encompass superelastic thermal CuNiTi, Beta-Titanium (TMA), and rigid Stainless Steel with calibrated force-deflection ratios.'
-    },
-    {
-      q: 'Is Odonto AI backed by peer-reviewed evidence?',
-      a: 'Every treatment plan references established orthodontic literature, including published papers from the American Journal of Orthodontics and Dentofacial Orthopedics (AJODO), The Angle Orthodontist, and the Journal of Clinical Orthodontics (JCO), integrated with live NCBI PubMed search.'
-    }
+  const whyIcons = [
+    BrainCircuit,
+    Layers,
+    Drill,
+    BookOpen,
+    ShieldCheck,
+    Compass
+  ];
+
+  const whyColors = [
+    { bg: 'bg-blue-100', text: 'text-blue-600' },
+    { bg: 'bg-teal-100', text: 'text-teal-600' },
+    { bg: 'bg-indigo-100', text: 'text-indigo-600' },
+    { bg: 'bg-rose-100', text: 'text-rose-600' },
+    { bg: 'bg-emerald-100', text: 'text-emerald-600' },
+    { bg: 'bg-amber-100', text: 'text-amber-600' }
   ];
 
   return (
@@ -76,20 +64,20 @@ export default function LandingPage() {
             {/* Top Eyebrow Badge */}
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-100/90 border border-slate-200/80 text-xs font-semibold text-slate-700 shadow-xs">
               <span className="w-2 h-2 rounded-full bg-teal-500 animate-pulse" />
-              <span>Clinical AI for Orthodontics &amp; Implantology</span>
+              <span>{t.hero.eyebrow}</span>
             </div>
 
             {/* Apple-Style Bold Typography */}
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-slate-950 leading-[1.08]">
-              Your Clinical Co-Pilot.{' '}
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-slate-950 leading-[1.12]">
+              {t.hero.titleLine1}{' '}
               <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-teal-600">
-                From Diagnosis to Treatment Plan.
+                {t.hero.titleLine2}
               </span>
             </h1>
 
             {/* Subtitle */}
-            <p className="text-base sm:text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed font-normal">
-              The most comprehensive and up-to-date clinical AI platform that takes you from radiograph analysis through cephalometric tracing, biomechanical planning, and dental implantology — all in one seamless workflow.
+            <p className="text-base sm:text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed font-normal">
+              {t.hero.subtitle}
             </p>
 
             {/* High-Contrast CTA Buttons */}
@@ -98,8 +86,8 @@ export default function LandingPage() {
               <Link href="/plans/generate" className="w-full sm:w-auto">
                 <Button className="w-full sm:w-auto h-12 px-8 text-sm font-bold bg-slate-950 text-white hover:bg-blue-600 rounded-full shadow-lg shadow-slate-950/15 hover:shadow-blue-600/25 transition-all duration-200 cursor-pointer group flex items-center justify-center gap-2">
                   <Sparkles className="w-4 h-4 text-blue-400 group-hover:text-white transition-colors" />
-                  <span>Launch Treatment Studio</span>
-                  <ChevronRight className="w-4 h-4 text-slate-400 group-hover:text-white group-hover:translate-x-1 transition-transform" />
+                  <span>{t.hero.launchStudioBtn}</span>
+                  <ChevronRight className={`w-4 h-4 text-slate-400 group-hover:text-white transition-transform ${isAr ? 'group-hover:-translate-x-1 rotate-180' : 'group-hover:translate-x-1'}`} />
                 </Button>
               </Link>
 
@@ -110,29 +98,19 @@ export default function LandingPage() {
                   className="w-full sm:w-auto h-12 px-7 text-sm font-semibold text-slate-700 border-slate-200 bg-white hover:bg-slate-50 hover:text-blue-600 rounded-full shadow-xs transition-all cursor-pointer flex items-center justify-center gap-2"
                 >
                   <Drill className="w-4 h-4 text-teal-600" />
-                  <span>Explore Implant Studio</span>
+                  <span>{t.hero.exploreImplantsBtn}</span>
                 </Button>
               </Link>
             </div>
 
             {/* Clinical Trust Bar */}
             <div className="pt-8 flex flex-wrap items-center justify-center gap-6 text-xs font-semibold text-slate-600">
-              <span className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-teal-600 shrink-0" />
-                <span>Steiner, Tweed &amp; McNamara Ceph</span>
-              </span>
-              <span className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-teal-600 shrink-0" />
-                <span>Misch D1–D4 Bone Density</span>
-              </span>
-              <span className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-teal-600 shrink-0" />
-                <span>Live NCBI PubMed Evidence</span>
-              </span>
-              <span className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-4 h-4 text-teal-600 shrink-0" />
-                <span>Dual-Engine Zero Hallucination</span>
-              </span>
+              {t.hero.trustItems.map((item, idx) => (
+                <span key={idx} className="flex items-center gap-1.5">
+                  <CheckCircle2 className="w-4 h-4 text-teal-600 shrink-0" />
+                  <span>{item}</span>
+                </span>
+              ))}
             </div>
           </div>
 
@@ -142,15 +120,15 @@ export default function LandingPage() {
               <div className="bg-white rounded-2xl overflow-hidden border border-slate-200/80">
                 {/* Safari Titlebar */}
                 <div className="px-4 py-3 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-2 rtl:space-x-reverse">
                     <span className="w-3 h-3 rounded-full bg-rose-400 inline-block border border-rose-500/30" />
                     <span className="w-3 h-3 rounded-full bg-amber-400 inline-block border border-amber-500/30" />
                     <span className="w-3 h-3 rounded-full bg-emerald-400 inline-block border border-emerald-500/30" />
-                    <span className="text-xs text-slate-500 font-mono pl-2">Odonto AI — Clinical Treatment Studio</span>
+                    <span className="text-xs text-slate-500 font-mono px-2">{t.hero.previewTitle}</span>
                   </div>
                   <div className="flex items-center gap-2 text-xs">
                     <Badge className="bg-blue-50 text-blue-800 border-blue-200 text-[10px] font-mono">
-                      Active Case: John Doe (Class III Underbite)
+                      {t.hero.activeCaseBadge}
                     </Badge>
                   </div>
                 </div>
@@ -159,15 +137,7 @@ export default function LandingPage() {
                 <div className="p-6 sm:p-8 space-y-6">
                   {/* Top 7-Layer Progress Pipeline */}
                   <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2">
-                    {[
-                      { num: 1, name: 'Ceph Tracing', sub: 'ANB -3.2° / Wits -4mm' },
-                      { num: 2, name: 'Panoramic OPG', sub: '32-Tooth Segmentation' },
-                      { num: 3, name: 'Pathology AI', sub: 'Zero Bone Loss Clearance' },
-                      { num: 4, name: '3D Arch Space', sub: 'Bolton Anterior 77.2%' },
-                      { num: 5, name: 'Cortical Limit', sub: 'Buccal Plate 1.8mm' },
-                      { num: 6, name: 'Clinical CoT', sub: 'Surgery vs Decomp' },
-                      { num: 7, name: 'Plan Synthesis', sub: 'Staged Mechanics' },
-                    ].map((step) => (
+                    {t.hero.layers.map((step) => (
                       <div key={step.num} className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-xs">
                         <div className="flex items-center justify-between font-bold text-slate-900">
                           <span>0{step.num}</span>
@@ -184,53 +154,53 @@ export default function LandingPage() {
                     {/* Left: Ceph & Clinical Findings */}
                     <div className="lg:col-span-6 bg-slate-50 rounded-2xl p-5 border border-slate-200 space-y-3">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Cephalometric Skeletal Diagnosis</span>
-                        <Badge className="bg-rose-50 text-rose-800 border-rose-200 text-[10px] font-bold">Skeletal Class III</Badge>
+                        <span className="text-xs font-bold uppercase tracking-wider text-slate-500">{t.hero.diagTitle}</span>
+                        <Badge className="bg-rose-50 text-rose-800 border-rose-200 text-[10px] font-bold">{t.hero.skeletalClassBadge}</Badge>
                       </div>
                       <div className="grid grid-cols-3 gap-2 text-xs font-mono">
                         <div className="p-2.5 bg-white rounded-xl border border-slate-200 shadow-xs">
-                          <span className="text-slate-500 block text-[10px] font-sans">ANB Angle</span>
-                          <span className="text-rose-600 font-bold text-sm">-3.2° (Norm: 2°)</span>
+                          <span className="text-slate-500 block text-[10px] font-sans">{t.hero.anbLabel}</span>
+                          <span className="text-rose-600 font-bold text-sm">{t.hero.anbValue}</span>
                         </div>
                         <div className="p-2.5 bg-white rounded-xl border border-slate-200 shadow-xs">
-                          <span className="text-slate-500 block text-[10px] font-sans">Wits Appraisal</span>
-                          <span className="text-rose-600 font-bold text-sm">-4.0 mm</span>
+                          <span className="text-slate-500 block text-[10px] font-sans">{t.hero.witsLabel}</span>
+                          <span className="text-rose-600 font-bold text-sm">{t.hero.witsValue}</span>
                         </div>
                         <div className="p-2.5 bg-white rounded-xl border border-slate-200 shadow-xs">
-                          <span className="text-slate-500 block text-[10px] font-sans">Overjet</span>
-                          <span className="text-rose-600 font-bold text-sm">-4.0 mm</span>
+                          <span className="text-slate-500 block text-[10px] font-sans">{t.hero.overjetLabel}</span>
+                          <span className="text-rose-600 font-bold text-sm">{t.hero.overjetValue}</span>
                         </div>
                       </div>
                       <p className="text-xs text-slate-600 leading-relaxed">
-                        Severe mandibular prognathism with anterior crossbite. AI recommends decompensation followed by bilateral sagittal split osteotomy (BSSO) setback.
+                        {t.hero.diagDesc}
                       </p>
                     </div>
 
                     {/* Right: Synthesized Treatment Plan */}
                     <div className="lg:col-span-6 bg-slate-50 rounded-2xl p-5 border border-slate-200 space-y-3">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Synthesized Biomechanical Plan</span>
-                        <Badge className="bg-blue-50 text-blue-800 border-blue-200 text-[10px] font-bold">Staged Mechanics</Badge>
+                        <span className="text-xs font-bold uppercase tracking-wider text-slate-500">{t.hero.planTitle}</span>
+                        <Badge className="bg-blue-50 text-blue-800 border-blue-200 text-[10px] font-bold">{t.hero.stagedBadge}</Badge>
                       </div>
                       <ul className="text-xs space-y-2 text-slate-700">
                         <li className="flex items-start gap-2 bg-white p-2 rounded-lg border border-slate-200/80 shadow-xs">
-                          <span className="text-blue-600 font-bold font-mono">P1:</span>
-                          <span>Leveling &amp; Alignment — 0.014 CuNiTi → 0.018 CuNiTi (6 months)</span>
+                          <span className="text-blue-600 font-bold font-mono shrink-0">{t.hero.p1Phase}</span>
+                          <span>{t.hero.p1Desc}</span>
                         </li>
                         <li className="flex items-start gap-2 bg-white p-2 rounded-lg border border-slate-200/80 shadow-xs">
-                          <span className="text-blue-600 font-bold font-mono">P2:</span>
-                          <span>Incisor Decompensation — 0.019x0.025 SS with Class III elastics (8 months)</span>
+                          <span className="text-blue-600 font-bold font-mono shrink-0">{t.hero.p2Phase}</span>
+                          <span>{t.hero.p2Desc}</span>
                         </li>
                         <li className="flex items-start gap-2 bg-white p-2 rounded-lg border border-slate-200/80 shadow-xs">
-                          <span className="text-teal-600 font-bold font-mono">SX:</span>
-                          <span>Mandibular Setback (BSSO 4.5mm) + Maxillary Advancement (Le Fort I 2.0mm)</span>
+                          <span className="text-teal-600 font-bold font-mono shrink-0">{t.hero.sxPhase}</span>
+                          <span>{t.hero.sxDesc}</span>
                         </li>
                       </ul>
                       <div className="pt-1 flex items-center justify-between text-xs">
-                        <span className="text-slate-500 font-medium">Estimated Duration: 22-26 months</span>
+                        <span className="text-slate-500 font-medium">{t.hero.estDuration}</span>
                         <Link href="/plans/generate">
                           <span className="text-blue-600 hover:text-blue-800 font-bold flex items-center gap-1 cursor-pointer">
-                            Open in Studio <ArrowRight className="w-3 h-3" />
+                            {t.hero.openInStudio} <ArrowRight className={`w-3 h-3 ${isAr ? 'rotate-180' : ''}`} />
                           </span>
                         </Link>
                       </div>
@@ -248,109 +218,34 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
             <Badge className="bg-blue-50 text-blue-700 border-blue-200 text-xs px-3.5 py-1 font-semibold rounded-full shadow-xs">
-              Why Odonto AI
+              {t.why.badge}
             </Badge>
             <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
-              What Makes This Different.
+              {t.why.title}
             </h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* Card 1 */}
-            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 shadow-xs hover:shadow-md transition-all space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center">
-                  <BrainCircuit className="w-5 h-5" />
+            {t.why.cards.map((card, i) => {
+              const IconComponent = whyIcons[i] || BrainCircuit;
+              const color = whyColors[i] || whyColors[0];
+              return (
+                <div key={i} className="p-6 rounded-2xl bg-slate-50 border border-slate-200 shadow-xs hover:shadow-md transition-all space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className={`w-10 h-10 rounded-xl ${color.bg} ${color.text} flex items-center justify-center`}>
+                      <IconComponent className="w-5 h-5" />
+                    </div>
+                    <Badge className="bg-slate-200 text-slate-700 hover:bg-slate-200 border-none text-[10px] font-bold">
+                      {card.metric}
+                    </Badge>
+                  </div>
+                  <h3 className="text-base font-bold text-slate-900">{card.title}</h3>
+                  <p className="text-sm text-slate-600 leading-relaxed">
+                    {card.desc}
+                  </p>
                 </div>
-                <Badge className="bg-slate-200 text-slate-700 hover:bg-slate-200 border-none text-[10px] font-bold">
-                  Competitors: 0 Plans
-                </Badge>
-              </div>
-              <h3 className="text-base font-bold text-slate-900">Treatment Plan Synthesis</h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                Unlike diagnostic-only tools that detect disease and stop, Odonto AI synthesizes complete multi-phase treatment plans with staged biomechanics, wire sequences, and retention protocols.
-              </p>
-            </div>
-            
-            {/* Card 2 */}
-            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 shadow-xs hover:shadow-md transition-all space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="w-10 h-10 rounded-xl bg-teal-100 text-teal-600 flex items-center justify-center">
-                  <Layers className="w-5 h-5" />
-                </div>
-                <Badge className="bg-slate-200 text-slate-700 hover:bg-slate-200 border-none text-[10px] font-bold">
-                  7 Safety Layers
-                </Badge>
-              </div>
-              <h3 className="text-base font-bold text-slate-900">7-Layer Diagnostic Pipeline</h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                Every plan passes through 7 deterministic diagnostic stages: ceph tracing, OPG segmentation, pre-ortho clearance, Bolton analysis, cortical verification, clinical reasoning, and final synthesis.
-              </p>
-            </div>
-
-            {/* Card 3 */}
-            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 shadow-xs hover:shadow-md transition-all space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center">
-                  <Drill className="w-5 h-5" />
-                </div>
-                <Badge className="bg-slate-200 text-slate-700 hover:bg-slate-200 border-none text-[10px] font-bold">
-                  14 Implant Catalogs
-                </Badge>
-              </div>
-              <h3 className="text-base font-bold text-slate-900">Dental Implant Planning</h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                Complete fixture sizing from 14 manufacturer catalogs, Misch D1-D4 bone density drilling protocols, sinus lift calculations, and calibrated prosthetic screw torques.
-              </p>
-            </div>
-
-            {/* Card 4 */}
-            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 shadow-xs hover:shadow-md transition-all space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="w-10 h-10 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center">
-                  <BookOpen className="w-5 h-5" />
-                </div>
-                <Badge className="bg-slate-200 text-slate-700 hover:bg-slate-200 border-none text-[10px] font-bold">
-                  Real-Time Citations
-                </Badge>
-              </div>
-              <h3 className="text-base font-bold text-slate-900">Live PubMed Evidence (RAG)</h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                Every clinical recommendation is grounded in peer-reviewed literature from Angle Orthod, AJODO, and JCO via real-time NCBI PubMed retrieval — not AI hallucination.
-              </p>
-            </div>
-
-            {/* Card 5 */}
-            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 shadow-xs hover:shadow-md transition-all space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center">
-                  <ShieldCheck className="w-5 h-5" />
-                </div>
-                <Badge className="bg-slate-200 text-slate-700 hover:bg-slate-200 border-none text-[10px] font-bold">
-                  Dual-Engine Verified
-                </Badge>
-              </div>
-              <h3 className="text-base font-bold text-slate-900">Zero Clinical Hallucination</h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                Dual-engine architecture: an AI reasoning layer backed by a deterministic biomechanical engine. All cephalometrics and force calculations are mathematically verified before plan synthesis.
-              </p>
-            </div>
-
-            {/* Card 6 */}
-            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200 shadow-xs hover:shadow-md transition-all space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center">
-                  <Compass className="w-5 h-5" />
-                </div>
-                <Badge className="bg-slate-200 text-slate-700 hover:bg-slate-200 border-none text-[10px] font-bold">
-                  6 Specialties
-                </Badge>
-              </div>
-              <h3 className="text-base font-bold text-slate-900">6 Clinical Disciplines</h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                Covers surgical orthodontics, clear aligners, comprehensive fixed mechanics, interceptive orthodontics, skeletal anchorage (TADs), and dental implantology in one platform.
-              </p>
-            </div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -369,27 +264,22 @@ export default function LandingPage() {
             <div className="lg:col-span-6 space-y-6">
               <Badge className="bg-teal-50 text-teal-800 border-teal-200 text-xs px-3.5 py-1 font-semibold rounded-full flex items-center gap-1.5 w-fit shadow-xs">
                 <Drill className="w-3.5 h-3.5 text-teal-600" />
-                <span>Interdisciplinary Extension</span>
+                <span>{t.implants.badge}</span>
               </Badge>
 
               <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 leading-tight">
-                Dental Implant Planning.{' '}
+                {t.implants.titleLine1}{' '}
                 <span className="block text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-blue-600">
-                  Precision Sizing &amp; Screw Torques.
+                  {t.implants.titleLine2}
                 </span>
               </h2>
 
               <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
-                Seamlessly transition from orthodontic space opening to implant fixture placement. Odonto AI calculates bone dimensions, subantral sinus elevation needs, drilling sequences, and calibrated prosthetic screw torques.
+                {t.implants.desc}
               </p>
 
               <div className="space-y-3 pt-2">
-                {[
-                  '14 Major Implant Catalogs: Straumann, Nobel Biocare, Zimmer, Dentsply, BioHorizons, Osstem, MegaGen',
-                  'Misch D1–D4 Bone Density Engine with Hounsfield Unit calibrated drilling speeds',
-                  'Automatic Subantral Sinus Lift Calculator: Crestal OSFE (Summers) vs Lateral Window',
-                  'Calibrated Prosthetic Screw Torques (25-35 Ncm) & Crown-to-Implant (C/I) lever ratios'
-                ].map((highlight, idx) => (
+                {t.implants.highlights.map((highlight, idx) => (
                   <div key={idx} className="flex items-start gap-3 text-xs sm:text-sm text-slate-700">
                     <CheckCircle2 className="w-5 h-5 text-teal-600 shrink-0 mt-0.5" />
                     <span>{highlight}</span>
@@ -401,8 +291,8 @@ export default function LandingPage() {
                 <Link href="/implants">
                   <Button className="h-12 px-8 text-sm font-bold bg-slate-950 hover:bg-blue-600 text-white rounded-full shadow-lg shadow-slate-950/15 hover:shadow-blue-600/25 transition-all cursor-pointer group flex items-center gap-2">
                     <Drill className="w-4 h-4 text-teal-400" />
-                    <span>Launch Implant Planning Studio</span>
-                    <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                    <span>{t.implants.ctaBtn}</span>
+                    <ArrowRight className={`w-4 h-4 ml-1 transition-transform ${isAr ? 'group-hover:-translate-x-1 rotate-180' : 'group-hover:translate-x-1'}`} />
                   </Button>
                 </Link>
               </div>
@@ -416,53 +306,56 @@ export default function LandingPage() {
                     #16
                   </div>
                   <div>
-                    <div className="text-sm font-bold text-slate-900">Upper Right First Molar</div>
-                    <div className="text-[11px] text-slate-500">Posterior Maxilla (Sinus Zone)</div>
+                    <div className="text-sm font-bold text-slate-900">{t.implants.cardToothName}</div>
+                    <div className="text-[11px] text-slate-500">{t.implants.cardToothRegion}</div>
                   </div>
                 </div>
                 <Badge className="bg-amber-50 text-amber-800 border-amber-200 text-xs font-semibold">
-                  Crestal Sinus Lift Indicated
+                  {t.implants.cardStatusBadge}
                 </Badge>
               </div>
 
               {/* Implant Dimension Specs */}
               <div className="grid grid-cols-3 gap-3 font-mono text-center">
                 <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200/80">
-                  <span className="text-[10px] text-slate-500 uppercase block font-sans font-semibold">Bone Width</span>
+                  <span className="text-[10px] text-slate-500 uppercase block font-sans font-semibold">{t.implants.boneWidthLabel}</span>
                   <span className="text-base font-bold text-slate-900">6.5 mm</span>
-                  <span className="text-[10px] text-teal-700 block font-sans font-medium">Safe (≥ 5.5mm)</span>
+                  <span className="text-[10px] text-teal-700 block font-sans font-medium">{t.implants.boneWidthStatus}</span>
                 </div>
                 <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200/80">
-                  <span className="text-[10px] text-slate-500 uppercase block font-sans font-semibold">Bone Height</span>
+                  <span className="text-[10px] text-slate-500 uppercase block font-sans font-semibold">{t.implants.boneHeightLabel}</span>
                   <span className="text-base font-bold text-amber-700">5.5 mm</span>
-                  <span className="text-[10px] text-amber-700 block font-sans font-medium">OSFE Lift +3mm</span>
+                  <span className="text-[10px] text-amber-700 block font-sans font-medium">{t.implants.boneHeightStatus}</span>
                 </div>
                 <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-200/80">
-                  <span className="text-[10px] text-slate-500 uppercase block font-sans font-semibold">Misch Density</span>
+                  <span className="text-[10px] text-slate-500 uppercase block font-sans font-semibold">{t.implants.mischDensityLabel}</span>
                   <span className="text-base font-bold text-blue-700">D3</span>
-                  <span className="text-[10px] text-slate-500 block font-sans font-medium">550 HU</span>
+                  <span className="text-[10px] text-slate-500 block font-sans font-medium">{t.implants.mischDensityVal}</span>
                 </div>
               </div>
 
               {/* Fixture Recommendation */}
               <div className="p-4 rounded-xl bg-blue-50/80 border border-blue-200 space-y-2 text-xs">
                 <div className="flex items-center justify-between">
-                  <span className="font-bold text-blue-900">Recommended Fixture:</span>
+                  <span className="font-bold text-blue-900">{t.implants.recFixtureLabel}</span>
                   <span className="font-mono font-bold text-slate-900">Straumann BLT Ø 4.1 x 10 mm</span>
                 </div>
                 <div className="flex items-center justify-between text-slate-700">
-                  <span>Connection: CrossFit / Morse Taper</span>
-                  <span className="text-blue-700 font-bold font-mono">Torque: 35 Ncm</span>
+                  <span>{isAr ? 'اتصال الدعامة: CrossFit / Morse Taper' : 'Connection: CrossFit / Morse Taper'}</span>
+                  <span className="text-blue-700 font-bold font-mono">{isAr ? 'العزم: 35 Ncm' : 'Torque: 35 Ncm'}</span>
                 </div>
                 <p className="text-[11px] text-slate-600 pt-1.5 border-t border-blue-200/60">
-                  Under-preparation drilling protocol with Summers osteotome elevation. Autograft + Bio-Oss particulate graft.
+                  {isAr 
+                    ? 'بروتوكول حفر تحت-تحضيري مع رفع الجيب بـ Summers osteotome. طعم ذاتي + جزيئات Bio-Oss.' 
+                    : 'Under-preparation drilling protocol with Summers osteotome elevation. Autograft + Bio-Oss particulate graft.'}
                 </p>
               </div>
 
-              <div className="text-right">
+              <div className="text-right rtl:text-left">
                 <Link href="/implants">
-                  <span className="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center justify-end gap-1 cursor-pointer">
-                    Open Full Implant Studio <ChevronRight className="w-3.5 h-3.5" />
+                  <span className="text-xs text-blue-600 hover:text-blue-800 font-semibold flex items-center justify-end rtl:justify-start gap-1 cursor-pointer">
+                    {isAr ? 'فتح استوديو الزراعة بالكامل' : 'Open Full Implant Studio'} 
+                    <ChevronRight className={`w-3.5 h-3.5 ${isAr ? 'rotate-180' : ''}`} />
                   </span>
                 </Link>
               </div>
@@ -476,13 +369,15 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto space-y-4">
             <Badge className="bg-blue-50 text-blue-700 border-blue-200 text-xs px-3.5 py-1 font-semibold rounded-full shadow-xs">
-              Literature-Grounded Reasoning
+              {isAr ? 'استدلال سريري مدعوم بالمراجع' : 'Literature-Grounded Reasoning'}
             </Badge>
             <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
-              Live NCBI PubMed RAG Search Engine.
+              {isAr ? 'محرك البحث والاسترجاع الحي من NCBI PubMed' : 'Live NCBI PubMed RAG Search Engine.'}
             </h2>
             <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
-              Every wire sequence, extraction decision, and anchorage recommendation is grounded in literature from Angle Orthod, AJODO, and JCO.
+              {isAr 
+                ? 'كل تسلسل أسلاك، وقرار خلع، وتوصية تثبيت عظمي مستندة إلى دراسات منشورة في كبرى الدوريات التقويمية (Angle Orthod, AJODO, JCO).' 
+                : 'Every wire sequence, extraction decision, and anchorage recommendation is grounded in literature from Angle Orthod, AJODO, and JCO.'}
             </p>
           </div>
 
@@ -491,20 +386,32 @@ export default function LandingPage() {
               {
                 journal: 'Angle Orthod',
                 author: 'Cantarella et al. (2017)',
-                title: 'Changes in midpalatal sutures induced by micro-implant skeletal expander (MSE)',
-                takeaway: 'MSE produces 3.5x greater skeletal sutural split than tooth-borne expanders with minimal alveolar bending.'
+                title: isAr 
+                  ? 'التغيرات في دروز قبة الحنك الناتجة عن جهاز التوسيع الهيكلي بالزرعات (MSE)' 
+                  : 'Changes in midpalatal sutures induced by micro-implant skeletal expander (MSE)',
+                takeaway: isAr 
+                  ? 'يحقق جهاز MSE انفصالاً هيكلياً أكبر بـ 3.5 أضعاف مقارنة بأجهزة التوسيع المرتكزة على الأسنان فقط مع أقل انحناء للعظم السنخي.' 
+                  : 'MSE produces 3.5x greater skeletal sutural split than tooth-borne expanders with minimal alveolar bending.'
               },
               {
                 journal: 'AJODO',
                 author: 'Park et al. (2001)',
-                title: 'Micro-implant anchorage for severe gummy smile and Class II malocclusion',
-                takeaway: 'Skeletal micro-implants provide absolute anchorage with zero reciprocal loss, enabling 6-8mm en-masse retraction.'
+                title: isAr 
+                  ? 'تثبيت الزرعات الدقيقة لعلاج الابتسامة اللثوية الحادة وعضة الصنف الثاني' 
+                  : 'Micro-implant anchorage for severe gummy smile and Class II malocclusion',
+                takeaway: isAr 
+                  ? 'توفر الزرعات الهيكلية الدقيقة مرسى مطلقاً بصفر فقدان في الأسنان الخلفية، مما يسمح بإرجاع الأسنان الأمامية 6-8 مم ككتلة واحدة.' 
+                  : 'Skeletal micro-implants provide absolute anchorage with zero reciprocal loss, enabling 6-8mm en-masse retraction.'
               },
               {
                 journal: 'Int J Oral Surg',
                 author: 'Misch CE et al. (2005)',
-                title: 'Bone density: key determinant for clinical success in implant dentistry',
-                takeaway: 'Density dictates drilling modifications and primary stability; D4 requires osteotome compression.'
+                title: isAr 
+                  ? 'كثافة العظم: العامل الحاسم للنجاح السريري في زراعة الأسنان' 
+                  : 'Bone density: key determinant for clinical success in implant dentistry',
+                takeaway: isAr 
+                  ? 'تحدد كثافة العظم تعديلات الحفر والثبات الأولي؛ يتطلب عظم D4 ضغطاً بواسطة Osteotome لزيادة الكثافة.' 
+                  : 'Density dictates drilling modifications and primary stability; D4 requires osteotome compression.'
               }
             ].map((ev, i) => (
               <div key={i} className="p-6 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-3 shadow-xs hover:bg-white hover:border-blue-300 transition-all">
@@ -518,7 +425,7 @@ export default function LandingPage() {
                   "{ev.title}"
                 </h4>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  <strong className="text-teal-700">Clinical Finding:</strong> {ev.takeaway}
+                  <strong className="text-teal-700">{isAr ? 'النتيجة السريرية: ' : 'Clinical Finding: '}</strong> {ev.takeaway}
                 </p>
               </div>
             ))}
@@ -534,18 +441,18 @@ export default function LandingPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center space-y-4 mb-14">
             <Badge className="bg-teal-50 text-teal-800 border-teal-200 text-xs px-3.5 py-1 font-semibold rounded-full shadow-xs">
-              Frequently Asked Questions
+              {t.faq.badge}
             </Badge>
             <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
-              Built for Clinical Questions.
+              {t.faq.title}
             </h2>
             <p className="text-sm text-slate-600">
-              Clear answers on how Odonto AI handles surgical cases, implant sizing, and biological safety.
+              {t.faq.subtitle}
             </p>
           </div>
 
           <div className="space-y-3">
-            {faqs.map((faq, idx) => {
+            {t.faq.items.map((faq, idx) => {
               const isOpen = openFaq === idx;
               return (
                 <div
@@ -555,7 +462,7 @@ export default function LandingPage() {
                   <button
                     type="button"
                     onClick={() => setOpenFaq(isOpen ? null : idx)}
-                    className="w-full p-5 text-left flex items-center justify-between gap-4 cursor-pointer"
+                    className="w-full p-5 text-left rtl:text-right flex items-center justify-between gap-4 cursor-pointer"
                   >
                     <span className="text-sm sm:text-base font-bold text-slate-900">
                       {faq.q}
@@ -581,20 +488,20 @@ export default function LandingPage() {
       <section className="py-24 sm:py-32 bg-gradient-to-b from-white via-blue-50/50 to-white text-center relative overflow-hidden">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-6">
           <Badge className="bg-teal-50 text-teal-800 border-teal-200 text-xs px-3.5 py-1 font-semibold rounded-full shadow-xs">
-            Immediate Clinical Access
+            {t.finalCta.badge}
           </Badge>
           <h2 className="text-4xl sm:text-6xl font-black tracking-tight text-slate-950 leading-tight">
-            Ready to Plan Your Next Case with Biological Certainty?
+            {t.finalCta.title}
           </h2>
           <p className="text-base sm:text-lg text-slate-600 max-w-xl mx-auto leading-relaxed font-normal">
-            Experience orthodontic treatment planning and dental implantology designed specifically for clinicians who value biological precision.
+            {t.finalCta.subtitle}
           </p>
           <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link href="/plans/generate" className="w-full sm:w-auto">
               <Button className="w-full sm:w-auto h-13 px-9 text-base font-bold bg-slate-950 text-white hover:bg-blue-600 rounded-full shadow-xl shadow-slate-950/15 hover:shadow-blue-600/25 transition-all cursor-pointer group flex items-center justify-center gap-2">
                 <Sparkles className="w-5 h-5 text-blue-400 group-hover:text-white transition-colors" />
-                <span>Open Treatment Studio Free</span>
-                <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-white group-hover:translate-x-1 transition-transform" />
+                <span>{t.finalCta.launchStudioBtn}</span>
+                <ChevronRight className={`w-5 h-5 text-slate-400 group-hover:text-white transition-transform ${isAr ? 'group-hover:-translate-x-1 rotate-180' : 'group-hover:translate-x-1'}`} />
               </Button>
             </Link>
             <Link href="/implants" className="w-full sm:w-auto">
@@ -603,10 +510,13 @@ export default function LandingPage() {
                 className="w-full sm:w-auto h-13 px-8 text-base font-semibold text-slate-700 border-slate-300 bg-white hover:bg-slate-50 hover:text-slate-900 rounded-full shadow-xs cursor-pointer flex items-center justify-center gap-2"
               >
                 <Drill className="w-5 h-5 text-teal-600" />
-                <span>Implant Planning</span>
+                <span>{t.finalCta.exploreImplantsBtn}</span>
               </Button>
             </Link>
           </div>
+          <p className="text-xs text-slate-500 pt-2 font-medium">
+            {t.finalCta.note}
+          </p>
         </div>
       </section>
 

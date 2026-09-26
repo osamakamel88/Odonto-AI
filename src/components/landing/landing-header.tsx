@@ -13,10 +13,14 @@ import {
   ShieldCheck 
 } from 'lucide-react';
 import { LanguageSwitcher } from '@/components/layout/language-switcher';
+import { useLanguage } from '@/lib/i18n/language-context';
+import { LANDING_DICTIONARY } from '@/lib/i18n/landing-dictionary';
 
 export function LandingHeader() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { lang, isAr } = useLanguage();
+  const t = LANDING_DICTIONARY[lang].header;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -31,13 +35,13 @@ export function LandingHeader() {
   }, []);
 
   const navLinks = [
-    { label: 'Specialties', href: '#specialties' },
-    { label: '7-Layer Engine', href: '#engine' },
-    { label: 'Implant Studio', href: '#implants' },
-    { label: 'Comparison', href: '#comparison' },
-    { label: 'Evidence Base', href: '#evidence' },
-    { label: 'Resources & References', href: '/resources.html', external: true },
-    { label: 'Clinical FAQ', href: '#faq' },
+    { label: t.specialties, href: '#specialties' },
+    { label: t.engine, href: '#engine' },
+    { label: t.implants, href: '#implants' },
+    { label: t.comparison, href: '#comparison' },
+    { label: t.evidence, href: '#evidence' },
+    { label: t.resources, href: '/resources.html', external: true },
+    { label: t.faq, href: '#faq' },
   ];
 
   return (
@@ -81,7 +85,7 @@ export function LandingHeader() {
               className="h-9 px-3.5 text-xs font-semibold text-slate-700 border-slate-200 bg-white hover:bg-slate-50 hover:text-blue-600 rounded-full shadow-xs transition-all cursor-pointer"
             >
               <Drill className="w-3.5 h-3.5 mr-1.5 text-teal-600" />
-              Implants
+              {t.implantsBtn}
             </Button>
           </Link>
 
@@ -92,7 +96,7 @@ export function LandingHeader() {
               className="h-9 px-5 text-xs font-semibold bg-slate-950 text-white hover:bg-blue-600 rounded-full shadow-md shadow-slate-950/10 hover:shadow-blue-600/20 transition-all duration-200 cursor-pointer group flex items-center gap-1.5"
             >
               <Sparkles className="w-3.5 h-3.5 text-blue-400 group-hover:text-white transition-colors" />
-              <span>Launch Studio</span>
+              <span>{t.launchStudioBtn}</span>
               <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-white group-hover:translate-x-0.5 transition-all" />
             </Button>
           </Link>
@@ -106,7 +110,7 @@ export function LandingHeader() {
               size="sm"
               className="h-8 px-3 text-xs font-semibold bg-slate-950 text-white hover:bg-blue-600 rounded-full cursor-pointer"
             >
-              <span>Studio</span>
+              <span>{isAr ? 'الاستوديو' : 'Studio'}</span>
             </Button>
           </Link>
           <button
@@ -140,7 +144,7 @@ export function LandingHeader() {
                 <span>{link.label}</span>
                 {link.external && (
                   <span className="text-[10px] bg-teal-100 text-teal-800 px-2 py-0.5 rounded-full font-bold">
-                    Manual ↗
+                    {isAr ? 'الدليل ↗' : 'Manual ↗'}
                   </span>
                 )}
               </a>
@@ -150,13 +154,13 @@ export function LandingHeader() {
             <Link href="/plans/generate" onClick={() => setMobileMenuOpen(false)}>
               <Button className="w-full h-10 text-xs font-semibold bg-blue-600 hover:bg-blue-700 text-white rounded-xl shadow-xs">
                 <Sparkles className="w-4 h-4 mr-2" />
-                Launch Treatment Studio
+                {t.launchStudioBtn}
               </Button>
             </Link>
             <Link href="/implants" onClick={() => setMobileMenuOpen(false)}>
               <Button variant="outline" className="w-full h-10 text-xs font-semibold border-slate-200 text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-xl">
                 <Drill className="w-4 h-4 mr-2 text-teal-600" />
-                Implant Planning Studio
+                {isAr ? 'استوديو زراعة الأسنان' : 'Implant Planning Studio'}
               </Button>
             </Link>
           </div>

@@ -84,8 +84,73 @@ export const PIPELINE_LAYERS = [
   }
 ];
 
+import { useLanguage } from '@/lib/i18n/language-context';
+
 export function EngineShowcase() {
   const [selectedLayer, setSelectedLayer] = useState(PIPELINE_LAYERS[0]);
+  const { lang, isAr } = useLanguage();
+
+  const layersAr = [
+    {
+      step: 1,
+      name: 'تتبع السيفالومتريك',
+      subtitle: 'المعايير الهيكلية والسنخية (Steiner & Tweed)',
+      tag: 'تحليل ANB و Wits',
+      description: 'تحديد آلي لـ 16 نقطة تشريحية على أشعة الرأس الجانبية. حساب زوايا ستاينر وتويد وماكنمارا لتصنيف العضة الهيكلية (صنف I / II / III).',
+      clinicalFocus: 'يلغي أخطاء التتبع اليدوي ويحسب نسبة جاراباك (Jarabak) واتجاه نمو الوجه (أفقي أم عمودي) بدقة عالية.'
+    },
+    {
+      step: 2,
+      name: 'تجزئة بانوراما الأسنان OPG',
+      subtitle: 'ترقيم الـ 32 سناً وفحص صحة الجذور',
+      tag: 'تجزئة FDI الدقيقة',
+      description: 'تحليل شامل للأشعة البانورامية لكشف الأسنان المطمورة (الأنياب وأضراس العقل)، وتوازي الجذور، وأطوالها، وتناظر لقمة الفك السفلي.',
+      clinicalFocus: 'يرصد انحناءات الجذور الحادة، والأسنان المفقودة وراثياً، وارتشاف الجذور قبل تطبيق أي قوة تقويمية.'
+    },
+    {
+      step: 3,
+      name: 'التصريح اللثوي السريري AI',
+      subtitle: 'حارس مستوى العظم وصحة اللثة',
+      tag: 'تصريح أمان بيولوجي',
+      description: 'فحص ارتفاع العظم السنخي ومستويات مفترق الجذور (Furcation) وخلو ذروة الجذور من الآفات قبل الشروع في تحريك الأسنان.',
+      clinicalFocus: 'يضمن عدم وجود أي التهاب لثوي نشط، مانعاً تراجع العظم السنخي الحاد أو حركة الأسنان الصدمية.'
+    },
+    {
+      step: 4,
+      name: 'مساحة القوس وتحليل بولتون',
+      subtitle: 'محيط القوس وتفاوت أحجام الأسنان',
+      tag: 'الأمامي 77.2% | الكلي 91.3%',
+      description: 'حساب العرض الإنسي الوحشي للأسنان من النماذج الرقمية ثلاثية الأبعاد، وتقييم نسب بولتون الأمامية والكلية والتزاحم بالملليمتر.',
+      clinicalFocus: 'يحدد رياضياً ما إذا كان التزاحم يعالج بالتوسيع أو البرد بين السني (IPR) أو إذا كان خلع الضواحك حتمياً بيولوجياً.'
+    },
+    {
+      step: 5,
+      name: 'التحقق من حدود العظم القشري',
+      subtitle: 'حماية صفيحة العظم الدهليزي وزاوية IMPA',
+      tag: 'أمان بيوميكانيكي حتمي',
+      description: 'فحص سماكة العظم في المقاطع المستعرضة، وفرض حد حتمي لميلان القواطع السفلية (IMPA ≤ 95°) لمنع خروج الجذور خارج العظم.',
+      clinicalFocus: 'يمنع انحسار اللثة الصدمي وتكشف جذور الأسنان عبر منع دفع القواطع خارج الحيز العظمي الصلب.'
+    },
+    {
+      step: 6,
+      name: 'الاستدلال السريري الموجه',
+      subtitle: 'منطق شجرة القرارات السريرية المحكومة',
+      tag: 'استدلال سريري CoT',
+      description: 'تطبيق خوارزميات الاستدلال السريري لوزن خيارات التقويم: جراحة الفكين مقابل التمويه، وأولويات ترتيب حركة الأسنان.',
+      clinicalFocus: 'يربط المشكلات الهيكلية والسنية معاً، لترتيب أهداف العلاج بدون أي تضارب بيوميكانيكي.'
+    },
+    {
+      step: 7,
+      name: 'تخليق خطة العلاج التوثيقية',
+      subtitle: 'تسلسل الأسلاك، المطاطات، والتثبيت',
+      tag: 'خطة سريرية متكاملة',
+      description: 'توليد خطة علاج جاهزة للتنفيذ: تدرج مقاسات الأسلاك (من CuNiTi 0.014 إلى SS 0.019x0.025)، عيار المطاطات، التثبيت، وتوثيق PubMed.',
+      clinicalFocus: 'يوفر جداول ميكانيكا العيادة خطوة بخطوة، ووصفات عزم البراكتات لكل سن بنظام FDI، واستمارات إقرار المريض.'
+    }
+  ];
+
+  const currentLayers = isAr ? layersAr : PIPELINE_LAYERS;
+  const currentSelected = currentLayers.find(l => l.step === selectedLayer.step) || currentLayers[0];
 
   return (
     <section id="engine" className="py-24 sm:py-32 bg-white relative overflow-hidden">
@@ -93,13 +158,15 @@ export function EngineShowcase() {
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-4">
           <Badge className="bg-teal-50 text-teal-800 border-teal-200 text-xs px-3.5 py-1 font-semibold rounded-full shadow-xs">
-            Clinical Architecture
+            {isAr ? 'المعمارية السريرية الحتمية' : 'Clinical Architecture'}
           </Badge>
           <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight text-slate-900 leading-tight">
-            The 7-Layer Clinical AI Pipeline.
+            {isAr ? 'خط الأنابيب التشخيصي السباعي للذكاء الاصطناعي.' : 'The 7-Layer Clinical AI Pipeline.'}
           </h2>
           <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-2xl mx-auto">
-            Generic LLMs hallucinate tooth numbers and force levels. Odonto AI executes a 7-stage deterministic diagnostic pipeline before synthesizing any clinical plan.
+            {isAr
+              ? 'نماذج الذكاء الاصطناعي العامة قد تهلوس بأرقام الأسنان ومقادير القوى. تطبق Odonto AI خط أنابيب تشخيصي حتمي من 7 مراحل قبل صياغة أي خطة علاج سريرية.'
+              : 'Generic LLMs hallucinate tooth numbers and force levels. Odonto AI executes a 7-stage deterministic diagnostic pipeline before synthesizing any clinical plan.'}
           </p>
         </div>
 
@@ -109,32 +176,48 @@ export function EngineShowcase() {
             <div className="text-3xl sm:text-4xl font-black text-blue-600 font-mono">
               85%
             </div>
-            <div className="text-xs font-bold text-slate-800 mt-1.5">Diagnosis Time Saved</div>
-            <p className="text-[11px] text-slate-500 mt-0.5">From ceph tracing to final plan</p>
+            <div className="text-xs font-bold text-slate-800 mt-1.5">
+              {isAr ? 'توفير في وقت التشخيص' : 'Diagnosis Time Saved'}
+            </div>
+            <p className="text-[11px] text-slate-500 mt-0.5">
+              {isAr ? 'من تتبع السيفالومتريك إلى الخطة' : 'From ceph tracing to final plan'}
+            </p>
           </div>
 
           <div className="bg-slate-50/70 border border-slate-200/80 rounded-2xl p-6 text-center shadow-xs">
             <div className="text-3xl sm:text-4xl font-black text-teal-600 font-mono">
               100%
             </div>
-            <div className="text-xs font-bold text-slate-800 mt-1.5">Biological Safety Check</div>
-            <p className="text-[11px] text-slate-500 mt-0.5">Cortical bone boundary limits</p>
+            <div className="text-xs font-bold text-slate-800 mt-1.5">
+              {isAr ? 'فحص الأمان البيولوجي' : 'Biological Safety Check'}
+            </div>
+            <p className="text-[11px] text-slate-500 mt-0.5">
+              {isAr ? 'حدود العظم وزاوية IMPA' : 'Cortical bone boundary limits'}
+            </p>
           </div>
 
           <div className="bg-slate-50/70 border border-slate-200/80 rounded-2xl p-6 text-center shadow-xs">
             <div className="text-3xl sm:text-4xl font-black text-indigo-600 font-mono">
               0 mm
             </div>
-            <div className="text-xs font-bold text-slate-800 mt-1.5">Anchor Loss with TADs</div>
-            <p className="text-[11px] text-slate-500 mt-0.5">Calculated skeletal vectors</p>
+            <div className="text-xs font-bold text-slate-800 mt-1.5">
+              {isAr ? 'فقدان التثبيت مع TADs' : 'Anchor Loss with TADs'}
+            </div>
+            <p className="text-[11px] text-slate-500 mt-0.5">
+              {isAr ? 'متجهات قوى هيكلية محسوبة' : 'Calculated skeletal vectors'}
+            </p>
           </div>
 
           <div className="bg-slate-50/70 border border-slate-200/80 rounded-2xl p-6 text-center shadow-xs">
             <div className="text-3xl sm:text-4xl font-black text-emerald-600 font-mono">
               11+
             </div>
-            <div className="text-xs font-bold text-slate-800 mt-1.5">Evidence Modules</div>
-            <p className="text-[11px] text-slate-500 mt-0.5">Peer-reviewed orthodontic data</p>
+            <div className="text-xs font-bold text-slate-800 mt-1.5">
+              {isAr ? 'وحدة معرفية محكمة' : 'Evidence Modules'}
+            </div>
+            <p className="text-[11px] text-slate-500 mt-0.5">
+              {isAr ? 'أبحاث ومعايير تقويمية عالمية' : 'Peer-reviewed orthodontic data'}
+            </p>
           </div>
         </div>
 
@@ -142,16 +225,17 @@ export function EngineShowcase() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Left Column: Vertical Layer Stepper */}
           <div className="lg:col-span-6 space-y-2">
-            {PIPELINE_LAYERS.map((layer) => {
-              const LayerIcon = layer.icon;
+            {currentLayers.map((layer) => {
+              const originalLayer = PIPELINE_LAYERS.find(p => p.step === layer.step) || PIPELINE_LAYERS[0];
+              const LayerIcon = originalLayer.icon;
               const isSelected = selectedLayer.step === layer.step;
 
               return (
                 <button
                   key={layer.step}
                   type="button"
-                  onClick={() => setSelectedLayer(layer)}
-                  className={`w-full text-left p-3.5 sm:p-4 rounded-xl border transition-all duration-200 cursor-pointer flex items-center justify-between gap-4 ${
+                  onClick={() => setSelectedLayer(originalLayer)}
+                  className={`w-full text-left rtl:text-right p-3.5 sm:p-4 rounded-xl border transition-all duration-200 cursor-pointer flex items-center justify-between gap-4 ${
                     isSelected
                       ? 'bg-blue-50/80 border-blue-400 text-slate-900 shadow-xs ring-1 ring-blue-300'
                       : 'bg-white border-slate-200/80 text-slate-600 hover:text-slate-900 hover:bg-slate-50 shadow-xs'
@@ -191,10 +275,10 @@ export function EngineShowcase() {
                 </div>
                 <div>
                   <Badge className="bg-blue-100 text-blue-800 border-none text-[10px] font-mono font-bold">
-                    Layer 0{selectedLayer.step} of 07
+                    {isAr ? `الطبقة 0${selectedLayer.step} من 07` : `Layer 0${selectedLayer.step} of 07`}
                   </Badge>
                   <h3 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight mt-0.5">
-                    {selectedLayer.name}
+                    {currentSelected.name}
                   </h3>
                 </div>
               </div>
@@ -203,30 +287,32 @@ export function EngineShowcase() {
             <div className="space-y-4 text-xs sm:text-sm text-slate-600">
               <div>
                 <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 block mb-1">
-                  How This Layer Works:
+                  {isAr ? 'كيف تعمل هذه الطبقة:' : 'How This Layer Works:'}
                 </span>
                 <p className="leading-relaxed text-slate-700">
-                  {selectedLayer.description}
+                  {currentSelected.description}
                 </p>
               </div>
 
               <div className="p-4 rounded-xl bg-white border border-slate-200 space-y-1 text-xs shadow-xs">
                 <span className="font-bold text-slate-900 block flex items-center gap-1.5">
                   <Activity className="w-3.5 h-3.5 text-teal-600" />
-                  Clinical &amp; Biomechanical Safety Value:
+                  {isAr ? 'القيمة السريرية والأمان البيوميكانيكي:' : 'Clinical & Biomechanical Safety Value:'}
                 </span>
                 <p className="text-slate-600 leading-relaxed">
-                  {selectedLayer.clinicalFocus}
+                  {currentSelected.clinicalFocus}
                 </p>
               </div>
             </div>
 
             <div className="pt-2 border-t border-slate-200 flex items-center justify-between">
-              <span className="text-xs font-medium text-slate-500">Available live in Treatment Studio</span>
+              <span className="text-xs font-medium text-slate-500">
+                {isAr ? 'متاح ومدمج في استوديو العلاج المباشر' : 'Available live in Treatment Studio'}
+              </span>
               <Link href="/plans/generate">
                 <Button size="sm" className="bg-slate-950 text-white hover:bg-blue-600 text-xs font-semibold rounded-full gap-1.5 transition-colors">
-                  <span>Open Studio</span>
-                  <ChevronRight className="w-3.5 h-3.5" />
+                  <span>{isAr ? 'فتح الاستوديو' : 'Open Studio'}</span>
+                  <ChevronRight className={`w-3.5 h-3.5 ${isAr ? 'rotate-180' : ''}`} />
                 </Button>
               </Link>
             </div>
@@ -235,17 +321,19 @@ export function EngineShowcase() {
 
         {/* Scientific Transparency & Under the Hood Callout */}
         <div className="mt-12 p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 text-white flex flex-col sm:flex-row items-center justify-between gap-5 border border-slate-800 shadow-md">
-          <div className="space-y-1.5 text-center sm:text-left">
-            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+          <div className="space-y-1.5 text-center sm:text-left rtl:sm:text-right">
+            <div className="flex flex-wrap items-center justify-center sm:justify-start rtl:sm:justify-start gap-2">
               <Badge className="bg-teal-500/20 text-teal-300 border-teal-500/30 text-[10px] uppercase font-bold tracking-wider">
-                Full Scientific Transparency
+                {isAr ? 'شفافية علمية وأكاديمية كاملة' : 'Full Scientific Transparency'}
               </Badge>
               <span className="text-xs font-bold text-slate-200">
-                Peer-Reviewed Evidence Base &amp; Biomechanical Rules
+                {isAr ? 'قاعدة أدلة محكمة وقواعد بيوميكانيكية صارمة' : 'Peer-Reviewed Evidence Base & Biomechanical Rules'}
               </span>
             </div>
             <p className="text-xs text-slate-300 max-w-2xl leading-relaxed">
-              Inspect our exact cephalometric formulas, Misch D1–D4 drilling protocols, PubMed NCBI live RAG pipeline, and 14+ landmark study citations in our complete clinician manual.
+              {isAr
+                ? 'اطلع على معادلات السيفالومتريك التفصيلية، وبروتوكولات حفر العظم Misch D1–D4، ونظام الاسترجاع المباشر من NCBI PubMed، وأكثر من 14 دراسة مرجعية في دليل الطبيب الشامل.'
+                : 'Inspect our exact cephalometric formulas, Misch D1–D4 drilling protocols, PubMed NCBI live RAG pipeline, and 14+ landmark study citations in our complete clinician manual.'}
             </p>
           </div>
           <a
@@ -254,7 +342,7 @@ export function EngineShowcase() {
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white text-slate-950 hover:bg-blue-50 text-xs font-bold transition-all shrink-0 shadow-sm cursor-pointer hover:shadow-md"
           >
-            <span>Resources &amp; References 🔬</span>
+            <span>{isAr ? 'المصادر والمراجع السريرية 🔬' : 'Resources & References 🔬'}</span>
             <ExternalLink className="w-3.5 h-3.5 text-teal-600" />
           </a>
         </div>

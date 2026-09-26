@@ -6,12 +6,14 @@ import { StudioLanguage } from './studio-dictionary';
 interface LanguageContextType {
   lang: StudioLanguage;
   isAr: boolean;
+  isRTL: boolean;
   switchLanguage: (newLang: StudioLanguage) => void;
 }
 
 const LanguageContext = createContext<LanguageContextType>({
   lang: 'en',
   isAr: false,
+  isRTL: false,
   switchLanguage: () => {}
 });
 
@@ -42,7 +44,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <LanguageContext.Provider value={{ lang, isAr: lang === 'ar', switchLanguage }}>
+    <LanguageContext.Provider value={{ lang, isAr: lang === 'ar', isRTL: lang === 'ar', switchLanguage }}>
       <div dir={lang === 'ar' ? 'rtl' : 'ltr'} className="min-h-screen">
         {children}
       </div>
