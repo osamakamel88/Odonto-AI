@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>دليل المطور الشامل لمنظومة Odonto AI | Developer Manual</title>
+  <title>دليل التدريب والتشغيل الشامل لمنظومة Odonto AI | Comprehensive Training Manual</title>
   
-  <!-- Fonts -->
+  <!-- Google Fonts: Cairo, IBM Plex Sans Arabic, Plus Jakarta Sans, JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -13,8 +13,7 @@
   <style>
     :root {
       --primary: #2563eb;
-      --primary-dark: #1d4ed8;
-      --primary-light: #eff6ff;
+      --primary-gradient: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
       --accent-teal: #0d9488;
       --accent-indigo: #4f46e5;
       --accent-purple: #7c3aed;
@@ -26,9 +25,11 @@
       --bg-card: #111827;
       --bg-card-hover: #1f2937;
       --bg-subtle: #1e293b;
+      --bg-highlight: rgba(37, 99, 235, 0.08);
       
       --border: #334155;
       --border-subtle: #1e293b;
+      --border-focus: #3b82f6;
       
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
@@ -45,8 +46,8 @@
       background-color: var(--bg-main);
       color: var(--text-main);
       font-family: 'Cairo', 'IBM Plex Sans Arabic', -apple-system, BlinkMacSystemFont, sans-serif;
-      line-height: 1.8;
-      font-size: 15px;
+      line-height: 1.85;
+      font-size: 15.5px;
       -webkit-font-smoothing: antialiased;
       padding-bottom: 120px;
     }
@@ -59,20 +60,20 @@
 
     /* Layout Container */
     .container {
-      max-width: 1280px;
+      max-width: 1240px;
       margin: 0 auto;
       padding: 0 24px;
     }
 
     /* Header Nav */
     header.top-header {
-      background: rgba(17, 24, 39, 0.85);
+      background: rgba(17, 24, 39, 0.9);
       backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border);
       position: sticky;
       top: 0;
       z-index: 100;
-      padding: 16px 0;
+      padding: 14px 0;
     }
 
     .header-inner {
@@ -91,25 +92,25 @@
     }
 
     .brand-icon {
-      width: 40px;
-      height: 40px;
+      width: 42px;
+      height: 42px;
       background: linear-gradient(135deg, #2563eb, #0d9488);
-      border-radius: 10px;
+      border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
-      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+      font-size: 22px;
+      box-shadow: 0 4px 16px rgba(37, 99, 235, 0.35);
     }
 
     .brand-title {
       font-size: 18px;
       font-weight: 800;
-      letter-spacing: -0.5px;
+      letter-spacing: -0.3px;
     }
 
     .brand-subtitle {
-      font-size: 11px;
+      font-size: 11.5px;
       color: var(--text-muted);
       font-weight: 500;
     }
@@ -117,16 +118,16 @@
     .nav-actions {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
 
     .btn {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 8px 16px;
+      padding: 8px 18px;
       border-radius: 8px;
-      font-size: 13px;
+      font-size: 13.5px;
       font-weight: 700;
       text-decoration: none;
       cursor: pointer;
@@ -135,12 +136,12 @@
     }
 
     .btn-primary {
-      background: #2563eb;
+      background: var(--primary);
       color: white;
     }
     .btn-primary:hover {
       background: #1d4ed8;
-      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
     }
 
     .btn-secondary {
@@ -155,7 +156,7 @@
 
     /* Hero Banner */
     .hero {
-      padding: 48px 0 32px 0;
+      padding: 56px 0 36px 0;
       text-align: center;
       position: relative;
     }
@@ -163,33 +164,33 @@
     .badge-pill {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 6px 14px;
-      background: rgba(37, 99, 235, 0.15);
-      border: 1px solid rgba(37, 99, 235, 0.35);
+      gap: 8px;
+      padding: 6px 16px;
+      background: rgba(37, 99, 235, 0.12);
+      border: 1px solid rgba(37, 99, 235, 0.3);
       color: #93c5fd;
       border-radius: 100px;
-      font-size: 12px;
+      font-size: 12.5px;
       font-weight: 700;
       margin-bottom: 20px;
     }
 
     .hero-title {
-      font-size: 38px;
+      font-size: 40px;
       font-weight: 900;
-      line-height: 1.3;
-      margin-bottom: 16px;
-      background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #60a5fa 100%);
+      line-height: 1.35;
+      margin-bottom: 18px;
+      background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 40%, #60a5fa 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
     .hero-desc {
-      font-size: 17px;
+      font-size: 18px;
       color: var(--text-muted);
-      max-width: 820px;
-      margin: 0 auto 32px auto;
-      line-height: 1.7;
+      max-width: 860px;
+      margin: 0 auto 36px auto;
+      line-height: 1.8;
     }
 
     /* Quick Jump Anchor Nav */
@@ -205,29 +206,39 @@
     .quick-nav a {
       color: var(--text-muted);
       text-decoration: none;
-      padding: 8px 16px;
+      padding: 9px 18px;
       background: var(--bg-card);
       border: 1px solid var(--border-subtle);
-      border-radius: 20px;
-      font-size: 13px;
-      font-weight: 600;
+      border-radius: 100px;
+      font-size: 13.5px;
+      font-weight: 700;
       transition: all 0.2s ease;
     }
 
     .quick-nav a:hover {
       color: white;
       border-color: var(--primary);
-      background: rgba(37, 99, 235, 0.1);
+      background: rgba(37, 99, 235, 0.12);
+      transform: translateY(-1px);
     }
 
     /* Cards & Layout */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 36px;
+      margin-bottom: 40px;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.3);
+    }
+
     .section-title {
-      font-size: 24px;
-      font-weight: 800;
-      margin-bottom: 20px;
+      font-size: 26px;
+      font-weight: 900;
+      margin-bottom: 16px;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       color: white;
     }
 
@@ -235,155 +246,210 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
       background: var(--primary);
       color: white;
-      font-size: 15px;
+      font-size: 16px;
       font-weight: 800;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
     }
 
-    .card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 28px;
-      margin-bottom: 32px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    .section-subtitle {
+      font-size: 15px;
+      color: var(--text-muted);
+      margin-bottom: 28px;
+      line-height: 1.7;
     }
 
     .grid-2 {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 24px;
     }
 
     .grid-3 {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
     }
 
-    .grid-4 {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px;
-    }
-
-    /* Jargon Translator Table */
-    .translator-card {
+    /* Explanation Boxes */
+    .concept-box {
       background: var(--bg-subtle);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 18px;
+      border-radius: 14px;
+      padding: 22px;
       position: relative;
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
 
-    .translator-card::before {
+    .concept-box::before {
       content: '';
       position: absolute;
       top: 0;
       right: 0;
-      width: 4px;
+      width: 5px;
       height: 100%;
       background: var(--primary);
     }
 
-    .translator-card.teal::before { background: var(--accent-teal); }
-    .translator-card.purple::before { background: var(--accent-purple); }
-    .translator-card.amber::before { background: var(--accent-amber); }
-    .translator-card.rose::before { background: var(--accent-rose); }
-    .translator-card.emerald::before { background: var(--accent-emerald); }
+    .concept-box.teal::before { background: var(--accent-teal); }
+    .concept-box.purple::before { background: var(--accent-purple); }
+    .concept-box.amber::before { background: var(--accent-amber); }
+    .concept-box.rose::before { background: var(--accent-rose); }
+    .concept-box.emerald::before { background: var(--accent-emerald); }
 
-    .jargon-header {
+    .concept-header {
       display: flex;
       align-items: baseline;
       justify-content: space-between;
-      margin-bottom: 8px;
+      gap: 10px;
+      margin-bottom: 12px;
     }
 
-    .jargon-medical {
-      font-size: 16px;
+    .concept-title {
+      font-size: 17px;
       font-weight: 800;
       color: #93c5fd;
     }
 
-    .jargon-cs {
+    .concept-en {
       font-size: 12px;
       font-family: 'JetBrains Mono', monospace;
-      color: #34d399;
-      background: rgba(52, 211, 153, 0.1);
+      color: #38bdf8;
+      background: rgba(56, 189, 248, 0.1);
       padding: 2px 8px;
       border-radius: 4px;
     }
 
-    .jargon-desc {
-      font-size: 13.5px;
+    .concept-body {
+      font-size: 14px;
       color: #cbd5e1;
+      line-height: 1.7;
+      margin-bottom: 14px;
+    }
+
+    .concept-benefit {
+      background: rgba(13, 148, 136, 0.12);
+      border: 1px solid rgba(13, 148, 136, 0.25);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 13px;
+      color: #5eead4;
       line-height: 1.6;
     }
 
-    /* Screenshot Box */
-    .screenshot-box {
-      border: 1px solid #475569;
-      border-radius: 12px;
-      overflow: hidden;
-      background: #0f172a;
-      margin: 20px 0;
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+    .concept-danger {
+      background: rgba(225, 29, 72, 0.12);
+      border: 1px solid rgba(225, 29, 72, 0.25);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 13px;
+      color: #fda4af;
+      line-height: 1.6;
+      margin-top: 8px;
     }
 
-    .screenshot-header {
-      padding: 10px 16px;
+    /* Screenshot Showcases */
+    .screenshot-card {
+      border: 1px solid #475569;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #0f172a;
+      margin: 28px 0;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55);
+    }
+
+    .screenshot-top-bar {
+      padding: 12px 20px;
       background: #1e293b;
       border-bottom: 1px solid #334155;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      font-size: 12px;
+      font-size: 13px;
       color: #94a3b8;
     }
 
-    .screenshot-dots {
+    .browser-dots {
       display: flex;
-      gap: 6px;
+      gap: 7px;
     }
 
-    .screenshot-dot {
-      width: 10px;
-      height: 10px;
+    .browser-dot {
+      width: 11px;
+      height: 11px;
       border-radius: 50%;
     }
     .dot-red { background: #ef4444; }
     .dot-yellow { background: #f59e0b; }
     .dot-green { background: #10b981; }
 
-    .screenshot-box img {
+    .screenshot-img-wrap {
+      position: relative;
+      background: #020617;
+      overflow: hidden;
+    }
+
+    .screenshot-img-wrap img {
       width: 100%;
       height: auto;
       display: block;
       transition: transform 0.3s ease;
     }
 
-    .screenshot-caption {
-      padding: 12px 16px;
-      background: rgba(15, 23, 42, 0.95);
+    .screenshot-bottom-info {
+      padding: 16px 20px;
+      background: rgba(15, 23, 42, 0.98);
       border-top: 1px solid #334155;
-      font-size: 13px;
-      color: #cbd5e1;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      font-size: 14px;
+      color: #e2e8f0;
+      line-height: 1.7;
     }
 
-    /* Step Pipeline Flow */
+    .callout-list {
+      margin-top: 10px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 10px;
+    }
+
+    .callout-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      background: #1e293b;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+    }
+
+    .callout-marker {
+      background: #2563eb;
+      color: white;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* Step Sequence */
     .step-list {
       display: flex;
       flex-direction: column;
-      gap: 20px;
-      margin: 24px 0;
+      gap: 22px;
+      margin: 28px 0;
     }
 
     .step-item {
@@ -392,77 +458,89 @@
       align-items: flex-start;
       background: var(--bg-subtle);
       border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 20px;
+      border-radius: 16px;
+      padding: 24px;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .step-item:hover {
+      border-color: #3b82f6;
+      transform: translateX(-4px);
     }
 
     .step-badge {
-      width: 44px;
-      height: 44px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
       color: white;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
-      font-weight: 800;
+      font-size: 20px;
+      font-weight: 900;
       flex-shrink: 0;
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
     }
 
     .step-content h3 {
-      font-size: 17px;
+      font-size: 18px;
       font-weight: 800;
       margin-bottom: 6px;
       color: white;
     }
 
     .step-content p {
-      font-size: 14px;
+      font-size: 14.5px;
       color: #94a3b8;
-      line-height: 1.6;
+      line-height: 1.7;
     }
 
-    .step-code-badge {
-      display: inline-block;
-      margin-top: 8px;
-      background: #0f172a;
-      border: 1px solid #334155;
-      padding: 4px 10px;
-      border-radius: 6px;
+    .step-tags {
+      margin-top: 10px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .step-tag {
       font-family: 'JetBrains Mono', monospace;
       font-size: 12px;
+      padding: 3px 10px;
+      border-radius: 6px;
+      background: #0f172a;
       color: #38bdf8;
+      border: 1px solid #334155;
     }
 
-    /* 7-Layer Flow Diagram */
+    /* 7-Layer Flow */
     .pipeline-grid {
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      margin: 24px 0;
+      gap: 14px;
+      margin: 26px 0;
     }
 
     .layer-row {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 18px;
       background: #1e293b;
       border: 1px solid #334155;
-      border-radius: 12px;
-      padding: 14px 20px;
-      transition: transform 0.2s ease, border-color 0.2s ease;
+      border-radius: 14px;
+      padding: 16px 22px;
+      transition: all 0.2s ease;
     }
 
     .layer-row:hover {
-      transform: translateX(-4px);
+      transform: translateX(-5px);
       border-color: #38bdf8;
+      background: #243248;
     }
 
     .layer-num {
-      width: 32px;
-      height: 32px;
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
       background: rgba(56, 189, 248, 0.15);
       border: 1px solid #38bdf8;
@@ -470,8 +548,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 13px;
-      font-weight: 800;
+      font-size: 14px;
+      font-weight: 900;
       flex-shrink: 0;
     }
 
@@ -480,83 +558,58 @@
     }
 
     .layer-title {
-      font-size: 15px;
-      font-weight: 700;
+      font-size: 16px;
+      font-weight: 800;
       color: white;
-      margin-bottom: 2px;
+      margin-bottom: 4px;
     }
 
     .layer-desc {
-      font-size: 12.5px;
+      font-size: 13.5px;
       color: #94a3b8;
+      line-height: 1.6;
     }
 
     .layer-tag {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      padding: 4px 10px;
+      font-size: 11.5px;
+      padding: 4px 12px;
       border-radius: 6px;
       background: #0f172a;
-      color: #a7f3d0;
+      color: #34d399;
       border: 1px solid #059669;
     }
 
-    /* Tables */
-    .table-container {
-      overflow-x: auto;
-      margin: 16px 0;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-    }
-
-    table.data-table {
-      width: 100%;
-      border-collapse: collapse;
-      text-align: right;
-      font-size: 13.5px;
-    }
-
-    table.data-table th {
-      background: #1e293b;
-      padding: 12px 16px;
-      color: #cbd5e1;
-      font-weight: 700;
-      border-bottom: 1px solid var(--border);
-    }
-
-    table.data-table td {
-      padding: 12px 16px;
-      border-bottom: 1px solid var(--border-subtle);
-      color: #e2e8f0;
-    }
-
-    table.data-table tr:hover td {
-      background: rgba(255, 255, 255, 0.02);
-    }
-
-    /* Tooth Chart Visualizer */
+    /* FDI Visualizer Diagram */
     .fdi-grid {
       display: grid;
-      grid-template-columns: repeat(8, 1fr) 12px repeat(8, 1fr);
+      grid-template-columns: repeat(8, 1fr) 14px repeat(8, 1fr);
       gap: 6px;
       direction: ltr;
       margin: 20px 0;
-      padding: 16px;
+      padding: 18px;
       background: #0f172a;
-      border-radius: 12px;
+      border-radius: 14px;
       border: 1px solid #334155;
     }
 
     .tooth-cell {
       background: #1e293b;
       border: 1px solid #475569;
-      border-radius: 6px;
-      padding: 8px 4px;
+      border-radius: 8px;
+      padding: 10px 4px;
       text-align: center;
       font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      font-weight: 700;
+      font-size: 12px;
+      font-weight: 800;
       color: #f8fafc;
+      transition: background 0.2s ease;
+    }
+
+    .tooth-cell:hover {
+      background: #2563eb;
+      border-color: #60a5fa;
+      cursor: default;
     }
 
     .tooth-cell.divider {
@@ -566,6 +619,7 @@
       align-items: center;
       justify-content: center;
       color: #64748b;
+      font-size: 16px;
     }
 
     /* Print styles */
@@ -588,20 +642,20 @@
 </head>
 <body>
 
-  <!-- Sticky Top Header -->
+  <!-- Top Sticky Navigation -->
   <header class="top-header">
     <div class="container header-inner">
       <a href="/dashboard" class="brand">
         <div class="brand-icon">🦷</div>
         <div>
-          <div class="brand-title">Odonto AI — دليل المطور الشامل</div>
-          <div class="brand-subtitle">Architectural & Operational Manual for Software Engineers</div>
+          <div class="brand-title">Odonto AI — دليل التدريب والتشغيل الشامل</div>
+          <div class="brand-subtitle">Comprehensive Operational & Clinical Training Manual</div>
         </div>
       </a>
 
       <div class="nav-actions">
         <a href="https://odonto-ai-seven.vercel.app/plans/generate" target="_blank" class="btn btn-primary">
-          <span>تشغيل الاستوديو المباشر 🚀</span>
+          <span>فتح استوديو العلاج المباشر 🚀</span>
         </a>
         <button onclick="window.print()" class="btn btn-secondary">
           <span>طباعة / حفظ كـ PDF 🖨️</span>
@@ -614,156 +668,202 @@
   <div class="container">
     <section class="hero">
       <div class="badge-pill">
-        <span>⚡ وثيقة موجهة لمهندسي البرمجيات ومطوري الويب (Zero Medical Background Required)</span>
+        <span>📖 دليل تفاعلي شامل للمدربين، مديري المنتجات، أطباء الأسنان، وفرق العمل</span>
       </div>
       <h1 class="hero-title">
-        كل ما تحتاج معرفته عن Odonto AI<br>منظومة التشغيل والذكاء السريري من الصفر
+        كل ما تحتاج معرفته عن منظومة Odonto AI<br>
+        شرح تشغيلي وسريري خطوة بخطوة بالصور التوضيحية
       </h1>
       <p class="hero-desc">
-        دليل تفصيلي خطوة بخطوة يشرح كل أداة، كل زر، كل عملية حسابية، وكيفية استخراج خطة علاجية تقويمية وجراحية متكاملة دون الحاجة لأي معرفة طبية مسبقة.
+        دليل مبسط ومفصل يشرح لك فلسفة المنظومة، ويوضح كل شاشة وزر وأداة بالصور الحية من داخل التطبيق، ويفسر كل مصطلح طبي وما يترتب عليه من قرارات علاجية، حتى تتمكن من تدريب أي شخص أو تشغيل المنظومة بكفاءة استشاري محترف.
       </p>
 
       <!-- Quick Nav Links -->
       <div class="quick-nav">
-        <a href="#cheat-sheet">قاموس المطور للأسنان 📚</a>
-        <a href="#generate-step-by-step">توليد خطة علاجية خطوة بخطوة 🛠️</a>
-        <a href="#under-the-hood">ما وراء الكواليس (7 طبقات) ⚙️</a>
-        <a href="#features-walkthrough">جولة في الأدوات والشاشات 🖥️</a>
-        <a href="#implants-studio">استوديو زراعة الأسنان 🔩</a>
-        <a href="#knowledge-base">قاعدة المعرفة والحاسبات 🔬</a>
+        <a href="#vision">1. ما هي المنظومة ولماذا تم بناؤها؟ 🎯</a>
+        <a href="#dental-basics">2. أساسيات طب الأسنان للجميع 🦷</a>
+        <a href="#step-by-step">3. كيف تولد خطة علاج بالصور؟ 📸</a>
+        <a href="#pipeline">4. ما وراء الكواليس (7 طبقات) ⚙️</a>
+        <a href="#implant-studio">5. استوديو زراعة الأسنان 🔩</a>
+        <a href="#knowledge-base">6. مكتبة المعرفة والحاسبات 🔬</a>
+        <a href="#scenarios">7. سيناريوهات تدريبية عملية 💡</a>
       </div>
     </section>
 
-    <!-- SECTION 1: Developer Cheat Sheet -->
-    <section id="cheat-sheet" class="card">
+    <!-- SECTION 1: Vision & The "Why" -->
+    <section id="vision" class="card">
       <div class="section-title">
         <span class="number-badge">1</span>
-        <h2>قاموس المطور للأسنان (Dental Concepts for Software Engineers)</h2>
+        <h2>ما هي منظومة Odonto AI؟ وما المشكلة الحقيقية التي تحلها؟</h2>
       </div>
-      <p style="color: #94a3b8; margin-bottom: 24px;">
-        لفهم ما تفعله المنظومة، انسَ كل تعقيدات كليات الطب. تخيل الفم ببساطة كـ <strong>محرك ألعاب فيزيائي (Physics Engine)</strong> والأسنان كأجسام صلبة (Rigid Bodies):
-      </p>
+      <div class="section-subtitle">
+        فهم الفجوة العميقة بين برمجيات الكشف الصوري البسيطة وبين أنظمة التشغيل السريرية المتكاملة.
+      </div>
 
       <div class="grid-2">
-        <div class="translator-card">
-          <div class="jargon-header">
-            <span class="jargon-medical">ترقيم الأسنان (FDI Notation)</span>
-            <span class="jargon-cs">2D Array Coordinates</span>
+        <div class="concept-box rose">
+          <div class="concept-header">
+            <span class="concept-title">المنافسون الكبار (Overjet & Pearl)</span>
+            <span class="concept-en">Detection-Only Tools</span>
           </div>
-          <div class="jargon-desc">
-            الفم مقسم إلى 4 أرباع (1: أعلى يمين، 2: أعلى يسار، 3: أسفل يسار، 4: أسفل يمين). رقم السن <code>36</code> يعني: الربع الثالث (أسفل يسار)، السن رقم 6 (الضرس الأول الدائم).
+          <div class="concept-body">
+            الشركات الأمريكية التي جمعت مئات الملايين من الدولارات (مثل Overjet و Pearl) هي مجرد <strong>"كاميرات تشخيص بصري"</strong>:
+            <br>• تقرأ صورة الأشعة، وترسم مربعاً أحمر حول التسوس أو تقيس تآكل العظم بملليمترات... <strong>ثم تتوقف تماماً!</strong>
+            <br>• لا تقدم خطة علاج، ولا تفهم تقويم الأسنان، ولا تحسب قوى فيزيائية، ولا ترشد الطبيب إلى كيفية إغلاق المسافات أو اختيار مقاسات الزرعات.
           </div>
-        </div>
-
-        <div class="translator-card teal">
-          <div class="jargon-header">
-            <span class="jargon-medical">سلك التقويم (Archwire)</span>
-            <span class="jargon-cs">Physics Spring Vector</span>
-          </div>
-          <div class="jargon-desc">
-            سلك مصنوع من سبائك النيكل تيتانيوم (NiTi) له شكل بيضاوي مثالي. عندما نربطه بأسنان معوجة، يعمل مثل سبرنج مشدود <code>F = -k * Δx</code> يسحب الأسنان تدريجياً لتعود لمكانها الصحيح.
+          <div class="concept-danger">
+            ⚠️ <strong>المشكلة:</strong> تترك الطبيب عند حافة التشخيص دون أن تساعده في اتخاذ القرار التنفيذي (Diagnostic Dead-End).
           </div>
         </div>
 
-        <div class="translator-card purple">
-          <div class="jargon-header">
-            <span class="jargon-medical">تدرج الأسلاك (Wire Progression)</span>
-            <span class="jargon-cs">Staged Load Throttling</span>
+        <div class="concept-box emerald">
+          <div class="concept-header">
+            <span class="concept-title">منظومة Odonto AI</span>
+            <span class="concept-en">Clinical Operating System</span>
           </div>
-          <div class="jargon-desc">
-            لا يمكن البدء بسلك صلب وقوي وإلا سيمتص جذر السن ويكسر العظم. نبدأ بسلك مرن نحيف <code>0.014 CuNiTi</code> للرصف، ثم نتدرج لأسلاك فولاذية صلبة <code>0.019x0.025 SS</code> للتحكم في الزوايا.
+          <div class="concept-body">
+            منظومة Odonto AI تبدأ من حيث يتوقف الجميع؛ إنها <strong>"نظام التشغيل والتنفيذ السريري الكامل"</strong>:
+            <br>• تأخذ الأشعة والفحص الطبي، وتمررها عبر محرك فيزيائي ورياضي حتمي يمنع أي هلوسة سريرية.
+            <br>• تخلق خطة علاج هندسية كاملة مقسمة إلى مراحل زمنية: متى نخلع أسنان؟ ما مقاسات الأسلاك التقويمية؟ أين نركب المطاط؟ وما أبعاد مسامير الزراعة بدقة الملليمتر؟
           </div>
-        </div>
-
-        <div class="translator-card amber">
-          <div class="jargon-header">
-            <span class="jargon-medical">التقويم الشفاف (Clear Aligners)</span>
-            <span class="jargon-cs">CSS Keyframe Animation</span>
+          <div class="concept-benefit">
+            ✅ <strong>القيمة الحقيقية:</strong> توفر على العيادة 8,000 إلى 15,000 دولار من تكاليف البرامج القديمة، وتختصر وقت التخطيط من ساعات إلى 60 ثانية.
           </div>
-          <div class="jargon-desc">
-            لنقل سن من الموضع A إلى B، نقسم الحركة إلى 25 قالب بلاستيكي (Keyframes). كل قالب يحرك السن بمقدار أقصاه <strong>0.25 مم</strong> أو يدوره <strong>2 درجة</strong> لمنع تلف الأنسجة.
-          </div>
-        </div>
-
-        <div class="translator-card rose">
-          <div class="jargon-header">
-            <span class="jargon-medical">التزاحم (Crowding)</span>
-            <span class="jargon-cs">Buffer Overflow Exception</span>
-          </div>
-          <div class="jargon-desc">
-            عرض الأسنان الإجمالي أكبر من محيط الفك العظمي (الأسنان تطلب 80 مم لكن الفك مساحته 72 مم فقط، فهناك عجز -8 مم والأسنان ستتراكم فوق بعضها وتتراكب).
-          </div>
-        </div>
-
-        <div class="translator-card emerald">
-          <div class="jargon-header">
-            <span class="jargon-medical">زراعة الأسنان (Dental Implants)</span>
-            <span class="jargon-cs">Hardware Bolt Mounting</span>
-          </div>
-          <div class="jargon-desc">
-            تثبيت برغي من التيتانيوم في عظم الفك بعزم دوران محسوب (Torque بـ Ncm). يجب احترام هامش أمان <strong>≥ 2 مم</strong> بعيداً عن العصب الفكي السفلي (IAN) لتفادي أي قطع أو شلل.
-          </div>
-        </div>
-      </div>
-
-      <!-- FDI Visualizer Diagram -->
-      <div style="margin-top: 24px;">
-        <h4 style="font-size: 14px; font-weight: 700; color: #94a3b8; margin-bottom: 8px;">مصفوفة ترقيم الأسنان الكاملة (32 سناً دائم):</h4>
-        <div class="fdi-grid">
-          <!-- Upper Right (Quadrant 1) -->
-          <div class="tooth-cell">18</div>
-          <div class="tooth-cell">17</div>
-          <div class="tooth-cell">16</div>
-          <div class="tooth-cell">15</div>
-          <div class="tooth-cell">14</div>
-          <div class="tooth-cell">13</div>
-          <div class="tooth-cell">12</div>
-          <div class="tooth-cell">11</div>
-          <div class="tooth-cell divider">|</div>
-          <!-- Upper Left (Quadrant 2) -->
-          <div class="tooth-cell">21</div>
-          <div class="tooth-cell">22</div>
-          <div class="tooth-cell">23</div>
-          <div class="tooth-cell">24</div>
-          <div class="tooth-cell">25</div>
-          <div class="tooth-cell">26</div>
-          <div class="tooth-cell">27</div>
-          <div class="tooth-cell">28</div>
-        </div>
-        <div class="fdi-grid" style="margin-top: -12px;">
-          <!-- Lower Right (Quadrant 4) -->
-          <div class="tooth-cell">48</div>
-          <div class="tooth-cell">47</div>
-          <div class="tooth-cell">46</div>
-          <div class="tooth-cell">45</div>
-          <div class="tooth-cell">44</div>
-          <div class="tooth-cell">43</div>
-          <div class="tooth-cell">42</div>
-          <div class="tooth-cell">41</div>
-          <div class="tooth-cell divider">|</div>
-          <!-- Lower Left (Quadrant 3) -->
-          <div class="tooth-cell">31</div>
-          <div class="tooth-cell">32</div>
-          <div class="tooth-cell">33</div>
-          <div class="tooth-cell">34</div>
-          <div class="tooth-cell">35</div>
-          <div class="tooth-cell">36</div>
-          <div class="tooth-cell">37</div>
-          <div class="tooth-cell">38</div>
         </div>
       </div>
     </section>
 
-    <!-- SECTION 2: Step-by-Step Plan Generation -->
-    <section id="generate-step-by-step" class="card">
+    <!-- SECTION 2: Dental Basics for Non-Dentists -->
+    <section id="dental-basics" class="card">
       <div class="section-title">
         <span class="number-badge">2</span>
-        <h2>كيف تستخرج خطة علاجية كاملة خطوة بخطوة؟ (Step-by-Step Walkthrough)</h2>
+        <h2>أساسيات ومصطلحات طب الأسنان مبسطة للجميع (Dental Fundamentals)</h2>
+      </div>
+      <div class="section-subtitle">
+        شرح تشريحي وبيولوجي مبسط للمصطلحات التي ستراها في واجهة البرنامج، ولماذا يهتم بها الطبيب.
       </div>
 
-      <p style="color: #94a3b8; margin-bottom: 20px;">
-        إذا كنت تريد تجربة النظام الآن وإخراج خطة علاج احترافية بنفسك في أقل من دقيقة، اتبع الخطوات التالية:
-      </p>
+      <!-- FDI Tooth Numbering Grid -->
+      <div style="margin-bottom: 28px;">
+        <h4 style="font-size: 16px; font-weight: 800; color: #93c5fd; margin-bottom: 6px;">نظام ترقيم الأسنان العالمي (FDI Tooth Notation):</h4>
+        <p style="font-size: 14px; color: #94a3b8; margin-bottom: 12px;">
+          الفم مقسم إلى 4 أرباع (Quadrant 1: أعلى يمين | Quadrant 2: أعلى يسار | Quadrant 3: أسفل يسار | Quadrant 4: أسفل يمين).
+          <br>رقم السن يتكون من خانتين: الأولى للربع والثانية لترتيب السن من المنتصف إلى الخلف (1 القاطع الأوسط حتى 8 ضرس العقل):
+        </p>
+        <div class="fdi-grid">
+          <div class="tooth-cell" title="ضرس عقل علوي أيمن">18</div>
+          <div class="tooth-cell" title="ضرس ثانٍ علوي أيمن">17</div>
+          <div class="tooth-cell" title="ضرس أول علوي أيمن">16</div>
+          <div class="tooth-cell" title="ضاحك ثانٍ علوي أيمن">15</div>
+          <div class="tooth-cell" title="ضاحك أول علوي أيمن">14</div>
+          <div class="tooth-cell" title="ناب علوي أيمن">13</div>
+          <div class="tooth-cell" title="قاطع جانبي علوي أيمن">12</div>
+          <div class="tooth-cell" title="قاطع أوسط علوي أيمن">11</div>
+          <div class="tooth-cell divider">|</div>
+          <div class="tooth-cell" title="قاطع أوسط علوي أيسر">21</div>
+          <div class="tooth-cell" title="قاطع جانبي علوي أيسر">22</div>
+          <div class="tooth-cell" title="ناب علوي أيسر">23</div>
+          <div class="tooth-cell" title="ضاحك أول علوي أيسر">24</div>
+          <div class="tooth-cell" title="ضاحك ثانٍ علوي أيسر">25</div>
+          <div class="tooth-cell" title="ضرس أول علوي أيسر">26</div>
+          <div class="tooth-cell" title="ضرس ثانٍ علوي أيسر">27</div>
+          <div class="tooth-cell" title="ضرس عقل علوي أيسر">28</div>
+        </div>
+        <div class="fdi-grid" style="margin-top: -12px;">
+          <div class="tooth-cell" title="ضرس عقل سفلي أيمن">48</div>
+          <div class="tooth-cell" title="ضرس ثانٍ سفلي أيمن">47</div>
+          <div class="tooth-cell" title="ضرس أول سفلي أيمن">46</div>
+          <div class="tooth-cell" title="ضاحك ثانٍ سفلي أيمن">45</div>
+          <div class="tooth-cell" title="ضاحك أول سفلي أيمن">44</div>
+          <div class="tooth-cell" title="ناب سفلي أيمن">43</div>
+          <div class="tooth-cell" title="قاطع جانبي سفلي أيمن">42</div>
+          <div class="tooth-cell" title="قاطع أوسط سفلي أيمن">41</div>
+          <div class="tooth-cell divider">|</div>
+          <div class="tooth-cell" title="قاطع أوسط سفلي أيسر">31</div>
+          <div class="tooth-cell" title="قاطع جانبي سفلي أيسر">32</div>
+          <div class="tooth-cell" title="ناب سفلي أيسر">33</div>
+          <div class="tooth-cell" title="ضاحك أول سفلي أيسر">34</div>
+          <div class="tooth-cell" title="ضاحك ثانٍ سفلي أيسر">35</div>
+          <div class="tooth-cell" title="ضرس أول سفلي أيسر">36</div>
+          <div class="tooth-cell" title="ضرس ثانٍ سفلي أيسر">37</div>
+          <div class="tooth-cell" title="ضرس عقل سفلي أيسر">38</div>
+        </div>
+      </div>
+
+      <!-- Core Dental Concepts Grid -->
+      <div class="grid-2">
+        <div class="concept-box">
+          <div class="concept-header">
+            <span class="concept-title">البروز الأفقي للأسنان</span>
+            <span class="concept-en">Overjet (OJ)</span>
+          </div>
+          <div class="concept-body">
+            المسافة الأفقية بالملليمتر التي تتقدم بها الأسنان العلوية أمام الأسنان السفلية. 
+            <br>• <strong>المعدل الطبيعي:</strong> من 2 إلى 3 مم.
+            <br>• <strong>إذا كان 8 أو 10 مم:</strong> تظهر الأسنان بارزة جداً ولا يستطيع المريض إغلاق شفتيه براحة.
+          </div>
+          <div class="concept-benefit">
+            💡 <strong>هيفيد الدكتور بإيه؟</strong> يحدد النظام هل البروز سببه ميلان في الأسنان فقط (Dental) أم صغر وتراجع هيكلي في عظم الفك السفلي (Skeletal Class II)، ويقرر فوراً هل نخلع أسناناً أم نستخدم أجهزة تعديل نمو.
+          </div>
+        </div>
+
+        <div class="concept-box teal">
+          <div class="concept-header">
+            <span class="concept-title">التغطية الرأسية للأسنان</span>
+            <span class="concept-en">Overbite (OB)</span>
+          </div>
+          <div class="concept-body">
+            مقدار النزول الرأسي للأسنان العلوية فوق الأسنان السفلية عند إغلاق الفم.
+            <br>• <strong>المعدل الطبيعي:</strong> من 1 إلى 2 مم (تغطي ثلث تاج السن السفلي فقط).
+            <br>• <strong>العضة العميقة (Deep Bite):</strong> تغطي الأسنان السفلية بالكامل وتجرح سقف الحلق.
+            <br>• <strong>العضة المفتوحة (Open Bite):</strong> فراغ مفتوح والأسنان لا تلمس بعضها.
+          </div>
+          <div class="concept-benefit">
+            💡 <strong>هيفيد الدكتور بإيه؟</strong> يمنع تكسر حاصرات التقويم السفلية عند المضغ، ويحدد رفعات العضة المطلوبة (Bite Turbos).
+          </div>
+        </div>
+
+        <div class="concept-box amber">
+          <div class="concept-header">
+            <span class="concept-title">تزاحم الأسنان</span>
+            <span class="concept-en">Crowding</span>
+          </div>
+          <div class="concept-body">
+            حجم الأسنان الإجمالي أكبر من المساحة المتاحة في عظم الفك. فتتراكب الأسنان وتلتف فوق بعضها.
+            <br>• <strong>خفيف:</strong> أقل من 3 مم.
+            <br>• <strong>متوسط:</strong> من 4 إلى 7 مم.
+            <br>• <strong>شديد وحرج:</strong> أكثر من 8 مم.
+          </div>
+          <div class="concept-benefit">
+            💡 <strong>هيفيد الدكتور بإيه؟</strong> يحسم أكبر معضلة في عيادة التقويم: <strong>"هل يجب خلع أسنان لتوفير مساحة أم يمكن توسيع الفك دون خلع؟"</strong>
+          </div>
+        </div>
+
+        <div class="concept-box purple">
+          <div class="concept-header">
+            <span class="concept-title">العضة المعكوسة</span>
+            <span class="concept-en">Crossbite</span>
+          </div>
+          <div class="concept-body">
+            في الحالة الطبيعية، الفك العلوي يحيط بالفك السفلي من الخارج كغطاء العلبة. 
+            <br>في العضة المعكوسة، تنعكس الآية وتصبح الأسنان السفلية خارج العلوية، مما يسبب انحرافاً في حركة الفك وتآكلاً في المينا.
+          </div>
+          <div class="concept-benefit">
+            💡 <strong>هيفيد الدكتور بإيه؟</strong> ينبه الطبيب لضرورة توسيع الفك السريع (RPE) مبكراً قبل أن ينمو وجه الطفل بشكل غير متماثل (Facial Asymmetry).
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: Step-by-Step UI Manual with Screenshots -->
+    <section id="step-by-step" class="card">
+      <div class="section-title">
+        <span class="number-badge">3</span>
+        <h2>شرح شاشات المنظومة خطوة بخطوة بالصور (Step-by-Step UI Walkthrough)</h2>
+      </div>
+      <div class="section-subtitle">
+        دليل بصري عملي لكيفية استخدام كل أداة وزر داخل استوديو تخليق خطط العلاج في أقل من 60 ثانية.
+      </div>
 
       <div class="step-list">
         <div class="step-item">
@@ -771,30 +871,68 @@
           <div class="step-content">
             <h3>الدخول إلى استوديو العلاج (Treatment Studio)</h3>
             <p>
-              افتح الرابط المباشر <code>/plans/generate</code> أو اضغط على الزر الأسود الرئيسي في الهيدر أو الصفحة الرئيسية. ستفتح لك شاشة التخطيط السريري الشاملة.
+              توجه إلى الرابط <code>/plans/generate</code> من القائمة الجانبية أو من خلال الضغط على زر <strong>"Launch Treatment Studio"</strong> في الهيدر. ستظهر أمامك واجهة التخطيط السريري المتطورة.
             </p>
-            <span class="step-code-badge">Route: /plans/generate</span>
+            <div class="step-tags">
+              <span class="step-tag">URL: /plans/generate</span>
+              <span class="step-tag">Action: Navigate to Treatment Studio</span>
+            </div>
           </div>
         </div>
 
         <div class="step-item">
           <div class="step-badge">2</div>
           <div class="step-content">
-            <h3>تحميل حالة اختبارية بضغطة زر واحدة (Load Clinical Sample)</h3>
+            <h3>تحميل عينة اختبارية بضغطة زر واحدة (Load Clinical Sample)</h3>
             <p>
-              بدلاً من إدخال 20 قياساً طبياً معقداً يدوياً، ستجد في أعلى الصفحة صندوقاً يحتوي على عينات جاهزة. اضغط على زر:
-              <strong style="color: #60a5fa;">"Class II Div 1 (Severe Overjet)"</strong> (حالة مريض لديه بروز علوي 8 مم) أو 
-              <strong style="color: #34d399;">"Severe Crowding"</strong> (تزاحم خانق). سيقوم الـ UI بملء كافة حقول الفحص تلقائياً ببيانات واقعية.
+              في أعلى الصفحة، ستجد صفاً من الأزرار الجاهزة لاختبار المنظومة دون الحاجة لملء استمارات طويلة يدوياً:
+              <br>• اضغط على <strong>"Class II Div 1 (Severe Overjet)"</strong> لاختبار مريض لديه بروز 8 مم وعضة عميقة.
+              <br>• أو اضغط على <strong>"Class I Severe Crowding"</strong> لاختبار حالة تزاحم حرج تتطلب خلعاً وتوسيعاً.
+              <br>فور الضغط، ستلاحظ امتلاء كافة حقول الفحص السريري تلقائياً ببيانات واقعية ودقيقة.
             </p>
+            <div class="step-tags">
+              <span class="step-tag">Sample Cases: Class II div 1 • Severe Crowding • Open Bite</span>
+            </div>
           </div>
         </div>
+
+        <!-- Studio Header & Language Switcher Screenshot -->
+        <div class="screenshot-card" style="margin: 18px 0 28px 0;">
+          <div class="screenshot-top-bar">
+            <div class="browser-dots">
+              <span class="browser-dot dot-red"></span>
+              <span class="browser-dot dot-yellow"></span>
+              <span class="browser-dot dot-green"></span>
+            </div>
+            <span>Odonto AI Header — شريط الأدوات العلوي ومبدل اللغة وأزرار الحالات الجاهزة</span>
+          </div>
+          <div class="screenshot-img-wrap">
+            <img src="/screenshots/studio_header_preview.png" alt="Odonto AI Studio Header & Language Switcher">
+          </div>
+          <div class="screenshot-bottom-info">
+            <strong>مزايا شريط التحكم العلوي:</strong>
+            <div class="callout-list">
+              <div class="callout-item">
+                <div class="callout-marker">🌐</div>
+                <span><strong>مبدل اللغة الشامل (Bilingual Switcher):</strong> يحول كامل المصطلحات والواجهات بين العربية المصرية المعرّبة طبياً والإنجليزية بضغطة واحدة.</span>
+              </div>
+              <div class="callout-item">
+                <div class="callout-marker">⚡</div>
+                <span><strong>تحميل الحالات الفوري (Quick Presets):</strong> زر لاختبار أصعب الحالات السريرية وتجربة النظام بلحظة واحدة.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
 
         <div class="step-item">
           <div class="step-badge">3</div>
           <div class="step-content">
-            <h3>اختيار نمط الشرح (Experience Level Toggle)</h3>
+            <h3>اختيار عمق الشرح السريري (Experience Level Toggle)</h3>
             <p>
-              اختر <strong>Beginner</strong> لكي يعطيك الذكاء الاصطناعي شرحاً تعليمياً مبسطاً يبرر سبب كل قرار طبي، أو <strong>Expert</strong> للحصول على ملخص أرقام وميكانيكا مباشر ومكثف.
+              يحتوي النظام على مفتاح ذكي لتغيير أسلوب الصياغة الطبية:
+              <br>• <strong>مبتدئ (Beginner):</strong> يقدم شرحاً تفصيلياً مع تبرير كل قرار بيوميكانيكي وذكر المراجع الأكاديمية (مثالي للتدريب وشرح الحالة للمريض).
+              <br>• <strong>خبير (Expert):</strong> يعطي تقريراً مكثفاً ومباشراً يحتوي على الأرقام والميكانيكا فوراً دون إطالة.
             </p>
           </div>
         </div>
@@ -802,68 +940,90 @@
         <div class="step-item">
           <div class="step-badge">4</div>
           <div class="step-content">
-            <h3>الضغط على زر "توليد الخطة (Generate Plan)"</h3>
+            <h3>الضغط على زر التوليد السريري (Generate Comprehensive Plan)</h3>
             <p>
-              اضغط على الزر البنفسجي/الأزرق الكبير. سيبدأ النظام في معالجة البيانات عبر 7 طبقات تشخيصية ثم يستدعي نموذج GPT-4o بقيود صارمة تمنع الهلوسة.
-            </p>
-            <span class="step-code-badge">POST /api/ai/generate-plan</span>
-          </div>
-        </div>
-
-        <div class="step-item">
-          <div class="step-badge">5</div>
-          <div class="step-content">
-            <h3>استعراض التبويبات وتصدير التقرير النهائي (Export PDF)</h3>
-            <p>
-              ستظهر أمامك الخطة مقسمة في تبويبات: (ملخص التشخيص، قرار الخلع، تدرج الأسلاك، المطاطات، التثبيت، والأدلة السريرية). اضغط زر <strong>Export PDF</strong> لتحميل تقرير مطبوع جاهز للتسليم.
+              اضغط على الزر الرئيسي البنفسجي/الأزرق. في هذه اللحظة، يعمل خط الأنابيب السباعي في الخادم لثوانٍ معدودة، ثم تظهر أمامك خطة علاجية متكاملة تتضمن:
+              <br>1. <strong>ملخص التشخيص:</strong> التصنيف الهيكلي والسنّي وصحة اللثة.
+              <br>2. <strong>قرار الخلع:</strong> هل نخلع أسناناً أم لا ولماذا؟
+              <br>3. <strong>تدرج الأسلاك:</strong> جدول مقاسات الأسلاك (NiTi ثم Stainless Steel ثم TMA).
+              <br>4. <strong>المطاطات:</strong> قوة المطاط ومكان تركيبه.
+              <br>5. <strong>التثبيت:</strong> نوع المثبت الدائم لمنع ارتداد الأسنان.
+              <br>6. <strong>التوثيق العلمي:</strong> أبحاث محكمة مسترجعة من PubMed.
             </p>
           </div>
         </div>
       </div>
 
-      <!-- Screenshot Preview of Treatment Studio -->
-      <div class="screenshot-box">
-        <div class="screenshot-header">
-          <div class="screenshot-dots">
-            <span class="screenshot-dot dot-red"></span>
-            <span class="screenshot-dot dot-yellow"></span>
-            <span class="screenshot-dot dot-green"></span>
+      <!-- Screenshot Showcase: Treatment Studio -->
+      <div class="screenshot-card">
+        <div class="screenshot-top-bar">
+          <div class="browser-dots">
+            <span class="browser-dot dot-red"></span>
+            <span class="browser-dot dot-yellow"></span>
+            <span class="browser-dot dot-green"></span>
           </div>
-          <span>Treatment Studio — واجهة استوديو توليد خطط التقويم</span>
+          <span>Odonto AI Treatment Studio — شاشة استوديو تخليق خطط العلاج</span>
         </div>
-        <img src="/screenshots/treatment_studio_preview.png" alt="Treatment Studio Preview" onerror="this.src='/screenshots/plan_generation_preview.png'">
-        <div class="screenshot-caption">
-          <span>📷 واجهة استوديو تخليق خطط العلاج: يظهر بها محدد العينات الجاهزة، خوارزمية الخلع، وتسلسل تدرج الأسلاك السريرية.</span>
+        <div class="screenshot-img-wrap">
+          <img src="/screenshots/treatment_studio_preview.png" alt="Treatment Studio Interface" onerror="this.src='/screenshots/plan_generation_preview.png'">
+        </div>
+        <div class="screenshot-bottom-info">
+          <strong>عناصر الشاشة الرئيسية الموضحة أعلاه:</strong>
+          <div class="callout-list">
+            <div class="callout-item">
+              <div class="callout-marker">1</div>
+              <span><strong>صندوق العينات الجاهزة:</strong> أزرار تحميل الحالات السريرية الجاهزة للاختبار الفوري.</span>
+            </div>
+            <div class="callout-item">
+              <div class="callout-marker">2</div>
+              <span><strong>مخطط الفحص السريري:</strong> خانات إدخال البروز، التغطية، والتزاحم بالملليمتر.</span>
+            </div>
+            <div class="callout-item">
+              <div class="callout-marker">3</div>
+              <span><strong>مفتاح مستوى الخبرة:</strong> التبديل بين الشرح المفصل (Beginner) والملخص السريع (Expert).</span>
+            </div>
+            <div class="callout-item">
+              <div class="callout-marker">4</div>
+              <span><strong>زر توليد الخطة:</strong> يطلق خط أنابيب المعالجة والذكاء الاصطناعي السريري.</span>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- SECTION 3: Under the Hood Pipeline -->
-    <section id="under-the-hood" class="card">
+    <!-- SECTION 4: The 7-Layer Pipeline -->
+    <section id="pipeline" class="card">
       <div class="section-title">
-        <span class="number-badge">3</span>
-        <h2>ما وراء الكواليس: خط الأنابيب السباعي (The 7-Layer Pipeline)</h2>
+        <span class="number-badge">4</span>
+        <h2>ما وراء الكواليس: خط الأنابيب التشخيصي السباعي (The 7-Layer Pipeline)</h2>
+      </div>
+      <div class="section-subtitle">
+        لماذا تضمن منظومة Odonto AI صفر هلوسة طبية (Zero Hallucination) مقارنة بجميع روبوتات الدردشة العادية؟
       </div>
 
-      <p style="color: #94a3b8; margin-bottom: 20px;">
-        عندما تضغط على زر توليد الخطة، لا يذهب الطلب مباشرة إلى الذكاء الاصطناعي بشكل عشوائي! بل يمر الطلب بسلسلة من 7 طبقات تدقيق رياضية وفيزيائية حتمية تمنع أي خطأ طبي:
+      <p style="color: #94a3b8; margin-bottom: 22px;">
+        نماذج الذكاء الاصطناعي التوليدي مثل ChatGPT قد تهلوس بأرقام غير واقعية إذا تركت وحدها. لمنع ذلك، ابتكرت Odonto AI معمارية هندسية صارمة: <strong>يمر كل قرار بـ 5 طبقات فحص رياضية وفيزيائية حتمية قبل أن يتدخل نموذج الذكاء الاصطناعي</strong>:
       </p>
 
       <div class="pipeline-grid">
         <div class="layer-row">
           <div class="layer-num">1</div>
           <div class="layer-info">
-            <div class="layer-title">محرك تتبع أشعة السيفالومتريك (Ceph Tracing Engine)</div>
-            <div class="layer-desc">يحسب إحداثيات (X, Y) لنقاط عظم الجمجمة ويقيس الزوايا الهندسية (SNA, SNB, ANB, FMA) لتحديد هل الخلل في عظم الفك أم في الأسنان فقط.</div>
+            <div class="layer-title">الطبقة الأولى: محرك تتبع السيفالومتريك (Ceph Tracing Engine)</div>
+            <div class="layer-desc">
+              يقيس الزوايا الهندسية لعظام الجمجمة (SNA, SNB, ANB, FMA). يحدد هل المشكلة في عظام الفك أم في الأسنان فقط، وهل الوجه ينمو رأسياً أم أفقياً.
+            </div>
           </div>
-          <span class="layer-tag">Math & Geometry</span>
+          <span class="layer-tag">Trigonometric Math</span>
         </div>
 
         <div class="layer-row">
           <div class="layer-num">2</div>
           <div class="layer-info">
-            <div class="layer-title">تجزئة أشعة البانوراما (OPG 32-Tooth Segmentation)</div>
-            <div class="layer-desc">يكتشف كل سن من الـ 32 سناً، ويتحقق من وجود أسنان مفقودة أو أسنان مطمورة مدفونة في العظم (مثل الأنياب Impacted Canines).</div>
+            <div class="layer-title">الطبقة الثانية: ترقيم وتجزئة الأسنان بالبانوراما (OPG FDI Tooth Segmentation)</div>
+            <div class="layer-desc">
+              فحص الـ 32 سناً والتأكد من عدم وجود أسنان مفقودة خَلقياً أو أنياب مطمورة داخل عظم الفك قبل وضع أي سلك تقويمي.
+            </div>
           </div>
           <span class="layer-tag">Computer Vision</span>
         </div>
@@ -871,17 +1031,21 @@
         <div class="layer-row">
           <div class="layer-num">3</div>
           <div class="layer-info">
-            <div class="layer-title">التصريح الطبي للتقويم (Pre-Ortho Clearance)</div>
-            <div class="layer-desc">يفحص مستوى تآكل العظم وصحة اللثة والتسوس النشط؛ إذا كان هناك التهاب حاد يصدر النظام تحذيراً برمجياً بمنع تحريك الأسنان حتى علاج اللثة لتفادي سقوط الأسنان.</div>
+            <div class="layer-title">الطبقة الثالثة: التصريح الطبي للتقويم (Pre-Ortho Clearance)</div>
+            <div class="layer-desc">
+              فحص مستوى تآكل العظم والتهابات اللثة النشطة؛ إذا كان المريض يعاني من صديد أو تآكل عظمي، يصدر النظام تحذيراً برمجياً فورياً بوقف التقويم حتى علاج اللثة لمنع سقوط الأسنان.
+            </div>
           </div>
-          <span class="layer-tag">Safety Validator</span>
+          <span class="layer-tag">Safety Gatekeeper</span>
         </div>
 
         <div class="layer-row">
           <div class="layer-num">4</div>
           <div class="layer-info">
-            <div class="layer-title">تحليل بولتون وميزانية الفراغ (Bolton & Space Analysis)</div>
-            <div class="layer-desc">معادلة تطرح عرض الأسنان من محيط الفك. إذا كان العجز سالباً بأكثر من -7 مم، تفرض الخوارزمية قرار خلع 4 ضواحك لتوفير مساحة.</div>
+            <div class="layer-title">الطبقة الرابعة: ميزانية الفراغ وتحليل بولتون (Bolton & Space Analysis)</div>
+            <div class="layer-desc">
+              خوارزمية تطرح حجم الأسنان الإجمالي من محيط عظم الفك المتاح. إذا تجاوز العجز -7 مم، تفرض الخوارزمية خيار خلع 4 ضواحك لتوفير مساحة وتمنع التوسيع العشوائي.
+            </div>
           </div>
           <span class="layer-tag">Deterministic Math</span>
         </div>
@@ -889,158 +1053,164 @@
         <div class="layer-row">
           <div class="layer-num">5</div>
           <div class="layer-info">
-            <div class="layer-title">حدود العظم القشري (Cortical Bone Boundary Verification)</div>
-            <div class="layer-desc">يتحقق من أن حركة القواطع للأمام لن تدفع جذور الأسنان لخارج القشرة العظمية للفك (IMPA ≤ 95°).</div>
+            <div class="layer-title">الطبقة الخامسة: حدود العظم القشري (Cortical Bone Boundary Limits)</div>
+            <div class="layer-desc">
+              وضع سقف أمان حتمي لزاوية ميلان القواطع السفلية (IMPA ≤ 95°) لضمان عدم خروج جذور الأسنان خارج القشرة العظمية للفك وتجنب تراجع اللثة الصدمي.
+            </div>
           </div>
-          <span class="layer-tag">Physical Boundary</span>
+          <span class="layer-tag">Hard Physiological Limit</span>
         </div>
 
         <div class="layer-row">
           <div class="layer-num">6</div>
           <div class="layer-info">
-            <div class="layer-title">التفكير السريري التوجيهي (Clinical AI Reasoning - GPT-4o)</div>
-            <div class="layer-desc">يأخذ القياسات الرياضية المحسوبة مسبقاً من الطبقات 1-5، ويصيغ المبررات العلاجية والبدائل التجميلية مع الالتزام بالقيود البيوميكانيكية الصارمة.</div>
+            <div class="layer-title">الطبقة السادسة: التفكير السريري الموجه (Clinical AI Reasoning - GPT-4o)</div>
+            <div class="layer-desc">
+              يستقبل الذكاء الاصطناعي الأرقام والقيود المحسوبة مسبقاً، ويصيغ البدائل العلاجية والميكانيكا بدقة دون أن يملك حرية اختراع أرقام من عنده.
+            </div>
           </div>
-          <span class="layer-tag">LLM Orchestration</span>
+          <span class="layer-tag">Guided LLM Layer</span>
         </div>
 
         <div class="layer-row">
           <div class="layer-num">7</div>
           <div class="layer-info">
-            <div class="layer-title">التخليق النهائي وتوثيق PubMed (Plan Synthesis & Live Literature RAG)</div>
-            <div class="layer-desc">توليد جدول تدرج الأسلاك وقوى المطاط وخطة التثبيت، مع استدعاء أبحاث محكمة مباشرة من National Library of Medicine لدعم كل قرار.</div>
+            <div class="layer-title">الطبقة السابعة: التخليق السريري والاسترجاع الحي من PubMed (Plan Synthesis & Live RAG)</div>
+            <div class="layer-desc">
+              إخراج خطة العلاج التنفيذية وربط كل خطوة ببحث علمي حي من كبرى الدوريات المحكمة عبر الاتصال الفوري بمكتبة NCBI الوطنية للطب.
+            </div>
           </div>
-          <span class="layer-tag">NCBI RAG</span>
+          <span class="layer-tag">PubMed E-Utilities</span>
         </div>
       </div>
-    </section>
 
-    <!-- SECTION 4: Features & Tools Walkthrough -->
-    <section id="features-walkthrough" class="card">
-      <div class="section-title">
-        <span class="number-badge">4</span>
-        <h2>جولة في كافة أدوات وشاشات المنظومة (Feature by Feature)</h2>
-      </div>
-
-      <div class="table-container">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>الصفحة والأداة</th>
-              <th>المسار (Route)</th>
-              <th>الوظيفة للمطور (Developer Functionality)</th>
-              <th>المدخلات والمخرجات (Inputs / Outputs)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>لوحة التحكم (Dashboard)</strong></td>
-              <td><code>/dashboard</code></td>
-              <td>عرض الإحصائيات الشاملة، متابعة الحالات النشطة، وأزرار الاختصار السريعة.</td>
-              <td>Input: Database Records<br>Output: Stats Cards & Recent Table</td>
-            </tr>
-            <tr>
-              <td><strong>الفحص ومخطط الأسنان</strong></td>
-              <td><code>/patients/new</code></td>
-              <td>مخطط تفاعلي لـ 32 سناً لتحديد التسوس والخلع، ونموذج إدخال قياسات البروز والعضات.</td>
-              <td>Input: Click events & mm inputs<br>Output: Clinical Record Object</td>
-            </tr>
-            <tr>
-              <td><strong>استوديو خطط التقويم</strong></td>
-              <td><code>/plans/generate</code></td>
-              <td>المحرك الرئيسي لتوليد الخطة العلاجية والأسلاك والمطاط والمثبتات مع تصدير PDF.</td>
-              <td>Input: Patient findings<br>Output: Multi-Phase Treatment Plan JSON</td>
-            </tr>
-            <tr>
-              <td><strong>استوديو زراعة الأسنان</strong></td>
-              <td><code>/implants</code></td>
-              <td>حساب مقاسات مسامير الزراعة من 14 شركة، فحص كثافة العظم، وحاسبة رفع الجيب الأنفي.</td>
-              <td>Input: Bone HU & Missing Tooth<br>Output: Fixture Spec & Surgical Sequence</td>
-            </tr>
-            <tr>
-              <td><strong>مكتبة البروتوكولات</strong></td>
-              <td><code>/knowledge</code></td>
-              <td>قاعدة معرفة تضم 44 بروتوكولاً سريرياً معربة للمبتدئين ومكتوبة بمصطلحات دقيقة.</td>
-              <td>Search & Filter dictionary<br>Output: Protocol Specs & Durations</td>
-            </tr>
-            <tr>
-              <td><strong>مستكشف PubMed الحي</strong></td>
-              <td><code>/knowledge (tab)</code></td>
-              <td>بحث فوري في 36 مليون دراسة طبية في NCBI E-Utilities API واستخراج التوثيق العلمي.</td>
-              <td>Input: Keyword Query<br>Output: Live Papers Array + PMID + Citation</td>
-            </tr>
-            <tr>
-              <td><strong>مقارنة الخطط العلاجية</strong></td>
-              <td><code>/compare</code></td>
-              <td>مقارنة خيارات علاج مختلفة لنفس الحالة (Diff Engine) مثل الخلع مقابل عدم الخلع.</td>
-              <td>Input: Multiple Plan IDs<br>Output: Side-by-side Matrix</td>
-            </tr>
-          </tbody>
-        </table>
+      <!-- Screenshot Showcase: Generated Plan Output -->
+      <div class="screenshot-card" style="margin-top: 26px;">
+        <div class="screenshot-top-bar">
+          <div class="browser-dots">
+            <span class="browser-dot dot-red"></span>
+            <span class="browser-dot dot-yellow"></span>
+            <span class="browser-dot dot-green"></span>
+          </div>
+          <span>Odonto AI Treatment Plan — ناتج تخليق الخطة السريرية وتدرج الأسلاك والميكانيكا</span>
+        </div>
+        <div class="screenshot-img-wrap">
+          <img src="/screenshots/plan_generation_preview.png" alt="Generated Treatment Plan Output">
+        </div>
+        <div class="screenshot-bottom-info">
+          <strong>مخرجات الخطة السريرية المولدة بواسطة خط الأنابيب السباعي:</strong>
+          <div class="callout-list">
+            <div class="callout-item">
+              <div class="callout-marker">1</div>
+              <span><strong>أهداف العلاج المرحلية (Staged Objectives):</strong> خطوات بيولوجية مقسمة على مراحل متدرجة لتقليل الإجهاد على الأنسجة المحيطة بالسن.</span>
+            </div>
+            <div class="callout-item">
+              <div class="callout-marker">2</div>
+              <span><strong>تدرج الأسلاك الحسابي (Wire Progression):</strong> تسلسل المقاسات والسبائك (CuNiTi ثم SS ثم TMA) حسب حالة الحالة.</span>
+            </div>
+            <div class="callout-item">
+              <div class="callout-marker">3</div>
+              <span><strong>بروتوكول المطاطات وقوة الشد (Elastics & Vector):</strong> تحديد عيار القوة بالأونصة، ساعات الارتداء، واتجاه الشد لتصحيح العضة.</span>
+            </div>
+            <div class="callout-item">
+              <div class="callout-marker">4</div>
+              <span><strong>التثبيت والوقاية من الارتداد (Retention Protocol):</strong> اختيار مثبت سلكي دائم أو شفاف لمنع نكس الحالة مع جدول المتابعة.</span>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
     <!-- SECTION 5: Implants Studio -->
-    <section id="implants-studio" class="card">
+    <section id="implant-studio" class="card">
       <div class="section-title">
         <span class="number-badge">5</span>
         <h2>استوديو زراعة الأسنان (Dental Implant Studio)</h2>
       </div>
-
-      <p style="color: #94a3b8; margin-bottom: 20px;">
-        زراعة الأسنان هي هندسة ميكانيكية بحتة: تثبيت مسمار برغي (Screw) في عظم المريض. إليك كيف يعمل الاستوديو:
-      </p>
+      <div class="section-subtitle">
+        كيف يخطط الجراح لزرع برغي تيتانيوم بدقة الميكرون دون لمس العصب أو اختراق الجيب الأنفي؟
+      </div>
 
       <div class="grid-3">
-        <div class="translator-card">
-          <div class="jargon-header">
-            <span class="jargon-medical">كثافة العظم (Misch D1-D4)</span>
-            <span class="jargon-cs">Substrate Density (HU)</span>
+        <div class="concept-box">
+          <div class="concept-header">
+            <span class="concept-title">كثافة العظم (Misch D1-D4)</span>
+            <span class="concept-en">Bone Density Engine</span>
           </div>
-          <div class="jargon-desc">
-            تحدد صلابة العظم بناءً على وحدات هاونسفيلد:
-            <br>• <strong>D1 (>1250 HU):</strong> عظم كالصخر الصلب (حفر بطيء مع تسنين يدوي).
-            <br>• <strong>D2 & D3 (350-1250 HU):</strong> عظم طبيعي مسامي (مثالي للزراعة).
-            <br>• <strong>D4 (&lt;350 HU):</strong> عظم كالفلين الرخو (يحتاج تكثيف عظمي).
+          <div class="concept-body">
+            يحدد صلابة العظم بناءً على وحدات هاونسفيلد من الأشعة المقطعية:
+            <br>• <strong>D1 (>1250 HU):</strong> عظم كالصخر الصلب؛ حفر بطيء مع تبريد غزير وتسنين يدوي مسبق لمنع موت خلايا العظم بالحرارة.
+            <br>• <strong>D2 & D3 (350-1250 HU):</strong> عظم مسامي مثالي للزراعة.
+            <br>• <strong>D4 (&lt;350 HU):</strong> عظم رخو كالفلين؛ حفر خفيف مع تكثيف العظم يدوياً بالأوستيوتوم.
           </div>
-        </div>
-
-        <div class="translator-card teal">
-          <div class="jargon-header">
-            <span class="jargon-medical">كتالوج الـ 14 شركة</span>
-            <span class="jargon-cs">Hardware Spec Database</span>
-          </div>
-          <div class="jargon-desc">
-            يحتوي النظام على مواصفات مسامير الزراعة لأشهر الشركات العالمية (Straumann, Nobel, Zimmer, Dentsply, MegaGen). يحسب القطر والطول تلقائياً ليناسب حجم العظم المتاح.
+          <div class="concept-benefit">
+            💡 <strong>الفائدة:</strong> يمنع فشل الزرعة الناتج عن ارتفاع حرارة العظم أو رخاوته.
           </div>
         </div>
 
-        <div class="translator-card amber">
-          <div class="jargon-header">
-            <span class="jargon-medical">رفع الجيب الأنفي (Sinus Lift)</span>
-            <span class="jargon-cs">Vertical Clearance Logic</span>
+        <div class="concept-box teal">
+          <div class="concept-header">
+            <span class="concept-title">كتالوج الـ 14 شركة عالمية</span>
+            <span class="concept-en">Manufacturer Catalogs</span>
           </div>
-          <div class="jargon-desc">
-            في الفك العلوي يوجد تجويف هوائي (الجيب الأنفي).
-            <br>• إذا كان العظم المتبقي <strong>&lt; 5 مم:</strong> يقرر النظام جراحة رفع الجيب الجانبي (Lateral Window).
-            <br>• إذا كان <strong>&gt; 5 مم:</strong> يقرر الرفع البسيط بالدريل (Crestal OSFE).
+          <div class="concept-body">
+            يحتوي النظام على مواصفات مسامير الزراعة المعتمدة لكبرى الشركات: Straumann, Nobel Biocare, Zimmer, Dentsply Astra, MegaGen, Osstem.
+            <br>يحدد النظام القطر المناسب (مثلاً 3.5 أو 4.1 مم) والطول المناسب (8 أو 10 أو 12 مم) مع احترام <strong>هامش أمان 2 مم</strong> بعيداً عن العصب الفكي السفلي (IAN).
+          </div>
+          <div class="concept-benefit">
+            💡 <strong>الفائدة:</strong> يمنع أي إصابة للعصب قد تسبب تنميلاً أو شللاً دائماً للشفة.
+          </div>
+        </div>
+
+        <div class="concept-box amber">
+          <div class="concept-header">
+            <span class="concept-title">حاسبة رفع الجيب الأنفي</span>
+            <span class="concept-en">Sinus Lift Decision</span>
+          </div>
+          <div class="concept-body">
+            في الفك العلوي الخلفي، يوجد تجويف الجيب الأنفي الهوائي (Maxillary Sinus):
+            <br>• إذا كان العظم المتبقي <strong>أقل من 5 مم:</strong> يفرض النظام إجراء **رفع الجيب الجانبي (Lateral Window)** مع طعم عظمي صناعي.
+            <br>• إذا كان العظم المتبقي <strong>أكثر من 5 مم:</strong> يوصي النظام بالرفع القمي البسيط بالدريل فقط (Crestal OSFE).
+          </div>
+          <div class="concept-benefit">
+            💡 <strong>الفائدة:</strong> يمنع اختراق المسمار للجيب الأنفي وحدوث صديد أو التهاب مزمن.
           </div>
         </div>
       </div>
 
-      <!-- Screenshot Preview of Implants Studio -->
-      <div class="screenshot-box">
-        <div class="screenshot-header">
-          <div class="screenshot-dots">
-            <span class="screenshot-dot dot-red"></span>
-            <span class="screenshot-dot dot-yellow"></span>
-            <span class="screenshot-dot dot-green"></span>
+      <!-- Screenshot Showcase: Implants Studio -->
+      <div class="screenshot-card">
+        <div class="screenshot-top-bar">
+          <div class="browser-dots">
+            <span class="browser-dot dot-red"></span>
+            <span class="browser-dot dot-yellow"></span>
+            <span class="browser-dot dot-green"></span>
           </div>
-          <span>Implant Studio — واجهة استوديو زراعة الأسنان</span>
+          <span>Odonto AI Implant Studio — استوديو زراعة الأسنان الرقمي</span>
         </div>
-        <img src="/screenshots/implants_studio_preview.png" alt="Implant Studio Preview">
-        <div class="screenshot-caption">
-          <span>📷 واجهة استوديو الزراعة: توضح اختيار السن المفقود، تحديد كثافة العظم Misch D1-D4، واختيار المقاس من كتالوج الشركات.</span>
+        <div class="screenshot-img-wrap">
+          <img src="/screenshots/implants_studio_preview.png" alt="Implants Studio Interface">
+        </div>
+        <div class="screenshot-bottom-info">
+          <strong>عناصر استوديو الزراعة الموضحة أعلاه:</strong>
+          <div class="callout-list">
+            <div class="callout-item">
+              <div class="callout-marker">1</div>
+              <span><strong>محدد السن المفقود:</strong> اختيار موقع الزراعة حسب نظام FDI.</span>
+            </div>
+            <div class="callout-item">
+              <div class="callout-marker">2</div>
+              <span><strong>محدد كثافة العظم Misch D1-D4:</strong> تقييم صلابة العظم وبروتوكول الحفر والتبريد.</span>
+            </div>
+            <div class="callout-item">
+              <div class="callout-marker">3</div>
+              <span><strong>كتالوج الشركات:</strong> اختيار الزرعة المناسبة من بين 14 ماركة عالمية.</span>
+            </div>
+            <div class="callout-item">
+              <div class="callout-marker">4</div>
+              <span><strong>عزم التربيط (Torque Ncm):</strong> القوة الدقيقة لربط المسمار لمنع كسره أو فكه لاحقاً.</span>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -1049,78 +1219,160 @@
     <section id="knowledge-base" class="card">
       <div class="section-title">
         <span class="number-badge">6</span>
-        <h2>قاعدة المعرفة والحاسبات التفاعلية الأربع (Calculators)</h2>
+        <h2>قاعدة المعرفة السريرية والحاسبات التفاعلية الأربع (`/knowledge`)</h2>
       </div>
-
-      <p style="color: #94a3b8; margin-bottom: 20px;">
-        تحتوي صفحة <code>/knowledge</code> على 4 حاسبات تفاعلية تترجم المفاهيم الطبية إلى دوال رياضية نقية (Pure Functions):
-      </p>
+      <div class="section-subtitle">
+        موسوعة شاملة تضم 44 بروتوكولاً سريرياً معرباً، مع 4 حاسبات رياضية تفاعلية ومستكشف أبحاث PubMed لحظي.
+      </div>
 
       <div class="grid-2">
-        <div class="translator-card purple">
-          <div class="jargon-header">
-            <span class="jargon-medical">1. حاسبة نمو الفقرات (CVM Stager)</span>
-            <span class="jargon-cs">Growth Spurt Window</span>
+        <div class="concept-box purple">
+          <div class="concept-header">
+            <span class="concept-title">1. حاسبة مرحلة نمو الفقرات العنقية</span>
+            <span class="concept-en">CVM Growth Stager</span>
           </div>
-          <div class="jargon-desc">
-            بدلاً من تصوير يد الطفل بالأشعة، يفحص النظام شكل الفقرات العنقية في الرقبة (C2, C3, C4) في أشعة الرأس الجانبية. يحدد هل الطفل في قمة طفرة نموه، وبالتالي هل سينجح معه جهاز تقديم الفك الوظيفي (Twin Block) أم انتهى نموه ويحتاج جراحة فكين؟
+          <div class="concept-body">
+            بدلاً من تصوير يد الطفل بالأشعة لمعرفة هل سينمو فكه أم لا، يحلل النظام شكل الفقرات العنقية في الرقبة (C2, C3, C4) في أشعة الرأس:
+            <br>• يحدد هل الطفل في قمة طفرة النمو (Peak Spurt) فينجح معه جهاز تقديم الفك الوظيفي (Twin Block)؟
+            <br>• أم انتهى نموه العظمي تماماً، وأي محاولة لتعديل الفك بالأجهزة ستفشل ويحتاج جراحة فكين؟
           </div>
-        </div>
-
-        <div class="translator-card teal">
-          <div class="jargon-header">
-            <span class="jargon-medical">2. حاسبة تاناكا جونستون (Tanaka-Johnston)</span>
-            <span class="jargon-cs">Predictive Space Equation</span>
-          </div>
-          <div class="jargon-desc">
-            للأطفال في مرحلة التبديل: تدخل قياس القواطع السفلية الأربعة فقط، فتحسب المعادلة:
-            <code>المسافة = (مجموع القواطع / 2) + 10.5 مم</code>
-            فتتنبأ بحجم الأنياب والضواحك المدفونة في العظم بدون تعريض الطفل لأي إشعاع!
+          <div class="concept-benefit">
+            💡 <strong>الفائدة:</strong> تجنيب المريض مصاريف أجهزة تقويم وظيفية فاشلة بعد فوات أوان طفرة النمو.
           </div>
         </div>
 
-        <div class="translator-card emerald">
-          <div class="jargon-header">
-            <span class="jargon-medical">3. مناطق أمان زرعات التثبيت (TAD Matrix)</span>
-            <span class="jargon-cs">3D Spatial Safety Coordinates</span>
+        <div class="concept-box teal">
+          <div class="concept-header">
+            <span class="concept-title">2. حاسبة تاناكا-جونستون للتسنين المختلط</span>
+            <span class="concept-en">Tanaka-Johnston Space Analysis</span>
           </div>
-          <div class="jargon-desc">
-            تعرض زاوية الغرس الدقيقة وعزم الدوران وسماكة العظم القشري لمسامير التثبيت الهيكلية المؤقتة في مواقع مثل (IZC و Buccal Shelf) لمنع الاصطدام بجذور الأسنان.
+          <div class="concept-body">
+            للأطفال في سن 7 إلى 10 سنوات: تدخل قياس القواطع السفلية الأربعة فقط، فتحسب المعادلة:
+            <br><code>المسافة المتوقعة = (مجموع القواطع / 2) + 10.5 مم</code>
+            <br>تتنبأ المعادلة بحجم الأنياب والضواحك المدفونة في العظم بدقة وبدون تعريض الطفل لأي إشعاع إضافي، وتخبرك هل سيكفي الفك للأسنان أم سيحدث تزاحم حرج؟
+          </div>
+          <div class="concept-benefit">
+            💡 <strong>الفائدة:</strong> التخطيط للتقويم الوقائي المبكر وتفادي انطمار الأنياب في العظم.
           </div>
         </div>
 
-        <div class="translator-card rose">
-          <div class="jargon-header">
-            <span class="jargon-medical">4. سرعات الألاينرز (Aligner Velocity Limits)</span>
-            <span class="jargon-cs">Micro-Movement Limits</span>
+        <div class="concept-box emerald">
+          <div class="concept-header">
+            <span class="concept-title">3. مصفوفة أمان زرعات التثبيت العظمي</span>
+            <span class="concept-en">TAD Safe-Zone Matrix</span>
           </div>
-          <div class="jargon-desc">
-            جدول استرشادي يحدد أقصى مسافة مسموح بها لكل قالب بلاستيكي حسب نوع الحركة (إمالة 0.25 مم، تدوير 2.0°، بثق 0.15 مم) لضمان دقة تحريك الأسنان وعدم انزلاق البلاستيك.
+          <div class="concept-body">
+            تحدد مناطق الأمان ثلاثية الأبعاد لغرس مسامير التثبيت التقويمية المؤقتة (TADs) في عظم الفك (مثل IZC و Buccal Shelf):
+            <br>تعرض الزاوية الدقيقة للغرس، عزم الربط، وسماكة العظم القشري لتفادي الاصطدام بجذور الأسنان المجاورة.
+          </div>
+          <div class="concept-benefit">
+            💡 <strong>الفائدة:</strong> منع جرح جذور الأسنان أو فقدان ثبات مسمار التثبيت.
+          </div>
+        </div>
+
+        <div class="concept-box rose">
+          <div class="concept-header">
+            <span class="concept-title">4. السرعات والحدود البيولوجية للألاينرز</span>
+            <span class="concept-en">Aligner Velocity Limits</span>
+          </div>
+          <div class="concept-body">
+            جدول استرشادي يحدد أقصى مسافة مسموح بها لكل قالب بلاستيكي شفاف:
+            <br>• إمالة السن: أقصاها <strong>0.25 مم</strong> لكل قالب.
+            <br>• تدوير السن: أقصاه <strong>2.0 درجة</strong> لكل قالب.
+            <br>• بثق السن (Extrusion): أقصاه <strong>0.15 مم</strong> (أصعب حركة في التقويم الشفاف).
+          </div>
+          <div class="concept-benefit">
+            💡 <strong>الفائدة:</strong> منع انزلاق قوالب التقويم الشفاف (Tracking Loss) وفشل العلاج.
           </div>
         </div>
       </div>
 
-      <!-- Screenshot Preview of Knowledge Base -->
-      <div class="screenshot-box">
-        <div class="screenshot-header">
-          <div class="screenshot-dots">
-            <span class="screenshot-dot dot-red"></span>
-            <span class="screenshot-dot dot-yellow"></span>
-            <span class="screenshot-dot dot-green"></span>
+      <!-- Screenshot Showcase: Knowledge Base -->
+      <div class="screenshot-card">
+        <div class="screenshot-top-bar">
+          <div class="browser-dots">
+            <span class="browser-dot dot-red"></span>
+            <span class="browser-dot dot-yellow"></span>
+            <span class="browser-dot dot-green"></span>
           </div>
-          <span>Knowledge Base — مكتبة البروتوكولات السريرية المعربة</span>
+          <span>Odonto AI Knowledge Base & PubMed Live RAG — مكتبة المعرفة ومستكشف الأبحاث الحي</span>
         </div>
-        <img src="/screenshots/knowledge_base_preview.png" alt="Knowledge Base Preview">
-        <div class="screenshot-caption">
-          <span>📷 مكتبة البروتوكولات السريرية: تشمل 44 بروتوكولاً معرباً للمبتدئين مع وضع المصطلح الإنجليزي بين قوسين، والربط الحي مع مستكشف أبحاث PubMed.</span>
+        <div class="screenshot-img-wrap">
+          <img src="/screenshots/knowledge_base_preview.png" alt="Knowledge Base Interface">
+        </div>
+        <div class="screenshot-bottom-info">
+          <strong>عناصر مكتبة المعرفة الموضحة أعلاه:</strong>
+          <div class="callout-list">
+            <div class="callout-item">
+              <div class="callout-marker">1</div>
+              <span><strong>44 بروتوكولاً سريرياً:</strong> مصنفة في 10 أقسام معربة للمبتدئين والمحترفين.</span>
+            </div>
+            <div class="callout-item">
+              <div class="callout-marker">2</div>
+              <span><strong>مستكشف PubMed الحي:</strong> يبحث لحظياً في 36 مليون دراسة طبية في المكتبة الوطنية الأمريكية للطب.</span>
+            </div>
+            <div class="callout-item">
+              <div class="callout-marker">3</div>
+              <span><strong>الحاسبات التفاعلية الأربع:</strong> معادلات رياضية نقية لنمو العظم ومسافات الأسنان.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 7: Practical Training Scenarios -->
+    <section id="scenarios" class="card">
+      <div class="section-title">
+        <span class="number-badge">7</span>
+        <h2>سيناريوهات تدريبية عملية خطوة بخطوة (Hands-On Training Scenarios)</h2>
+      </div>
+      <div class="section-subtitle">
+        أمثلة واقعية يمكنك استخدامها أثناء تدريب الأطباء أو تقديم العروض التوضيحية لمديري المنتجات.
+      </div>
+
+      <div class="step-list">
+        <div class="step-item">
+          <div class="step-badge">A</div>
+          <div class="step-content">
+            <h3>السيناريو الأول: مراهق لديه بروز شديد في الفك العلوي (Class II Div 1 - Overjet 8mm)</h3>
+            <p>
+              • <strong>التشخيص:</strong> الفك السفلي متراجع ومحبوس خلف القواطع العلوية، والبروز 8 مم، مع عضة عميقة 4 مم.
+              <br>• <strong>كيف تنفذها في البرنامج؟</strong> افتح <code>/plans/generate</code> واضغط على زر <code>Class II Div 1 Sample Case</code> ثم اضغط <code>Generate Plan</code>.
+              <br>• <strong>ماذا ستشاهد في النتيجة؟</strong> سيوصي النظام بجهاز تقديم الفك الوظيفي (Twin Block) إذا كان المريض ينمو، أو خلع الضواحك العلوية (14 و 24) مع تسلسل أسلاك NiTi ثم Stainless Steel ومطاط الصنف الثاني (Class II Elastics).
+            </p>
+          </div>
+        </div>
+
+        <div class="step-item">
+          <div class="step-badge">B</div>
+          <div class="step-content">
+            <h3>السيناريو الثاني: شاب بالغ يعاني من تزاحم أسنان خانق (Severe Crowding 9mm)</h3>
+            <p>
+              • <strong>التشخيص:</strong> الفك ضيق والأسنان متراكبة فوق بعضها، وزاوية القواطع السفلية IMPA بلغت 94 درجة ولا تحتمل أي توسيع إضافي.
+              <br>• <strong>كيف تنفذها في البرنامج؟</strong> اختر عينة <code>Severe Crowding</code> واضغط <code>Generate Plan</code>.
+              <br>• <strong>ماذا ستشاهد في النتيجة؟</strong> سيقرر النظام تلقائياً خلع 4 ضواحك (14, 24, 34, 44) لتوفير مساحة لصف الأسنان، مع استخدام زرعات مؤقتة (TADs) لتثبيت الأضراس الخلفية ومنع تحركها للأمام أثناء سحب الأسنان الأمامية.
+            </p>
+          </div>
+        </div>
+
+        <div class="step-item">
+          <div class="step-badge">C</div>
+          <div class="step-content">
+            <h3>السيناريو الثالث: مريض يحتاج زراعة ضرس سفلي مفقود (Missing Lower Molar 36)</h3>
+            <p>
+              • <strong>التشخيص:</strong> الضرس 36 مفقود، وعظم الفك من النوع D2، والمسافة المتبقية فوق العصب الفكي السفلي هي 12 مم.
+              <br>• <strong>كيف تنفذها في البرنامج؟</strong> افتح <code>/implants</code>، اختر السن <code>36</code>، واختر كثافة العظم <code>D2</code> وماركة <code>Straumann</code>.
+              <br>• <strong>ماذا ستشاهد في النتيجة؟</strong> سيختار النظام مسماراً بطول 10 مم وقطر 4.1 مم (ليترك هامش أمان 2 مم فوق العصب)، وسيعطيك سرعة الدريل 800 RPM وعزم ربط المسمار الدقيق 35 Ncm.
+            </p>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- Footer Summary -->
-    <div style="text-align: center; margin-top: 48px; padding-top: 32px; border-top: 1px solid #1e293b; color: #64748b; font-size: 13px;">
+    <div style="text-align: center; margin-top: 56px; padding-top: 36px; border-top: 1px solid #1e293b; color: #64748b; font-size: 13.5px;">
       <p>منظومة <strong>Odonto AI</strong> — نظام التشغيل السريري لتقويم وزراعة الأسنان.</p>
-      <p style="margin-top: 4px;">كُتب هذا الدليل في سبتمبر 2026 لمساعدة مهندسي البرمجيات وفرق التطوير على فهم المنظومة وتشغيلها بأعلى كفاءة.</p>
+      <p style="margin-top: 6px;">كُتب هذا الدليل كمرجع قياسي للمدربين، مهندسي البرمجيات، مديري المنتجات، وأطباء الأسنان، لضمان تشغيل المنظومة بأعلى درجات الكفاءة والأمان السريري.</p>
     </div>
 
   </div>
