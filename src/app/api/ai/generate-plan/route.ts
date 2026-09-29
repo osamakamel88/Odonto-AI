@@ -6,7 +6,8 @@ import {
   assessCanineImpaction, 
   assessMarpeProtocol, 
   calculateProtractionProtocol, 
-  calculateOpenBiteProtocol 
+  calculateOpenBiteProtocol,
+  REPUTABLE_CLINICAL_AUTHORITIES
 } from '@/lib/orthodontics';
 
 export async function POST(request: Request) {
@@ -141,7 +142,15 @@ export async function POST(request: Request) {
           isOpenBite,
           isImpacted,
           isCrowding
-        })
+        }),
+        authoritativeGuidelines: REPUTABLE_CLINICAL_AUTHORITIES.map(auth => ({
+          id: auth.id,
+          authorityName: auth.authorityName,
+          specialty: auth.specialty,
+          citation: auth.citation,
+          year: auth.year,
+          corePrinciples: auth.corePrinciples
+        }))
       }
     });
 

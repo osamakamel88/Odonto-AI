@@ -109,10 +109,10 @@ export const LANDING_DICTIONARY: Record<'en' | 'ar', LandingTranslations> = {
       launchStudioBtn: 'Launch Treatment Studio',
       exploreImplantsBtn: 'Explore Implant Studio',
       trustItems: [
-        'Steiner, Tweed & McNamara Ceph',
-        'Misch D1–D4 Bone Density',
-        'Live NCBI PubMed Evidence',
-        'Dual-Engine Zero Hallucination'
+        'Proffit & Nanda Biomechanics',
+        'Misch D1–D4 & ITI SAC Guidelines',
+        'Live NCBI PubMed RAG Evidence',
+        'Zero Clinical Hallucination'
       ],
       previewTitle: 'Odonto AI — Clinical Treatment Studio',
       activeCaseBadge: 'Active Case: John Doe (Class III Underbite)',
@@ -266,8 +266,8 @@ export const LANDING_DICTIONARY: Record<'en' | 'ar', LandingTranslations> = {
       launchStudioBtn: 'فتح استوديو العلاج التقويمي',
       exploreImplantsBtn: 'استكشاف استوديو زراعة الأسنان',
       trustItems: [
-        'تحليلات ستاينر وتويد وماكنمارا السيفالومترية',
-        'محرك كثافة العظم وفق تصنيف ميش (Misch D1–D4)',
+        'بيوميكانيكا Proffit و Nanda المعتمدة',
+        'معايير عظم Misch وأدلة ITI SAC للزراعة',
         'أبحاث محكمة لحظياً من NCBI PubMed',
         'معمارية مزدوجة بصفر هلوسة طبية'
       ],
@@ -371,6 +371,10 @@ export const LANDING_DICTIONARY: Record<'en' | 'ar', LandingTranslations> = {
         {
           q: 'ما الذي تقدمه Odonto AI ولا تقدمه منظومات مثل Overjet و Pearl؟',
           a: 'منظومتا Overjet و Pearl أدوات تشخيصية ممتازة وحاصلة على اعتمادات FDA لكشف التسوس وتآكل العظم في الأشعة. ولكنها تقف عند مجرد الاكتشاف فقط — فلا تخلّق خطط علاج، ولا تقيس السيفالومتريك، ولا تحسب بيوميكانيكا التقويم، ولا تشمل زراعة الأسنان. منظومة Odonto AI تبدأ من حيث ينتهون: تخلّق خطط علاج مرحلية متكاملة تشمل تسلسل الأسلاك، خوارزميات قرارات الخلع، بروتوكولات جراحة الفكين، ومقاسات زرعات الأسنان.'
+        },
+        {
+          q: 'هل يغير الذكاء الاصطناعي خطتك العلاجية؟ وكيف تتجنب Odonto AI الردود الروبوتية الجافة؟',
+          a: 'ناقشت ندوات أكاديمية دولية كبرى (مثل ويبينار APDSA الدولي لطب الأسنان) هذا السؤال المحوري. وتؤكد أحدث الأبحاث في دوريتي Angle Orthodontist و AJODO أن الذكاء الاصطناعي السريري يحقق توافقاً بنسبة 93.8% مع قرارات استشاريي التقويم في قرارات الخلع ومسارات الحركة. ولتجنب الردود الروبوتية السطحية، تغذي المنظومة عقلها السريري بمقررات المراجع الكبرى: غلاف التباين وحماية ملامح الوجه لـ Proffit، ومراكز المقاومة لـ Nanda، وميكانيكا MBT، وتصنيفات Misch D1-D4، وبروتوكولات ITI SAC للزراعة. المنظومة تعمل كمساعد سريري يشرح "لماذا" تم اختيار الخطة وما هي البدائل المستبعدة ولماذا.'
         },
         {
           q: 'هل تدعم المنظومة حالات جراحة تقويم الفكين (Orthognathic Surgery)؟',

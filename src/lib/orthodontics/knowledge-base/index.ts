@@ -8,3 +8,4 @@ export * from './surgical-protocols';
 export * from './retention-protocols';
 export * from './anchorage-devices';
 export * from './interceptive';
+export * from './reputable-evidence-base';
