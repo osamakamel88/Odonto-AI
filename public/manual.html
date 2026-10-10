@@ -622,6 +622,63 @@
       font-size: 16px;
     }
 
+    /* Table & Formula styles */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 18px 0;
+      font-size: 13.5px;
+      background: var(--bg-card);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .data-table th {
+      background: #1e293b;
+      color: #93c5fd;
+      padding: 12px 14px;
+      text-align: right;
+      font-weight: 800;
+      border-bottom: 1px solid var(--border);
+    }
+    .data-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+      color: #e2e8f0;
+      vertical-align: middle;
+    }
+    .data-table tr:last-child td {
+      border-bottom: none;
+    }
+    .data-table tr:hover td {
+      background: rgba(37, 99, 235, 0.05);
+    }
+    .formula-box {
+      background: #0f172a;
+      border: 1px solid #38bdf8;
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin: 14px 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: #38bdf8;
+      direction: ltr;
+      text-align: left;
+    }
+    .badge-soft {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 11.5px;
+      font-weight: 700;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .badge-soft.blue { background: rgba(37, 99, 235, 0.15); color: #93c5fd; border: 1px solid rgba(37, 99, 235, 0.3); }
+    .badge-soft.green { background: rgba(5, 150, 105, 0.15); color: #6ee7b7; border: 1px solid rgba(5, 150, 105, 0.3); }
+    .badge-soft.amber { background: rgba(217, 119, 6, 0.15); color: #fcd34d; border: 1px solid rgba(217, 119, 6, 0.3); }
+    .badge-soft.rose { background: rgba(225, 29, 72, 0.15); color: #fda4af; border: 1px solid rgba(225, 29, 72, 0.3); }
+
     /* Print styles */
     @media print {
       body {
@@ -682,11 +739,15 @@
       <div class="quick-nav">
         <a href="#vision">1. ما هي المنظومة ولماذا تم بناؤها؟ 🎯</a>
         <a href="#dental-basics">2. أساسيات طب الأسنان للجميع 🦷</a>
-        <a href="#step-by-step">3. كيف تولد خطة علاج بالصور؟ 📸</a>
-        <a href="#pipeline">4. ما وراء الكواليس (7 طبقات) ⚙️</a>
-        <a href="#implant-studio">5. استوديو زراعة الأسنان 🔩</a>
-        <a href="#knowledge-base">6. مكتبة المعرفة والحاسبات 🔬</a>
-        <a href="#scenarios">7. سيناريوهات تدريبية عملية 💡</a>
+        <a href="#xray-capabilities">3. ما يفعله أودونتو بصورة أشعة فقط ⚡</a>
+        <a href="#step-by-step">4. كيف تولد خطة علاج بالصور؟ 📸</a>
+        <a href="#pipeline">5. ما وراء الكواليس (7 طبقات) ⚙️</a>
+        <a href="#biomechanical-rules">6. القواعد الذهبية للقرارات والأسلاك 📐</a>
+        <a href="#implant-studio">7. استوديو وقواعد زراعة الأسنان 🔩</a>
+        <a href="#knowledge-base">8. مكتبة المعرفة والحاسبات 🔬</a>
+        <a href="#scenarios">9. سيناريوهات تدريبية عملية (4 حالات بالأرقام) 💡</a>
+        <a href="#pitch-playbook">10. دليل العرض السريع للعيادات (5 دقائق) 💼</a>
+        <a href="#egyptian-dental-glossary">11. قاموس مصطلحات العيادة المصرية 🇪🇬</a>
       </div>
     </section>
 
@@ -855,10 +916,108 @@
       </div>
     </section>
 
-    <!-- SECTION 3: Step-by-Step UI Manual with Screenshots -->
-    <section id="step-by-step" class="card">
+    <!-- SECTION 3: What Odonto Can Do With ONLY an X-Ray -->
+    <section id="xray-capabilities" class="card">
       <div class="section-title">
         <span class="number-badge">3</span>
+        <h2>ما الذي يستطيع أودونتو فعله بصورة أشعة فقط؟ (سيفالومتريك + بانوراما)</h2>
+      </div>
+      <div class="section-subtitle">
+        الإجابة السريرية الشاملة على السؤال المحوري لكل طبيب أسنان: <em>«أنا لو رفعت صورة أشعة السيفالو أو البانوراما بس من غير ما أكتب تقرير يدوي.. المنظومة هتعملي إيه بالضبط؟»</em>
+      </div>
+
+      <div class="grid-2">
+        <!-- Ceph Capabilities -->
+        <div class="concept-box teal">
+          <div class="concept-header">
+            <span class="concept-title">أشعة السيفالومتريك (Lateral Ceph)</span>
+            <span class="concept-en">5-Second Auto-Tracing</span>
+          </div>
+          <div class="concept-body">
+            بمجرد رفع صورة أشعة السيفالو الجانبية للجمجمة، يقوم الذكاء الاصطناعي في 5 ثوانٍ بـ:
+            <br>• <strong>تحديد 16 نقطة تشريحية عظمية وسنية تلقائياً:</strong> (Sella, Nasion, A-point, B-point, Pogonion, Gnathion, Menton, Gonion, Basion, Articulare, Orbitale, Porion, ANS, PNS, U1, L1).
+            <br>• <strong>حساب زوايا Steiner القياسية:</strong> زاوية SNA (82°)، SNB (80°)، وزاوية ANB (2°) لتحديد هل العضة صنف أول، صنف ثانٍ (تراجع فك سفلي)، أم صنف ثالث (بروز فك سفلي).
+            <br>• <strong>حساب قياس Wits Appraisal بالملليمتر:</strong> إسقاط النقطتين A و B عمودياً على مستوى الإطباق لإلغاء أي خطأ ناتج عن ميلان قاعدة الجمجمة.
+            <br>• <strong>حساب مثلث Tweed وزاوية أمان القواطع IMPA:</strong> قياس ميلان القواطع السفلية بالنسبة لعظم الفك (المعيار 90° ± 3°). إذا كانت الزاوية 98°، يمنع النظام دفعها للأمام ويفرض خلع الضواحك لحماية اللثة من الانحسار.
+            <br>• <strong>حساب نسبة جاراباك وتحديد اتجاه نمو الوجه (Jarabak Ratio):</strong>
+            <div class="formula-box">
+              Jarabak Ratio = (S-Go Posterior Height / N-Me Anterior Height) * 100
+            </div>
+            إذا كانت النسبة > 65% فالنمو أفقي قوي (Brachyfacial)، وإذا كانت < 59% فالنمو رأسي طويل (Dolichofacial) مع ميل لعضة مفتوحة.
+            <br>• <strong>تحليل الأنسجة الرخوة وملامح الوجه (Profile & E-Plane):</strong> زاوية الأنف والشفة ومستوى ريكتس الجمالي للتنبؤ بدقة بتأثير حركة الأسنان على بروز الشفاه ومظهر الوجه.
+          </div>
+          <div class="concept-benefit">
+            ⚡ <strong>عائد العيادة:</strong> يوفر 25 دقيقة من العمل اليدوي المرهق بالمسطرة والمنقلة وشيتات الرسم في كل مريض!
+          </div>
+        </div>
+
+        <!-- OPG Panoramic Capabilities -->
+        <div class="concept-box blue">
+          <div class="concept-header">
+            <span class="concept-title">أشعة البانوراما (Panoramic OPG)</span>
+            <span class="concept-en">Computer Vision FDI Engine</span>
+          </div>
+          <div class="concept-body">
+            بمجرد رفع صورة أشعة البانوراما، يقوم المحرك البصري بتحليل فم المريض بالكامل:
+            <br>• <strong>تجزئة وترقيم الـ 32 سناً بنظام FDI العالمي:</strong> التعرف على كل سن على حدة من #11 إلى #48.
+            <br>• <strong>رصد الأسنان المطمورة (Impaction Detection):</strong> كشف الأنياب المطمورة في سقف الحنك، وأضراس العقل المائلة، والأسنان المفقودة خلقياً (Agenesis) مثل القواطع الجانبية #12 و #22.
+            <br>• <strong>فحص توازي الجذور وارتشاف القمم (Root Health):</strong> فحص توازي الجذور، واكتشاف أي انحناء حاد في الجذور (Dilaceration) أو ارتشاف عظمي مسبق (Root Resorption) قبل تسليط أي قوة تقويمية.
+            <br>• <strong>فحص التصريح اللثوي السريري (Pre-Ortho Clearance AI):</strong> قياس مستوى العظم السنخي ومفترق الجذور (Furcation). إذا كان هناك تآكل عظمي نشط، يصدر النظام تحذيراً أحمر بضرورة علاج اللثة أولاً لمنع خلخلة الأسنان.
+            <br>• <strong>فحص لقمة الفك وتناظر المفصل الصدغي (TMJ Condyle Symmetry):</strong> فحص التناسق بين لقمتي الفك الأيمن والأيسر لاستبعاد الانحراف الهيكلي الوجهي (Hemimandibular Hyperplasia).
+          </div>
+          <div class="concept-benefit">
+            🛡️ <strong>عائد العيادة:</strong> فحص شامل للسلامة البيولوجية يحميك تماماً من أي مساءلة قانونية عن تلف الجذور أو سقوط الأسنان.
+          </div>
+        </div>
+      </div>
+
+      <!-- Radiographic Plan Synthesis Output Table -->
+      <div style="margin-top: 26px;">
+        <h4 style="font-size: 16px; font-weight: 800; color: #93c5fd; margin-bottom: 8px;">
+          ماذا ينتج النظام فورياً بمجرد إدخال الصورتين معاً؟ (The Radiographic Plan Synthesis)
+        </h4>
+        <p style="font-size: 14px; color: #94a3b8; margin-bottom: 14px;">
+          بمجرد توفر قياسات السيفالو وفحص البانوراما، يولد أودونتو خطة عمل أولية تنفيذية دون الحاجة لأي فحص يدوي إضافي:
+        </p>
+
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>المخرج السريري (Clinical Output)</th>
+              <th>ما يفعله النظام فورياً بالأشعة</th>
+              <th>القيمة والقرار التنفيذي للطبيب في العيادة</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>1. تصنيف الحالة الهيكلي والسنّي</strong></td>
+              <td>حساب ANB و Wits وزاوية القواطع لربط عظام الفك بعلاقة الأسنان</td>
+              <td>تحديد فوري: هل الحالة تحتاج تقويم تمويهي فقط (Camouflage) أم جهاز تعديل نمو أم جراحة فكين؟</td>
+            </tr>
+            <tr>
+              <td><strong>2. حسم قرار الخلع (Extraction Verdict)</strong></td>
+              <td>طرح مساحة الأسنان من محيط الفك ومقارنتها بزاوية IMPA وسماكة العظم</td>
+              <td>قرار قاطع ومبرر: "خلع 4 ضواحك" أو "توسيع الفك بدون خلع" مع بيان نسبة بولتون (Bolton Ratio).</td>
+            </tr>
+            <tr>
+              <td><strong>3. تسلسل مقاسات الأسلاك (Wire Sequence)</strong></td>
+              <td>اختيار نوع وقطر الأسلاك بناءً على شدة التزاحم ونوع حاصرات التقويم (MBT/Roth)</td>
+              <td>جدول بمقاسات الأسلاك للمرحلة الأولى والثانية (مثل 0.014 CuNiTi حراري ← 0.018 CuNiTi ← 0.019x0.025 SS).</td>
+            </tr>
+            <tr>
+              <td><strong>4. خريطة الأمان لعصب الفك والجيوب الأنفية</strong></td>
+              <td>قياس المسافة المتبقية فوق قناة العصب السفلي (IAN) وأسفل الجيب الأنفي</td>
+              <td>تحديد مقاسات زرعات الأسنان الآمنة بهامش أمان 2.0 مم فوق العصب، وتحديد الحاجة لرفع الجيب الأنفي.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SECTION 4: Step-by-Step UI Manual with Screenshots -->
+    <section id="step-by-step" class="card">
+      <div class="section-title">
+        <span class="number-badge">4</span>
         <h2>شرح شاشات المنظومة خطوة بخطوة بالصور (Step-by-Step UI Walkthrough)</h2>
       </div>
       <div class="section-subtitle">
@@ -962,10 +1121,10 @@
       </div>
     </section>
 
-    <!-- SECTION 4: The 7-Layer Pipeline -->
+    <!-- SECTION 5: The 7-Layer Pipeline -->
     <section id="pipeline" class="card">
       <div class="section-title">
-        <span class="number-badge">4</span>
+        <span class="number-badge">5</span>
         <h2>ما وراء الكواليس: خط الأنابيب التشخيصي السباعي (The 7-Layer Pipeline)</h2>
       </div>
       <div class="section-subtitle">
@@ -1092,16 +1251,161 @@
       </div>
     </section>
 
-    <!-- SECTION 5: Implants Studio -->
-    <section id="implant-studio" class="card">
+    <!-- SECTION 6: Biomechanical Decision Rules & Clinical Formulas -->
+    <section id="biomechanical-rules" class="card">
       <div class="section-title">
-        <span class="number-badge">5</span>
-        <h2>استوديو زراعة الأسنان (Dental Implant Studio)</h2>
+        <span class="number-badge">6</span>
+        <h2>القواعد الذهبية البيوميكانيكية لحسم القرارات في العيادة (Biomechanical Decision Rules)</h2>
       </div>
       <div class="section-subtitle">
-        كيف يخطط الجراح لزرع برغي تيتانيوم بدقة الميكرون دون لمس العصب أو اختراق الجيب الأنفي؟
+        القواعد السريرية والمعادلات الهندسية التي يعتمد عليها أودونتو لحسم أكبر معضلات العيادة اليومية: متى نخلع؟ متى نغير السلك؟ وأين نضع المطاطات؟
       </div>
 
+      <!-- Decision Matrix 1: Extraction vs Non-Extraction -->
+      <div style="margin-bottom: 32px;">
+        <h3 style="font-size: 18px; font-weight: 800; color: #93c5fd; margin-bottom: 12px;">
+          1. خوارزمية قرار الخلع مقابل عدم الخلع (Extraction vs. Non-Extraction Algorithm)
+        </h3>
+        <p style="font-size: 14px; color: #94a3b8; margin-bottom: 16px;">
+          الخلع في التقويم ليس مسألة رأي أو ذوق شخصي؛ بل هو معادلة بيولوجية صارمة تحسب توازن الأسنان داخل الحيز العظمي ومظهر الشفاه:
+        </p>
+
+        <div class="grid-2">
+          <div class="concept-box rose">
+            <div class="concept-header">
+              <span class="concept-title">متى يقرر أودونتو الخلع حتمياً؟</span>
+              <span class="concept-en">Extraction Indicated</span>
+            </div>
+            <div class="concept-body">
+              <strong>شروط الخلع الأربعة مجتمعة أو متحققة:</strong>
+              <br>• <strong>التزاحم الحرج:</strong> عجز الفراغ في القوس السني > 7 مم.
+              <br>• <strong>ميلان القواطع السفلية:</strong> زاوية IMPA > 95° (القواطع مائلة للأمام بشكل حاد).
+              <br>• <strong>بروفايل الوجه:</strong> بروز الشفتين أمام خط ريكتس الجمالي E-Plane مع عجز إغلاق الشفاه (Lip Incompetence).
+              <br>• <strong>رقة العظم الدهليزي:</strong> سماكة الصفيحة العظمية الدهليزية < 1.0 مم (أي توسيع إضافي سيخرج الجذور خارج العظم ويسبب انحسار اللثة).
+              <br>• <strong>القرار النموذجي:</strong> خلع الضواحك الأولى (14, 24, 34, 44) لتوفير 14 مم لسحب الأسنان الأمامية وتصحيح ميلانها.
+            </div>
+          </div>
+
+          <div class="concept-box emerald">
+            <div class="concept-header">
+              <span class="concept-title">متى يمنع أودونتو الخلع ويختار التوسيع؟</span>
+              <span class="concept-en">Non-Extraction Protocol</span>
+            </div>
+            <div class="concept-body">
+              <strong>شروط الأمان للتوسيع بدون خلع:</strong>
+              <br>• <strong>التزاحم خفيف إلى متوسط:</strong> عجز الفراغ < 4 مم.
+              <br>• <strong>ميلان القواطع السفلية:</strong> زاوية IMPA < 90° (القواطع مستقيمة أو متراجعة للخلف ويمكن إمالتها للأمام بأمان).
+              <br>• <strong>بروفايل الوجه:</strong> مظهر الوجه مقعر أو مستقيم مع أنف بارز (الخلع في هذه الحالة سيجعل الوجه يبدو غائراً وعجوزاً!).
+              <br>• <strong>عظم كافٍ:</strong> وجود صفيحة عظمية سميكة تحتمل توسيع القوس.
+              <br>• <strong>الحل الوسط في التزاحم المتوسط (4-7 مم):</strong> البرد بين السني المحسوب (IPR) بحد أقصى 0.5 مم لكل نقطة تلامس لتوظيف 2-4 مم مسافة كافية.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Decision Matrix 2: Wire Progression Philosophy -->
+      <div style="margin-bottom: 32px;">
+        <h3 style="font-size: 18px; font-weight: 800; color: #93c5fd; margin-bottom: 12px;">
+          2. فلسفة تدرج مقاسات الأسلاك التقويمية (Archwire Metallurgy & Progression)
+        </h3>
+        <p style="font-size: 14px; color: #94a3b8; margin-bottom: 16px;">
+          كل سلك له وظيفة فيزيائية محددة، والانتقال المبكر لسلك صلب قبل وقته يسبب ارتشاف عظمي وآلام حادة للمريض:
+        </p>
+
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>المرحلة السريرية</th>
+              <th>نوع ومقاس السلك</th>
+              <th>المادة الفيزيائية والخصائص</th>
+              <th>الوظيفة والمدة المعتادة</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>المرحلة 1: الرصف والتسوية (Alignment)</strong></td>
+              <td><code>0.014 CuNiTi</code> ثم <code>0.018 CuNiTi</code></td>
+              <td>سبيكة نحاس-نيكل-تيتانيوم حرارية، مرونة خارقة وقوة خفيفة مستمرة</td>
+              <td>فك التزاحم وتدوير الأسنان الملتفة وتسوية مستوى الإطباق دون صدمة للجذور (4 - 6 أشهر).</td>
+            </tr>
+            <tr>
+              <td><strong>المرحلة 2: إغلاق المسافات (Space Closure)</strong></td>
+              <td><code>0.019x0.025 SS</code> (Stainless Steel مستطيل)</td>
+              <td>فولاذ مقاوم للصدأ صلب جداً، معامل مرونة عالي يمنع انثناء السلك</td>
+              <td>سحب القواطع للخلف ككتلة واحدة (En-masse) بنوابض NiTi مغلقة (150 جم) مع تحكم كامل في زاوية الجذور (6 - 9 أشهر).</td>
+            </tr>
+            <tr>
+              <td><strong>المرحلة 3: الإنهاء والفنش (Finishing & Detailing)</strong></td>
+              <td><code>0.019x0.025 TMA</code> أو <code>0.021x0.025 Braided SS</code></td>
+              <td>سبيكة تيتانيوم-موليبدينوم، نصف صلابة الفولاذ، قابلة للثني الدقيق</td>
+              <td>إدخال ثنيات فنية دقيقة لضبط إطباق كل سن، مع مطاطات تثليث لإحكام تعشيق الحدبات (3 - 4 أشهر).</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Decision Matrix 3: Intermaxillary Elastics -->
+      <div>
+        <h3 style="font-size: 18px; font-weight: 800; color: #93c5fd; margin-bottom: 12px;">
+          3. بروتوكول مطاطات شد العضة وقوى السحب (Elastics Vectors & Mechanics)
+        </h3>
+        <p style="font-size: 14px; color: #94a3b8; margin-bottom: 16px;">
+          المطاطات هي المحرك الأساسي لتنسيق إطباق الفكين بعد رصف الأسنان:
+        </p>
+
+        <div class="grid-3">
+          <div class="concept-box blue">
+            <div class="concept-header">
+              <span class="concept-title">مطاطات الصنف الثاني</span>
+              <span class="concept-en">Class II Elastics</span>
+            </div>
+            <div class="concept-body">
+              • <strong>نقطة التعليق:</strong> من الضرس الأول السفلي (#36/#46) إلى الناب العلوي (#13/#23).
+              <br>• <strong>القوة والمقاس:</strong> 3/16 بوصة بقوة 4.5 أونصة (130-150 جم).
+              <br>• <strong>الوظيفة:</strong> سحب الأسنان العلوية للخلف وتعديل العضة من Class II إلى Class I.
+              <br>• <strong>التحذير:</strong> تسبب بثق القواطع العلوية؛ لا تستخدم في المرضى ذوي الابتسامة اللثوية دون تثبيت عظمي.
+            </div>
+          </div>
+
+          <div class="concept-box teal">
+            <div class="concept-header">
+              <span class="concept-title">مطاطات الصنف الثالث</span>
+              <span class="concept-en">Class III Elastics</span>
+            </div>
+            <div class="concept-body">
+              • <strong>نقطة التعليق:</strong> من الضرس الأول العلوي (#16/#26) إلى الناب السفلي (#33/#43).
+              <br>• <strong>القوة والمقاس:</strong> 3/16 بوصة بقوة 4.5 أونصة (130-150 جم).
+              <br>• <strong>الوظيفة:</strong> إرجاع القواطع السفلية للخلف وتصحيح العضة المعكوسة.
+              <br>• <strong>التحذير:</strong> تسبب دوران الفك السفلي للأسفل والخلف؛ ممنوعة في حالات الوجه الطويل (High-Angle).
+            </div>
+          </div>
+
+          <div class="concept-box purple">
+            <div class="concept-header">
+              <span class="concept-title">مطاطات الصندوق والمثلث</span>
+              <span class="concept-en">Box & Triangle Elastics</span>
+            </div>
+            <div class="concept-body">
+              • <strong>نقطة التعليق:</strong> على شكل مثلث بين ناب وضاحكين، أو صندوق بين 4 أسنان علوية وسفلية.
+              <br>• <strong>القوة والمقاس:</strong> 1/8 بوصة بقوة 3.5 أونصة.
+              <br>• <strong>الوظيفة:</strong> إغلاق الفراغات الرأسية البسيطة وتعشيق الحدبات (Intercuspation) في الشهور الأخيرة.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 7: Implants Studio & Surgical Safety Rules -->
+    <section id="implant-studio" class="card">
+      <div class="section-title">
+        <span class="number-badge">7</span>
+        <h2>استوديو وقواعد زراعة الأسنان الذهبية وحماية عصب الفك (Implant Safety Protocols)</h2>
+      </div>
+      <div class="section-subtitle">
+        كيف يخطط الجراح لزرع برغي تيتانيوم بدقة الميكرون دون لمس العصب الفكي أو اختراق الجيب الأنفي، وكيف تحميك المنظومة قانونياً وسريرياً؟
+      </div>
+
+      <!-- Core Implant Concepts -->
       <div class="grid-3">
         <div class="concept-box">
           <div class="concept-header">
@@ -1109,13 +1413,13 @@
             <span class="concept-en">Bone Density Engine</span>
           </div>
           <div class="concept-body">
-            يحدد صلابة العظم بناءً على وحدات هاونسفيلد من الأشعة المقطعية:
-            <br>• <strong>D1 (>1250 HU):</strong> عظم كالصخر الصلب؛ حفر بطيء مع تبريد غزير وتسنين يدوي مسبق لمنع موت خلايا العظم بالحرارة.
-            <br>• <strong>D2 & D3 (350-1250 HU):</strong> عظم مسامي مثالي للزراعة.
-            <br>• <strong>D4 (&lt;350 HU):</strong> عظم رخو كالفلين؛ حفر خفيف مع تكثيف العظم يدوياً بالأوستيوتوم.
+            يحدد صلابة العظم بناءً على وحدات هاونسفيلد من الأشعة المقطعية CBCT:
+            <br>• <strong>D1 (>1250 HU):</strong> عظم كالصخر الصلب؛ حفر بطيء (800 RPM) مع تبريد غزير وتسنين يدوي مسبق (Bone Tap) لمنع موت خلايا العظم بالحرارة.
+            <br>• <strong>D2 & D3 (350-1250 HU):</strong> عظم مسامي مثالي للزراعة مع ثبات أولي ميكانيكي ممتاز.
+            <br>• <strong>D4 (&lt;350 HU):</strong> عظم رخو كالفلين؛ حفر طيار فقط مع تكثيف العظم يدوياً بالأوستيوتوم دون إزالة عظم.
           </div>
           <div class="concept-benefit">
-            💡 <strong>الفائدة:</strong> يمنع فشل الزرعة الناتج عن ارتفاع حرارة العظم أو رخاوته.
+            💡 <strong>الفائدة:</strong> يمنع فشل الزرعة الناتج عن ارتفاع حرارة العظم فوق 47° مئوية أو رخاوته.
           </div>
         </div>
 
@@ -1125,11 +1429,11 @@
             <span class="concept-en">Manufacturer Catalogs</span>
           </div>
           <div class="concept-body">
-            يحتوي النظام على مواصفات مسامير الزراعة المعتمدة لكبرى الشركات: Straumann, Nobel Biocare, Zimmer, Dentsply Astra, MegaGen, Osstem.
-            <br>يحدد النظام القطر المناسب (مثلاً 3.5 أو 4.1 مم) والطول المناسب (8 أو 10 أو 12 مم) مع احترام <strong>هامش أمان 2 مم</strong> بعيداً عن العصب الفكي السفلي (IAN).
+            يحتوي النظام على مواصفات مسامير الزراعة المعتمدة لكبرى الشركات: Straumann, Nobel Biocare, Zimmer, Dentsply Astra, MegaGen, Osstem, BioHorizons.
+            <br>يحدد النظام القطر المناسب (مثلاً 3.5 أو 4.1 مم) والطول المناسب (8 أو 10 أو 12 مم) مع فرض <strong>هامش أمان 2.0 مم</strong> إجباري فوق قناة العصب الفكي السفلي (IAN).
           </div>
           <div class="concept-benefit">
-            💡 <strong>الفائدة:</strong> يمنع أي إصابة للعصب قد تسبب تنميلاً أو شللاً دائماً للشفة.
+            💡 <strong>الفائدة:</strong> يمنع أي إصابة للعصب قد تسبب تنميلاً أو شللاً دائماً للشفة والذقن (Paresthesia).
           </div>
         </div>
 
@@ -1140,11 +1444,11 @@
           </div>
           <div class="concept-body">
             في الفك العلوي الخلفي، يوجد تجويف الجيب الأنفي الهوائي (Maxillary Sinus):
-            <br>• إذا كان العظم المتبقي <strong>أقل من 5 مم:</strong> يفرض النظام إجراء **رفع الجيب الجانبي (Lateral Window)** مع طعم عظمي صناعي.
-            <br>• إذا كان العظم المتبقي <strong>أكثر من 5 مم:</strong> يوصي النظام بالرفع القمي البسيط بالدريل فقط (Crestal OSFE).
+            <br>• إذا كان العظم المتبقي <strong>≥ 5 مم:</strong> يوصي النظام بالرفع القمي المغلق عبر قمة العظم (Crestal OSFE Summers) بمقدار 2-3 مم مع وضع الزرعة في نفس الجلسة.
+            <br>• إذا كان العظم المتبقي <strong>&lt; 5 مم:</strong> يفرض النظام إجراء **رفع الجيب الجانبي المفتوح (Lateral Window)** مع طعم عظمي صناعي (Bio-Oss).
           </div>
           <div class="concept-benefit">
-            💡 <strong>الفائدة:</strong> يمنع اختراق المسمار للجيب الأنفي وحدوث صديد أو التهاب مزمن.
+            💡 <strong>الفائدة:</strong> يمنع اختراق المسمار للجيب الأنفي وحدوث صديد أو التهاب مزمن وفشل الزرعة.
           </div>
         </div>
       </div>
@@ -1184,12 +1488,101 @@
           </div>
         </div>
       </div>
+
+      <!-- In-Depth Implant Clinical Tables -->
+      <div style="margin-top: 26px;">
+        <h4 style="font-size: 16px; font-weight: 800; color: #93c5fd; margin-bottom: 8px;">
+          القواعد الذهبية لحماية العصب واختيار عزم الربط (Clinical Safety Standards)
+        </h4>
+
+        <!-- Misch Drilling Protocols Table -->
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>درجة كثافة العظم (Misch)</th>
+              <th>وحدات هاونسفيلد (HU)</th>
+              <th>طبيعة العظم والموقع الشائع</th>
+              <th>بروتوكول الحفر والتبريد الموصى به</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="badge-soft rose">D1 Dense Cortical</span></td>
+              <td>> 1250 HU</td>
+              <td>عظم صلب يشبه خشب البلوط، مقدمة الفك السفلي الأمامي</td>
+              <td>سرعة حفر منخفضة (800 RPM)، ري بارد غزير، واستخدام دكر تسنين مسبق (Bone Tap) لتفادي احتراق خلايا العظم.</td>
+            </tr>
+            <tr>
+              <td><span class="badge-soft blue">D2 Porous Cortical</span></td>
+              <td>850 – 1250 HU</td>
+              <td>قشرة سميكة مع مسامية متوسطة، الفك السفلي الخلفي ومقدمة العلوي</td>
+              <td>البروتوكول القياسي للدريلات بتسلسل كامل (2.0 ← 2.8 ← 3.5 مم) بسرعة 1000-1200 RPM مع ثبات أولي ممتاز.</td>
+            </tr>
+            <tr>
+              <td><span class="badge-soft amber">D3 Fine Trabecular</span></td>
+              <td>350 – 850 HU</td>
+              <td>قشرة رقيقة ومسامية عالية، الفك العلوي الخلفي</td>
+              <td>بروتوكول التجهيز الجزئي (Under-drilling): تقليل قطر الدريل النهائي بنسبة 10% لزيادة عزم الثبات الميكانيكي.</td>
+            </tr>
+            <tr>
+              <td><span class="badge-soft green">D4 Fine Sponge</span></td>
+              <td>< 350 HU</td>
+              <td>عظم إسفنجي رخو كالجبن، حدبة الفك العلوي (Maxillary Tuberosity)</td>
+              <td>دريل طيار فقط، ثم تكثيف العظم يدوياً بأدوات الأوستيوتوم (Osteotomes) لتحقيق ثبات أولي دون إهدار العظم.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Screw Torque Table -->
+        <table class="data-table" style="margin-top: 18px;">
+          <thead>
+            <tr>
+              <th>الشركة المصنعة (Brand)</th>
+              <th>النظام والاتصال (Connection)</th>
+              <th>عزم ربط البرغي التعويضي (Torque)</th>
+              <th>البروتوكول السريري لمنع تخلخل البراغي</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Straumann</strong></td>
+              <td>CrossFit / Conical Morse Taper</td>
+              <td><span class="badge-soft blue">35 Ncm</span></td>
+              <td>ربط بالمفتاح العازم، والانتظار 10 دقائق ثم إعادة الشد (Re-torque) لتفريغ استرخاء المعدن (Preload).</td>
+            </tr>
+            <tr>
+              <td><strong>Nobel Biocare</strong></td>
+              <td>Conical Connection / Tri-Channel</td>
+              <td><span class="badge-soft blue">35 Ncm</span></td>
+              <td>استخدام براغي TorqTite الأصلية مع إحكام الربط لضمان قفل المورس تابر ومنع تسرب البكتيريا.</td>
+            </tr>
+            <tr>
+              <td><strong>Zimmer Biomet</strong></td>
+              <td>Friction Fit / Internal Hex</td>
+              <td><span class="badge-soft amber">30 Ncm</span></td>
+              <td>ربط عزم 30 Ncm لمنع كسر عنق البرغي السداسي.</td>
+            </tr>
+            <tr>
+              <td><strong>Dentsply Sirona Astra</strong></td>
+              <td>Conical Seal Design</td>
+              <td><span class="badge-soft green">25 Ncm</span></td>
+              <td>عزم محدد بـ 25 Ncm يكفي تماماً لمنع الانفصال بفضل زاوية المخروط الداخلية.</td>
+            </tr>
+            <tr>
+              <td><strong>MegaGen & Osstem</strong></td>
+              <td>Internal Morse Taper 11°</td>
+              <td><span class="badge-soft blue">30 - 35 Ncm</span></td>
+              <td>ربط وفق توصيات الكتالوج مع فحص الإطباق لتقليل القوى الجانبية (Offset Loads).</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </section>
 
-    <!-- SECTION 6: Knowledge Base & Calculators -->
+    <!-- SECTION 8: Knowledge Base & Calculators -->
     <section id="knowledge-base" class="card">
       <div class="section-title">
-        <span class="number-badge">6</span>
+        <span class="number-badge">8</span>
         <h2>قاعدة المعرفة السريرية والحاسبات التفاعلية الأربع (`/knowledge`)</h2>
       </div>
       <div class="section-subtitle">
@@ -1291,53 +1684,255 @@
       </div>
     </section>
 
-    <!-- SECTION 7: Practical Training Scenarios -->
+    <!-- SECTION 9: Practical Training Scenarios (4 Complete Cases) -->
     <section id="scenarios" class="card">
       <div class="section-title">
-        <span class="number-badge">7</span>
-        <h2>سيناريوهات تدريبية عملية خطوة بخطوة (Hands-On Training Scenarios)</h2>
+        <span class="number-badge">9</span>
+        <h2>سيناريوهات تدريبية عملية: 4 حالات سريرية متكاملة بالأرقام (Case Studies)</h2>
       </div>
       <div class="section-subtitle">
-        أمثلة واقعية يمكنك استخدامها أثناء تدريب الأطباء أو تقديم العروض التوضيحية لمديري المنتجات.
+        دراسات حالة حقيقية يمكنك استخدامها أثناء تدريب الأطباء، مع الأرقام السيفالومترية الدقيقة، خطة الأسلاك، وقرار الخلع ومسافات أمان الزراعة.
       </div>
 
       <div class="step-list">
+        <!-- CASE A -->
         <div class="step-item">
           <div class="step-badge">A</div>
           <div class="step-content">
-            <h3>السيناريو الأول: مراهق لديه بروز شديد في الفك العلوي (Class II Div 1 - Overjet 8mm)</h3>
+            <h3>الحالة الأولى: بروز شديد بالفك العلوي وعضة عميقة (Class II Div 1 — Overjet 8.0mm, Deep Bite 4.0mm)</h3>
             <p>
-              • <strong>التشخيص:</strong> الفك السفلي متراجع ومحبوس خلف القواطع العلوية، والبروز 8 مم، مع عضة عميقة 4 مم.
-              <br>• <strong>كيف تنفذها في البرنامج؟</strong> افتح <code>/plans/generate</code> واضغط على زر <code>Class II Div 1 Sample Case</code> ثم اضغط <code>Generate Plan</code>.
-              <br>• <strong>ماذا ستشاهد في النتيجة؟</strong> سيوصي النظام بجهاز تقديم الفك الوظيفي (Twin Block) إذا كان المريض ينمو، أو خلع الضواحك العلوية (14 و 24) مع تسلسل أسلاك NiTi ثم Stainless Steel ومطاط الصنف الثاني (Class II Elastics).
+              • <strong>بيانات المريض:</strong> مراهق 15 سنة، يشكو من بروز الأسنان وعدم القدرة على قفل الشفتين (Lip Incompetence).
+              <br>• <strong>قياسات السيفالو المحسوبة:</strong> زاوية SNA 82°، زاوية SNB 76°، زاوية ANB +6.0° (صنف ثانٍ هيكلي)، مؤشر Wits +5.0 مم، زاوية FMA 24°، وزاوية IMPA 98° (القواطع السفلية مائلة للأمام ولا تحتمل أي ميل إضافي).
+              <br>• <strong>كيف تنفذها في البرنامج؟</strong> افتح <code>/plans/generate</code> واختر عينة <code>Class II Div 1 Sample Case</code> ثم اضغط <code>Generate Plan</code>.
+              <br>• <strong>مخرجات أودونتو التنفيذية:</strong>
+              <br>&nbsp;&nbsp;1. <strong>قرار الخلع:</strong> خلع الضواحك العلوية الأولى (#14 و #24) لتوفير 14 مم لإرجاع القواطع العلوية 6 مم وتحسين مظهر الوجه، مع <strong>عدم خلع أي أسنان سفلية</strong> للحفاظ على علاقة أضراس صنف ثانٍ وظيفية مع أنياب صنف أول.
+              <br>&nbsp;&nbsp;2. <strong>رفعات العضة (Bite Turbos):</strong> تركيب رفعات عضة مركبة على الأضراس العلوية لفك تداخل العضة العميقة وتركيب حاصرات الفك السفلي فورياً دون انكسار.
+              <br>&nbsp;&nbsp;3. <strong>تسلسل الأسلاك:</strong> أسلاك <code>0.014 CuNiTi</code> حراري (3 أشهر) ← <code>0.018 CuNiTi</code> (3 أشهر) ← <code>0.019x0.025 SS</code> صلب مع نوابض سحب NiTi مغلقة بقوة 150 جم على خطافات سحب لسحب القواطع بالكامل ككتلة واحدة (En-Masse).
+              <br>&nbsp;&nbsp;4. <strong>التثبيت:</strong> مثبت سلكي ملصق دائم 3-3 مع قالب شفاف تفريغي Essix ليلي.
             </p>
           </div>
         </div>
 
+        <!-- CASE B -->
         <div class="step-item">
           <div class="step-badge">B</div>
           <div class="step-content">
-            <h3>السيناريو الثاني: شاب بالغ يعاني من تزاحم أسنان خانق (Severe Crowding 9mm)</h3>
+            <h3>الحالة الثانية: عضة معكوسة هيكلية وبروز الفك السفلي (Class III Skeletal Underbite — ANB -3.2°, Wits -4.0mm)</h3>
             <p>
-              • <strong>التشخيص:</strong> الفك ضيق والأسنان متراكبة فوق بعضها، وزاوية القواطع السفلية IMPA بلغت 94 درجة ولا تحتمل أي توسيع إضافي.
-              <br>• <strong>كيف تنفذها في البرنامج؟</strong> اختر عينة <code>Severe Crowding</code> واضغط <code>Generate Plan</code>.
-              <br>• <strong>ماذا ستشاهد في النتيجة؟</strong> سيقرر النظام تلقائياً خلع 4 ضواحك (14, 24, 34, 44) لتوفير مساحة لصف الأسنان، مع استخدام زرعات مؤقتة (TADs) لتثبيت الأضراس الخلفية ومنع تحركها للأمام أثناء سحب الأسنان الأمامية.
+              • <strong>بيانات المريض:</strong> شاب 19 سنة، فكه السفلي بارز للأمام، مع عضة أمامية معكوسة وصعوبة مضغ ومظهر وجه مقعر.
+              <br>• <strong>قياسات السيفالو المحسوبة:</strong> SNA 78.5° (تراجع فك علوي)، SNB 81.7° (بروز فك سفلي)، ANB -3.2°، مؤشر Wits -4.0 مم، وزاوية IMPA 84° (قواطع سفلية مائلة للخلف بتعويض طبيعي).
+              <br>• <strong>كيف تنفذها في البرنامج؟</strong> افتح <code>/plans/generate</code> واختر عينة <code>Class III Underbite</code> واضغط <code>Generate Plan</code>.
+              <br>• <strong>مخرجات أودونتو التنفيذية:</strong>
+              <br>&nbsp;&nbsp;1. <strong>المسار السريري:</strong> الحالة تصنف كحالة جراحية حتمية (Surgical Borderline) لأن محاولة التمويه بالخلع ستزيد تقعر الوجه وتسبب مشاكل في المفصل الصدغي.
+              <br>&nbsp;&nbsp;2. <strong>إلغاء التعويض السني (Decompensation):</strong> دفع القواطع السفلية للأمام حتى زاوية IMPA 90° لزيادة البروز السلبي وتجهيز الفك للجراحة.
+              <br>&nbsp;&nbsp;3. <strong>الخطة الجراحية المشتركة:</strong> تقديم الفك العلوي بعملية Le Fort I بمقدار 2.5 مم + إرجاع الفك السفلي بعملية BSSO بمقدار 4.5 مم.
+              <br>&nbsp;&nbsp;4. <strong>المطاطات بعد الجراحة:</strong> أسلاك 0.019x0.025 SS مع مطاطات صنف ثالث Class III (3/16" 4.5 oz) لتثبيت العضة في الصنف الأول.
             </p>
           </div>
         </div>
 
+        <!-- CASE C -->
         <div class="step-item">
           <div class="step-badge">C</div>
           <div class="step-content">
-            <h3>السيناريو الثالث: مريض يحتاج زراعة ضرس سفلي مفقود (Missing Lower Molar 36)</h3>
+            <h3>الحالة الثالثة: عضة مفتوحة وتزاحم شديد ودفع لسان (Anterior Open Bite 3.5mm, Tongue Thrust, High-Angle)</h3>
             <p>
-              • <strong>التشخيص:</strong> الضرس 36 مفقود، وعظم الفك من النوع D2، والمسافة المتبقية فوق العصب الفكي السفلي هي 12 مم.
-              <br>• <strong>كيف تنفذها في البرنامج؟</strong> افتح <code>/implants</code>، اختر السن <code>36</code>، واختر كثافة العظم <code>D2</code> وماركة <code>Straumann</code>.
-              <br>• <strong>ماذا ستشاهد في النتيجة؟</strong> سيختار النظام مسماراً بطول 10 مم وقطر 4.1 مم (ليترك هامش أمان 2 مم فوق العصب)، وسيعطيك سرعة الدريل 800 RPM وعزم ربط المسمار الدقيق 35 Ncm.
+              • <strong>بيانات المريضة:</strong> فتاة 22 سنة، فراغ بين الأسنان الأمامية 3.5 مم لا ينغلق، مع عادة دفع اللسان عند البلع وابتسامة غير متناسقة.
+              <br>• <strong>قياسات السيفالو المحسوبة:</strong> زاوية FMA 33° (نمو رأسي طويل High-Angle)، نسبة Jarabak 56%، العضة الرأسية Overbite -3.5 مم، زاوية U1-SN 112°.
+              <br>• <strong>كيف تنفذها في البرنامج؟</strong> اختر عينة <code>Open Bite Tongue Thrust</code> واضغط <code>Generate Plan</code>.
+              <br>• <strong>مخرجات أودونتو التنفيذية:</strong>
+              <br>&nbsp;&nbsp;1. <strong>كسر عادة اللسان:</strong> تركيب حاجز لسان (Tongue Crib) ملحوم على حلقات الأضراس العلوية لمنع اللسان من منع بزوغ القواطع.
+              <br>&nbsp;&nbsp;2. <strong>غرس الأضراس الخلفية بزرعات TADs:</strong> وضع مسمارين تقويميين في عظم الحنك ومسمارين في عظم الوجنة (IZC) لتطبيق قوة غرس 2.5 مم على الأضراس الخلفية.
+              <br>&nbsp;&nbsp;3. <strong>إغلاق العضة تلقائياً:</strong> غرس الأضراس الخلفية يتيح للفك السفلي الدوران التلقائي للأمام والأعلى (Mandibular Auto-rotation)، مما يغلق العضة المفتوحة بالكامل دون الحاجة لأي جراحة فكين!
+            </p>
+          </div>
+        </div>
+
+        <!-- CASE D -->
+        <div class="step-item">
+          <div class="step-badge">D</div>
+          <div class="step-content">
+            <h3>الحالة الرابعة: زراعة ضرس سفلي مفقود #36 مع عظم قليل وقريب من عصب الفك (Atrophic Posterior Mandible #36)</h3>
+            <p>
+              • <strong>بيانات المريض:</strong> رجل 46 سنة، خلع الضرس 36 منذ 3 سنوات، وعظم الفك يعاني من ضمور جزئي.
+              <br>• <strong>قياسات الأشعة المقطعية CBCT:</strong> العرض المتاح 6.2 مم، الارتفاع من قمة العظم لسقف قناة عصب الفك السفلي 11.5 مم، كثافة العظم 920 HU (Misch D2 Porous Cortical).
+              <br>• <strong>كيف تنفذها في البرنامج؟</strong> افتح <code>/implants</code>، اختر السن #36، وحدد الكثافة D2 والماركة Straumann.
+              <br>• <strong>مخرجات أودونتو التنفيذية:</strong>
+              <br>&nbsp;&nbsp;1. <strong>تطبيق هامش أمان عصب الفك (2.0mm IAN Rule):</strong>
+              <div class="formula-box">
+                Max Implant Length = 11.5mm - 2.0mm Safety Clearance = 9.5mm
+              </div>
+              <br>&nbsp;&nbsp;2. <strong>اختيار الزرعة:</strong> زرعة Straumann BLT بمقاس Ø 4.1 × 8.0 مم (تترك 3.5 مم عظم دهليزي ولساني، و2.5 مم هامش أمان كامل فوق العصب).
+              <br>&nbsp;&nbsp;3. <strong>بروتوكول الحفر:</strong> دريل طيار 2.2 مم ← 2.8 مم ← 3.5 مم بسرعة 800 RPM وري بارد مثلج لمنع ارتفاع الحرارة.
+              <br>&nbsp;&nbsp;4. <strong>عزم ربط البرغي والتركيبة:</strong> شد برغي الدعامة بعزم 35 Ncm مع تركيب تاج زيركونيا مثبت ببرغي (Screw-Retained Monolithic Zirconia).
             </p>
           </div>
         </div>
       </div>
+    </section>
+
+    <!-- SECTION 10: The 5-Minute Clinic Owner Pitch Playbook -->
+    <section id="pitch-playbook" class="card">
+      <div class="section-title">
+        <span class="number-badge">10</span>
+        <h2>دليل العرض السريع لمديري وأصحاب العيادات ومراكز الأسنان في 5 دقائق (Clinic Owner Pitch Playbook)</h2>
+      </div>
+      <div class="section-subtitle">
+        كيف تشرح منظومة Odonto AI لأي طبيب أسنان أو مدير مركز طبي في 5 دقائق فقط وتجعله يقتنع فورياً بالمنظومة؟
+      </div>
+
+      <div class="grid-2">
+        <div class="concept-box blue">
+          <div class="concept-header">
+            <span class="concept-title">الدقيقة الأولى: وفّر 25 دقيقة في كل حالة</span>
+            <span class="concept-en">Minute 1: The Time Hook</span>
+          </div>
+          <div class="concept-body">
+            <em>«يا دكتور، في كل حالة تقويم بتجيلك العيادة، بتقعد قد إيه ترسم نقط السيفالو على الشيت بالمسطرة والمنقلة؟ من 20 لـ 30 دقيقة صح؟</em>
+            <br><em>أودونتو بتعملك التتبع ده بالكامل في 5 ثواني بنقرة زرار واحدة، وبترسملك كل الزوايا وتصنفلك العضة هيكلياً وسنياً فوراً.»</em>
+          </div>
+        </div>
+
+        <div class="concept-box emerald">
+          <div class="concept-header">
+            <span class="concept-title">الدقيقة الثانية: اقفل الكيس مع المريض فوراً</span>
+            <span class="concept-en">Minute 2: Case Acceptance</span>
+          </div>
+          <div class="concept-body">
+            <em>«أكبر مشكلة بتواجهك مع مريض التقويم إنه مش فاهم الخطة وخايف من النتيجة أو السعر.</em>
+            <br><em>أودونتو بيطلعلك تقرير بصري تفاعلي ومحاكاة 3D، المريض بيشوف شكل أسنانه وتدرج العلاج قدام عينه فبيتحمس ويبدأ كورس العلاج فوراً بدون تردد.»</em>
+          </div>
+        </div>
+
+        <div class="concept-box rose">
+          <div class="concept-header">
+            <span class="concept-title">الدقيقة الثالثة: احمِ عيادتك قانونياً وطبياً</span>
+            <span class="concept-en">Minute 3: Legal & Zero Hallucination</span>
+          </div>
+          <div class="concept-body">
+            <em>«أودونتو مش شات بوت بيهلوس.. كل رقم وكل قرار وراه 7 طبقات أمان ومعادلات فيزيائية صارمة، وكل خطوة مربوطة ببحث علمي حي من مكتبة PubMed الطبية.</em>
+            <br><em>لو مريض سألك 'ليه خلعت الضرس ده؟'، التقرير السريري مكتوب فيه التبرير العلمي الموثق بالأرقام والأبحاث.»</em>
+          </div>
+        </div>
+
+        <div class="concept-box amber">
+          <div class="concept-header">
+            <span class="concept-title">الدقيقة الرابعة: وفّر 10,000 دولار برمجيات قديمة</span>
+            <span class="concept-en">Minute 4: Software Cost Savings</span>
+          </div>
+          <div class="concept-body">
+            <em>«برامج الأشعة القديمة زي Dolphin بتكلفك من 8,000 لـ 15,000 دولار ولازم كمبيوتر مخصص ودونجل في العيادة.</em>
+            <br><em>أودونتو منظومة سحابية بالكامل، تفتحها من لابتوبك أو تابلتك في أي وقت، وبتديك تفاصيل تسلسل الأسلاك من 0.014 CuNiTi لحد 0.019x0.025 SS ومقاسات المطاطات بدقة.»</em>
+          </div>
+        </div>
+      </div>
+
+      <div class="concept-box purple" style="margin-top: 20px;">
+        <div class="concept-header">
+          <span class="concept-title">الدقيقة الخامسة: استوديو الزراعة وحماية عصب الفك (The Clincher)</span>
+          <span class="concept-en">Minute 5: Interdisciplinary Implant Safety</span>
+        </div>
+        <div class="concept-body">
+          <em>«مش بس تقويم؛ أودونتو بيكمل معاك في زراعة الأسنان، بيبعد 2 مم كاملين عن عصب الفك السفلي IAN عشان تتفادى أي تنميل أو مشاكل قانونية، وبيحسبلك كثافة العظم Misch D1-D4 ومقاس الزرعة وعزم الربط من كتالوجات 14 شركة زي Straumann و Nobel.</em>
+          <br><em>تحب نجرب حالة حية دلوقتي ونشوف خطتها في 30 ثانية؟»</em>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 11: Egyptian Dental Slang & Technical Glossary -->
+    <section id="egyptian-dental-glossary" class="card">
+      <div class="section-title">
+        <span class="number-badge">11</span>
+        <h2>قاموس المصطلحات السريرية الدارجة في العيادات المصرية (Egyptian Dental Glossary)</h2>
+      </div>
+      <div class="section-subtitle">
+        مطابقة دقيقة وشاملة بين المصطلحات الدارجة في العيادات والمراكز المصرية وبين المصطلحات الطبية والأكاديمية المعتمدة في منظومة أودونتو:
+      </div>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>المصطلح الدارج في العيادة المصرية</th>
+            <th>المصطلح الأكاديمي المعتمد في أودونتو</th>
+            <th>المصطلح الإنجليزي (Dental Term)</th>
+            <th>دوره ووظيفته في المنظومة</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>شَفّ السيفالو</strong></td>
+            <td>تتبع النقاط والزوايا السيفالومترية</td>
+            <td>Cephalometric Tracing</td>
+            <td>رصد الـ 16 نقطة وحساب زوايا الجمجمة في 5 ثوانٍ تلقائياً دون قلم ومسطرة.</td>
+          </tr>
+          <tr>
+            <td><strong>قفل السبيس</strong></td>
+            <td>إغلاق المسافات السنية المتبقية</td>
+            <td>Space Closure Phase</td>
+            <td>سحب الأسنان الأمامية على سلك صلب 0.019x0.025 SS بنوابض NiTi مغلقة بقوة 150 جم.</td>
+          </tr>
+          <tr>
+            <td><strong>ترويق ورص الأسنان</strong></td>
+            <td>الرصف والتسوية الحيوية</td>
+            <td>Leveling & Alignment</td>
+            <td>المرحلة الأولى بأسلاك CuNiTi حرارية خفيفة لفك التزاحم وتعديل الالتفاف.</td>
+          </tr>
+          <tr>
+            <td><strong>عضة غويطة</strong></td>
+            <td>العضة العميقة وتغطية القواطع</td>
+            <td>Deep Bite</td>
+            <td>نزول القواطع العلوية أكثر من 3 مم فوق السفلية؛ تتطلب رفعات عضة (Bite Turbos).</td>
+          </tr>
+          <tr>
+            <td><strong>عضة مقلوبة</strong></td>
+            <td>العضة المعكوسة الأمامية</td>
+            <td>Anterior Crossbite / Underbite</td>
+            <td>تقدم الأسنان السفلية أمام العلوية؛ تتطلب فك تعويض ثم تقديم الفك العلوي أو إرجاع السفلي.</td>
+          </tr>
+          <tr>
+            <td><strong>عصب الفك</strong></td>
+            <td>العصب السنخي السفلي</td>
+            <td>Inferior Alveolar Nerve (IAN)</td>
+            <td>أهم تركيب تشريحي في زراعة الأسنان؛ يفرض أودونتو مسافة أمان إجبارية 2.0 مم فوقه.</td>
+          </tr>
+          <tr>
+            <td><strong>مسمار التقويم</strong></td>
+            <td>زرعة التثبيت الهيكلي المؤقتة</td>
+            <td>TADs Miniscrew</td>
+            <td>برغي تيتانيوم صغير يغرس في العظم خارج السنخ لسحب أو غرس الأسنان دون ارتداد.</td>
+          </tr>
+          <tr>
+            <td><strong>سلك نيتي حراري</strong></td>
+            <td>سبيكة نحاس-نيكل-تيتانيوم</td>
+            <td>Thermal CuNiTi Archwire</td>
+            <td>سلك فائق المرونة يتنشط بحرارة الفم لتطبيق قوى خفيفة ومستمرة على الجذور.</td>
+          </tr>
+          <tr>
+            <td><strong>عزم الربط</strong></td>
+            <td>عزم الشد بالنيوتن/سنتيمتر</td>
+            <td>Torque (Ncm)</td>
+            <td>قوة شد براغي زراعة الأسنان (25-35 Ncm) لمنع تفككها أو كسرها داخل الزرعة.</td>
+          </tr>
+          <tr>
+            <td><strong>مثبت دائم</strong></td>
+            <td>المثبت السلكي اللساني الملصق</td>
+            <td>Fixed Lingual Retainer</td>
+            <td>سلك رفيع ملصق خلف الأسنان الأمامية (3-3) لمنع ارتداد الأسنان وتزاحمها مجدداً.</td>
+          </tr>
+          <tr>
+            <td><strong>برد بين السنان</strong></td>
+            <td>الإنقاص التقريبي للمينا السنية</td>
+            <td>Interproximal Reduction (IPR)</td>
+            <td>حك طبقة ميكرونية من المينا (0.2-0.5 مم) لتوفير مساحة لصف الأسنان دون خلع.</td>
+          </tr>
+          <tr>
+            <td><strong>تزويد عضم</strong></td>
+            <td>التجديد العظمي الموجه</td>
+            <td>Guided Bone Regeneration (GBR)</td>
+            <td>وضع طعم عظمي صناعي مع غشاء كولاجيني لتوفير سماكة ≥ 1.5 مم حول زرعة الأسنان.</td>
+          </tr>
+        </tbody>
+      </table>
     </section>
 
     <!-- Footer Summary -->
