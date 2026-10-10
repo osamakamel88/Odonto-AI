@@ -32,6 +32,17 @@ import {
   StudioLanguage, 
   MASTER_PHASE_TRANSLATIONS 
 } from '@/lib/i18n/studio-dictionary';
+import {
+  formatToothNameAr,
+  translateSkeletalDiagnosisAr,
+  translateDentalDiagnosisAr,
+  translateSoftTissueDiagnosisAr,
+  translateObjectivesAr,
+  translateExtractionRationaleAr,
+  translateMechanicsPhaseAr,
+  translateAnchorageAr,
+  translateRetentionAr
+} from '@/lib/i18n/clinical-arabic-translator';
 
 export interface MasterPhaseItem {
   phaseNumber: number;
@@ -381,7 +392,30 @@ export function PlanBuilder({
   };
 
   const handleCopy = () => {
-    const text = `
+    const text = isAr ? `
+منظومة ODONTO AI — خطة العلاج السريرية المعتمدة للتقويم والزراعة
+المريض: ${plan.patientName || 'مريض'} (${plan.patientAge || 15} سنة) | تصنيف الإطباق: ${plan.diagnosisSummary?.angleClass || 'صنف أول'}
+الشكوى الرئيسية: ${plan.chiefComplaint || 'استشارة تقويمية شاملة'}
+نظام العلاج: ${plan.treatmentModality?.primary || 'تقويم ثابت'}
+قرار الخلع: ${plan.extractionDecision?.decision === 'Extraction' ? 'خلع علاجي مطلوب حتمياً' : 'علاج تحفظي بدون خلع'} ${(plan.extractionDecision?.teeth || []).map(formatToothNameAr).join('، ')}
+المدة التقديرية للعلاج: ${plan.estimatedDuration ? plan.estimatedDuration.replace(/months?/gi, 'أشهر') : '٢٠–٢٤ شهراً'}
+
+تسلسل المراحل الست الكبرى (Master 6-Phase Sequence):
+${masterPhases.map(p => {
+  const trans = MASTER_PHASE_TRANSLATIONS[p.phaseNumber]?.ar;
+  return `المرحلة ${p.phaseNumber}: ${trans?.title || p.title} [حالة المرحلة: ${p.status}] - ${trans?.timeline || p.timeline}\n• الأهداف السريرية: ${trans?.clinicalObjectives || p.clinicalObjectives}`;
+}).join('\n\n')}
+
+تسلسل الميكانيكا المرحلية والأسلاك:
+${plan.mechanicsSequence?.map(m => {
+  const tr = translateMechanicsPhaseAr(m);
+  return `• ${tr.phaseTitleAr} (${tr.durationAr}): ${tr.objectivesAr} | الأسلاك: ${m.wires}`;
+}).join('\n') || ''}
+
+بروتوكول التثبيت النهائي (Dual Retention):
+الفك العلوي: ${translateRetentionAr(plan.retentionProtocol).maxAr}
+الفك السفلي: ${translateRetentionAr(plan.retentionProtocol).mandAr}
+    `.trim() : `
 ODONTO AI - ORTHODONTIC & IMPLANT CLINICAL TREATMENT PLAN
 Patient: ${plan.patientName || 'Patient'} (${plan.patientAge || 15} yrs) | ${plan.diagnosisSummary?.angleClass || 'Class I'}
 Chief Complaint: ${plan.chiefComplaint || 'N/A'}
@@ -581,25 +615,33 @@ Mandibular: ${plan.retentionProtocol?.mandibular}
                 {t.modalityTitle}
               </span>
               <Badge className="bg-blue-600 text-white font-bold text-[10px] px-2 py-0.5">
-                {isAr ? '٢٠–٢٤ شهراً' : (plan.estimatedDuration || '20–24 Months')}
+                {isAr ? (plan.estimatedDuration ? plan.estimatedDuration.replace(/months?/gi, 'شهراً') : '٢٠–٢٤ شهراً') : (plan.estimatedDuration || '20–24 Months')}
               </Badge>
             </div>
 
             <h3 className="text-sm font-bold text-slate-900">
               {isAr 
-                ? 'تقويم شامل ثابت سلكي (وصفة MBT قياس سلوت 0.022 بوصة)' 
+                ? (plan.treatmentModality?.primary?.toLowerCase().includes('aligner')
+                    ? 'تقويم شفاف غير مرئي (قوالب Clear Aligners متتابعة مع ملحقات تثبيت)'
+                    : plan.treatmentModality?.primary?.toLowerCase().includes('twin block')
+                    ? 'جهاز وظيفي ثنائي القوالب لتقديم الفك السفلي (Twin Block Functional Appliance)'
+                    : plan.treatmentModality?.primary?.toLowerCase().includes('facemask') || plan.treatmentModality?.primary?.toLowerCase().includes('marpe')
+                    ? 'جهاز توسيع الحنك الهيكلي مع قناع تقديم الفك العلوي (MARPE / Facemask)'
+                    : 'تقويم شامل ثابت سلكي (وصفة MBT قياس سلوت 0.022 بوصة)') 
                 : (plan.treatmentModality?.primary || 'Fixed Pre-adjusted Appliance System')}
             </h3>
             <p className="text-xs text-slate-600 leading-relaxed">
               {isAr 
-                ? 'نظام MBT Versatile+ مع تعويض عزم -6 درجات للقواطع المركزية العلوية لمنع انكفائها أثناء السحب' 
+                ? (plan.treatmentModality?.prescription 
+                    ? `وصفة الجهاز المعتمدة: ${plan.treatmentModality.prescription}`
+                    : 'نظام MBT Versatile+ مع تعويض عزم القواطع لمنع انكفائها أثناء السحب') 
                 : plan.treatmentModality?.prescription}
             </p>
 
             {plan.treatmentModality?.alternatives && plan.treatmentModality.alternatives.length > 0 && (
               <div className="pt-2 border-t border-blue-200/60 text-[11px] text-slate-500">
                 <span className="font-semibold text-slate-700">{t.alternativesLabel}: </span>
-                <span>{isAr ? 'قوالب التقويم الشفافة مع أجنحة تقديم الفك السفلي' : plan.treatmentModality.alternatives[0]}</span>
+                <span>{isAr ? 'قوالب التقويم الشفافة، أو أجهزة التثبيت الهيكلي بمسامير TADs' : plan.treatmentModality.alternatives[0]}</span>
               </div>
             )}
           </div>
@@ -626,26 +668,28 @@ Mandibular: ${plan.retentionProtocol?.mandibular}
               </span>
             </div>
 
-            {plan.extractionDecision?.teeth && plan.extractionDecision.teeth.length > 0 ? (
+            {plan.extractionDecision?.decision === 'Extraction' && plan.extractionDecision?.teeth && plan.extractionDecision.teeth.length > 0 ? (
               <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
                 <span className="text-xs font-semibold text-slate-700">{t.teethToExtract}</span>
                 {plan.extractionDecision.teeth.map((tUnit, idx) => (
                   <span key={idx} className="px-2 py-0.5 bg-amber-200 text-amber-950 font-bold text-[11px] rounded-md border border-amber-300 shadow-2xs">
-                    {isAr 
-                      ? (tUnit.includes('14') ? 'الضاحك الأول العلوي الأيمن (#14)' : tUnit.includes('24') ? 'الضاحك الأول العلوي الأيسر (#24)' : tUnit)
-                      : tUnit}
+                    {isAr ? formatToothNameAr(tUnit) : tUnit}
                   </span>
                 ))}
               </div>
             ) : (
               <div className="text-xs font-semibold text-emerald-800">
-                ✓ {isAr ? 'علاج تحفظي بدون خلع: المحافظة على كامل محيط القوس السنخي' : 'Non-Extraction Protocol: Preservation of full arch perimeter'}
+                ✓ {isAr ? 'علاج تحفظي بدون خلع: المحافظة على كامل محيط القوس السنخي ورصف الأسنان ضمن حدود العظم القشري' : 'Non-Extraction Protocol: Preservation of full arch perimeter'}
               </div>
             )}
 
             <p className="text-xs text-slate-600 leading-relaxed">
               {isAr 
-                ? 'خلع الضواحك العلوية الأولى يوفر 14 مم من محيط القوس: كافية تماماً لإرجاع القواطع 6 مم ورص التزاحم دون التأثير سلباً على الوجه.' 
+                ? translateExtractionRationaleAr(
+                    plan.extractionDecision?.decision,
+                    plan.extractionDecision?.teeth,
+                    plan.extractionDecision?.rationale
+                  ).rationaleAr
                 : plan.extractionDecision?.rationale}
             </p>
           </div>
@@ -867,51 +911,42 @@ Mandibular: ${plan.retentionProtocol?.mandibular}
             {/* Tab 2: Staged Mechanics */}
             {activeTab === 'mechanics' && (
               <div className="space-y-3.5">
-                {plan.mechanicsSequence?.map((phase, idx) => (
-                  <div key={idx} className="p-3.5 rounded-xl border border-slate-200 bg-slate-50/40 space-y-2">
-                    <div className="flex items-center justify-between">
-                      <span className="font-bold text-xs text-blue-900 uppercase tracking-wider flex items-center gap-1.5">
-                        <Clock className="w-3.5 h-3.5 text-blue-600" />
-                        {isAr 
-                          ? (phase.phase.includes('1') ? 'المرحلة 1: الرص والمحاذاة (Alignment & Leveling)' : phase.phase.includes('2') ? 'المرحلة 2: غلق المسافات وإرجاع القواطع (Space Closure)' : 'المرحلة 3: الإنهاء والتطابق الإطباقي (Finishing)') 
-                          : phase.phase}
-                      </span>
-                      <span className="px-2.5 py-0.5 bg-slate-200 text-slate-800 rounded font-bold text-[10px]">
-                        {isAr 
-                          ? (phase.duration.includes('4–6') ? '٤–٦ أشهر' : phase.duration.includes('6–8') ? '٦–٨ أشهر' : '٣–٤ أشهر')
-                          : phase.duration}
-                      </span>
-                    </div>
-
-                    <p className="text-xs text-slate-700 font-medium">
-                      {isAr
-                        ? (phase.objectives.includes('Derotate') 
-                            ? 'تعديل دوران الأسنان، وتعديل منحنى سبي، وفك التزاحم، وتجهيز أسلاك ستانلس ستيل مستطيلة صلبة للعمل.'
-                            : phase.objectives.includes('En-masse')
-                            ? 'إرجاع القواطع العلوية ككتلة واحدة (En-masse) على أسلاك صلبة مزودة بمقابض ويايات شد NiTi مغلقة بقوة 150 جم.'
-                            : 'تطابق الإطباق النهائي، وتحقيق إطباق صنف أول متداخل للأنياب والأضراس، وتنسيق أقواس الفكين.')
-                        : phase.objectives}
-                    </p>
-
-                    <div className="flex flex-wrap items-center gap-2 pt-1 text-[11px]">
-                      <span className="font-bold text-slate-900">{isAr ? 'الأسلاك المستخدمة:' : 'Archwires:'}</span>
-                      <span className="px-2 py-0.5 bg-blue-100 text-blue-800 rounded font-mono font-medium" dir="ltr">
-                        {phase.wires}
-                      </span>
-                    </div>
-
-                    {phase.elastics && (
-                      <div className="flex flex-wrap items-center gap-2 text-[11px]">
-                        <span className="font-bold text-slate-900">{isAr ? 'المطاط التقويمي:' : 'Elastics:'}</span>
-                        <span className="px-2 py-0.5 bg-teal-100 text-teal-800 rounded font-medium">
-                          {isAr 
-                            ? (phase.elastics.includes('Class II') ? 'مطاط صنف ثانٍ قصير (3/16 بوصة، 4.5 أونصة) لدعم المرسى السهمي' : 'مطاط إنهاء مثلث (1/8 بوصة، 2.5 أونصة)')
-                            : phase.elastics}
+                {plan.mechanicsSequence?.map((phase, idx) => {
+                  const tr = translateMechanicsPhaseAr(phase);
+                  return (
+                    <div key={idx} className="p-3.5 rounded-xl border border-slate-200 bg-slate-50/40 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="font-bold text-xs text-blue-900 uppercase tracking-wider flex items-center gap-1.5">
+                          <Clock className="w-3.5 h-3.5 text-blue-600" />
+                          {isAr ? tr.phaseTitleAr : phase.phase}
+                        </span>
+                        <span className="px-2.5 py-0.5 bg-slate-200 text-slate-800 rounded font-bold text-[10px]">
+                          {isAr ? tr.durationAr : phase.duration}
                         </span>
                       </div>
-                    )}
-                  </div>
-                ))}
+
+                      <p className="text-xs text-slate-700 font-medium">
+                        {isAr ? tr.objectivesAr : phase.objectives}
+                      </p>
+
+                      <div className="flex flex-wrap items-center gap-2 pt-1 text-[11px]">
+                        <span className="font-bold text-slate-900">{isAr ? 'الأسلاك المستخدمة:' : 'Archwires:'}</span>
+                        <span className="px-2 py-0.5 bg-blue-100 text-blue-800 rounded font-mono font-medium" dir="ltr">
+                          {phase.wires}
+                        </span>
+                      </div>
+
+                      {phase.elastics && (
+                        <div className="flex flex-wrap items-center gap-2 text-[11px]">
+                          <span className="font-bold text-slate-900">{isAr ? 'المطاط التقويمي:' : 'Elastics:'}</span>
+                          <span className="px-2 py-0.5 bg-teal-100 text-teal-800 rounded font-medium">
+                            {isAr ? tr.elasticsAr : phase.elastics}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             )}
 
@@ -939,31 +974,32 @@ Mandibular: ${plan.retentionProtocol?.mandibular}
             {/* Tab 4: Anchorage & Elastics */}
             {activeTab === 'anchorage' && (
               <div className="space-y-4">
-                <div className="p-3.5 rounded-xl border border-slate-200 bg-slate-50/40 space-y-1.5">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
-                      <Anchor className="w-3.5 h-3.5 text-blue-600" />
-                      {t.anchorageTitle}
-                    </span>
-                    <Badge variant="outline" className="text-[10px] bg-white font-bold">
-                      {isAr ? 'مرسى عظمي مطلق (Class A)' : plan.anchoragePlan?.type}
-                    </Badge>
-                  </div>
-                  <p className="text-xs text-slate-600">
-                    {isAr 
-                      ? 'منع تحرك الأضراس العلوية الأولى للأمام أثناء سحب القواطع مسافة 6 مم، للحفاظ على علاقة الأضراس في الصنف الثاني وإطباق الأنياب في الصنف الأول.' 
-                      : plan.anchoragePlan?.rationale}
-                  </p>
-                  <div className="flex flex-wrap gap-1.5 pt-1">
-                    {plan.anchoragePlan?.devices?.map((d, i) => (
-                      <span key={i} className="text-[11px] px-2 py-0.5 bg-white border border-slate-200 rounded font-medium text-slate-700">
-                        {isAr 
-                          ? (d.includes('Transpalatal') ? 'قوس حنكي صلب (TPA 0.036")' : 'مسامير تقويم هيكلية IZC ثنائية (2.0 × 12 مم)')
-                          : d}
-                      </span>
-                    ))}
-                  </div>
-                </div>
+                {(() => {
+                  const anchTr = translateAnchorageAr(plan.anchoragePlan);
+                  return (
+                    <div className="p-3.5 rounded-xl border border-slate-200 bg-slate-50/40 space-y-1.5">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-slate-900 uppercase tracking-wider flex items-center gap-1.5">
+                          <Anchor className="w-3.5 h-3.5 text-blue-600" />
+                          {t.anchorageTitle}
+                        </span>
+                        <Badge variant="outline" className="text-[10px] bg-white font-bold">
+                          {isAr ? anchTr.typeAr : plan.anchoragePlan?.type}
+                        </Badge>
+                      </div>
+                      <p className="text-xs text-slate-600">
+                        {isAr ? anchTr.rationaleAr : plan.anchoragePlan?.rationale}
+                      </p>
+                      <div className="flex flex-wrap gap-1.5 pt-1">
+                        {(isAr ? anchTr.devicesAr : (plan.anchoragePlan?.devices || [])).map((d, i) => (
+                          <span key={i} className="text-[11px] px-2 py-0.5 bg-white border border-slate-200 rounded font-medium text-slate-700">
+                            {d}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })()}
 
                 <div className="p-3.5 rounded-xl border border-slate-200 bg-slate-50/40 space-y-1.5">
                   <div className="flex items-center justify-between">
@@ -972,12 +1008,20 @@ Mandibular: ${plan.retentionProtocol?.mandibular}
                       {t.elasticsTitle}
                     </span>
                     <Badge variant="outline" className="text-[10px] bg-teal-50 text-teal-800 border-teal-200 font-bold">
-                      {isAr ? 'مطاط صنف ثانٍ سهمي' : plan.elasticProtocol?.type}
+                      {isAr 
+                        ? (plan.elasticProtocol?.type?.includes('III') ? 'مطاط صنف ثالث سهمي' : 'مطاط صنف ثانٍ سهمي') 
+                        : plan.elasticProtocol?.type}
                     </Badge>
                   </div>
                   <div className="grid grid-cols-2 gap-2 text-xs pt-1">
-                    <div><span className="text-slate-500">{isAr ? 'القوة: ' : 'Force: '}</span><strong>{isAr ? '4.5 أونصة (متوسط إلى قوي)' : plan.elasticProtocol?.force}</strong></div>
-                    <div><span className="text-slate-500">{isAr ? 'الارتداء: ' : 'Wear: '}</span><strong>{isAr ? 'ارتداء كامل ٢٢ ساعة/يوم (تغيير مرتين يومياً)' : plan.elasticProtocol?.wearSchedule}</strong></div>
+                    <div>
+                      <span className="text-slate-500">{isAr ? 'القوة: ' : 'Force: '}</span>
+                      <strong>{isAr ? '4.5 أونصة (متوسط إلى قوي)' : plan.elasticProtocol?.force}</strong>
+                    </div>
+                    <div>
+                      <span className="text-slate-500">{isAr ? 'الارتداء: ' : 'Wear: '}</span>
+                      <strong>{isAr ? 'ارتداء كامل ٢٢ ساعة/يوم (تغيير مرتين يومياً)' : plan.elasticProtocol?.wearSchedule}</strong>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -986,25 +1030,30 @@ Mandibular: ${plan.retentionProtocol?.mandibular}
             {/* Tab 5: Retention */}
             {activeTab === 'retention' && (
               <div className="space-y-3">
-                <div className="p-3.5 rounded-xl border border-slate-200 bg-slate-50/40 space-y-2">
-                  <span className="text-xs font-bold text-slate-900 uppercase tracking-wider block">
-                    {t.retentionTitle}
-                  </span>
-                  <div className="space-y-1.5 text-xs">
-                    <div>
-                      <strong className="text-slate-800">{isAr ? 'الفك العلوي: ' : 'Maxillary: '}</strong>
-                      {isAr ? 'جهاز إيسيكس الشفاف (Essix 1.0mm) يغطي كامل القوس حتى الأضراس الثانية' : plan.retentionProtocol?.maxillary}
+                {(() => {
+                  const retTr = translateRetentionAr(plan.retentionProtocol);
+                  return (
+                    <div className="p-3.5 rounded-xl border border-slate-200 bg-slate-50/40 space-y-2">
+                      <span className="text-xs font-bold text-slate-900 uppercase tracking-wider block">
+                        {t.retentionTitle}
+                      </span>
+                      <div className="space-y-1.5 text-xs">
+                        <div>
+                          <strong className="text-slate-800">{isAr ? 'الفك العلوي: ' : 'Maxillary: '}</strong>
+                          {isAr ? retTr.maxAr : plan.retentionProtocol?.maxillary}
+                        </div>
+                        <div>
+                          <strong className="text-slate-800">{isAr ? 'الفك السفلي: ' : 'Mandibular: '}</strong>
+                          {isAr ? retTr.mandAr : plan.retentionProtocol?.mandibular}
+                        </div>
+                        <div>
+                          <strong className="text-slate-800">{isAr ? 'جدول الارتداء: ' : 'Schedule: '}</strong>
+                          {isAr ? retTr.schedAr : plan.retentionProtocol?.wearSchedule}
+                        </div>
+                      </div>
                     </div>
-                    <div>
-                      <strong className="text-slate-800">{isAr ? 'الفك السفلي: ' : 'Mandibular: '}</strong>
-                      {isAr ? 'سلك لساني دائم ملصوق من الناب للناب (3-3 Bonded Lingual Retainer سلك .0175" مجدول)' : plan.retentionProtocol?.mandibular}
-                    </div>
-                    <div>
-                      <strong className="text-slate-800">{isAr ? 'جدول الارتداء: ' : 'Schedule: '}</strong>
-                      {isAr ? 'ارتداء كامل (22 ساعة/يوم) لمدة 6 أشهر، ثم الانتقال لارتداء ليلي دائم للحفاظ على النتيجة' : plan.retentionProtocol?.wearSchedule}
-                    </div>
-                  </div>
-                </div>
+                  );
+                })()}
               </div>
             )}
 
@@ -1174,28 +1223,62 @@ Mandibular: ${plan.retentionProtocol?.mandibular}
                     : 'Targeted biomechanical guidelines for complex clinical scenarios (impaction, adult expansion, Class III protraction, open bite):'}
                 </p>
 
-                {(plan.specializedProtocols || []).map((sp, idx) => (
-                  <div key={idx} className="p-4 rounded-xl border border-indigo-200 bg-indigo-50/40 space-y-2">
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded">
-                        {isAr ? 'بروتوكول سرعة النمو والتوقيت الهيكلي CVM' : sp.category}
-                      </span>
-                      <span className="text-[11px] font-mono text-slate-600">
-                        {sp.evidenceCitation}
-                      </span>
+                {(plan.specializedProtocols || []).map((sp, idx) => {
+                  let catAr = sp.category;
+                  let nameAr = sp.protocolName;
+                  let takeawayAr = sp.keyTakeaway;
+
+                  if (isAr) {
+                    const c = sp.category.toLowerCase();
+                    const n = sp.protocolName.toLowerCase();
+                    if (c.includes('impact') || n.includes('canine')) {
+                      catAr = 'بروتوكول شد وكشف الأنياب المدفونة (Impacted Canine Protocol)';
+                      nameAr = 'جراحة الكشف المغلق وسحب الناب المدفون حنكياً (Closed Eruption & Ballista Spring)';
+                      takeawayAr = 'يتم كشف الناب جراحياً ولصق عروة معدنية بحبل سحب وتطبيق قوة خفيفة (40–60 جم) لمنع امتصاص جذور الأسنان المجاورة.';
+                    } else if (c.includes('marpe') || n.includes('expansion') || n.includes('suture')) {
+                      catAr = 'بروتوكول توسيع عظم الحنك للبالغين بمسامير MARPE/MSE';
+                      nameAr = 'توسيع هيكلي مدعوم بأربعة مسامير عظمية صلبة (Bicortical Engagement)';
+                      takeawayAr = 'ينفذ التوسيع بمعدل لفتين أسبوعياً بعد التحام دروز الحنك في البالغين لتفادي الإمالة السنية وتحقيق توسيع عظمي حقيقي.';
+                    } else if (c.includes('protraction') || n.includes('class iii') || n.includes('alt-ramec')) {
+                      catAr = 'بروتوكول تقديم الفك العلوي للصنف الثالث (Maxillary Protraction)';
+                      nameAr = 'بروتوكول Alt-RAMEC مع قناع الوجه العظمي (Petit Facemask Protocol)';
+                      takeawayAr = 'تنشيط متناوب لتوسيع وتضييق الفك لمدة 8 أسابيع لتفكيك الدروز الوجهية قبل تطبيق قوة تقديم 400 جم لكل جانب.';
+                    } else if (c.includes('open bite') || n.includes('intrusion')) {
+                      catAr = 'بروتوكول غرس الأضراس لعلاج العضة المفتوحة (Molar Intrusion Protocol)';
+                      nameAr = 'غرس الأضراس العلوية بمسامير عظمية حنكية ودهليزية مزدوجة (TAD Intrusion)';
+                      takeawayAr = 'غرس 1.5 مم في الأضراس يحقق غلق 3.5–4 مم في القواطع الأمامية بفضل دوران الفك السفلي للأمام (Autorotation) دون الإضرار بالابتسامة.';
+                    } else if (c.includes('growth') || n.includes('cvm')) {
+                      catAr = 'بروتوكول سرعة النمو والتوقيت الهيكلي CVM';
+                      nameAr = sp.protocolName.includes('Adult') 
+                        ? 'توازن بيوميكانيكي للبالغين مكتملي النمو العظمي' 
+                        : 'نافذة طفرة نمو الفك السفلي البلوغية Baccetti CVM CS3-CS4';
+                      takeawayAr = sp.protocolName.includes('Adult')
+                        ? 'العظم القشري مكتمل الكثافة؛ تطبق قوى خفيفة ومستمرة لمنع انحسار اللثة.'
+                        : 'الاستجابة العظمية التقويمية القصوى نشطة حالياً. يجب تعظيم التصحيح السهمي قبل اكتمال مرحلة النضوج CS5.';
+                    }
+                  }
+
+                  return (
+                    <div key={idx} className="p-4 rounded-xl border border-indigo-200 bg-indigo-50/40 space-y-2">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded">
+                          {catAr}
+                        </span>
+                        <span className="text-[11px] font-mono text-slate-600">
+                          {sp.evidenceCitation}
+                        </span>
+                      </div>
+
+                      <h4 className="text-sm font-bold text-slate-900">
+                        {nameAr}
+                      </h4>
+
+                      <p className="text-xs text-slate-700 bg-white p-3 rounded-lg border border-indigo-100 leading-relaxed">
+                        {takeawayAr}
+                      </p>
                     </div>
-
-                    <h4 className="text-sm font-bold text-slate-900">
-                      {isAr ? 'نافذة طفرة نمو الفك السفلي البلوغية Baccetti CVM CS3-CS4' : sp.protocolName}
-                    </h4>
-
-                    <p className="text-xs text-slate-700 bg-white p-3 rounded-lg border border-indigo-100 leading-relaxed">
-                      {isAr 
-                        ? 'الاستجابة العظمية التقويمية القصوى نشطة حالياً. يجب تعظيم التصحيح السهمي قبل اكتمال مرحلة النضوج CS5.'
-                        : sp.keyTakeaway}
-                    </p>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </div>
@@ -1212,19 +1295,19 @@ Mandibular: ${plan.retentionProtocol?.mandibular}
               <div>
                 <strong className="text-slate-900">{t.skeletalLabel}: </strong> 
                 {isAr 
-                  ? 'علاقة هيكلية صنف ثانٍ (ANB 5.2°، Wits +3.5 مم) ناتجة عن تراجع الفك السفلي؛ نمط نمو قياسي (FMA 25°).'
+                  ? translateSkeletalDiagnosisAr(plan.diagnosisSummary?.skeletal, plan.diagnosisSummary?.angleClass)
                   : plan.diagnosisSummary?.skeletal}
               </div>
               <div>
                 <strong className="text-slate-900">{t.dentalLabel}: </strong> 
                 {isAr 
-                  ? 'سوء إطباق صنف ثانٍ تقسيم 1؛ بروز أفقي 8 مم؛ عضة عميقة 5.5 مم؛ تزاحم علوي متوسط (-5 مم).'
+                  ? translateDentalDiagnosisAr(plan.diagnosisSummary?.dental, plan.diagnosisSummary?.angleClass)
                   : plan.diagnosisSummary?.dental}
               </div>
               <div>
                 <strong className="text-slate-900">{t.softTissueLabel}: </strong> 
                 {isAr 
-                  ? 'مظهر جانبي محدب؛ عدم كفاءة إطباق الشفاه مع فجوة 3.5 مم عند الراحة؛ انحصار الشفة السفلية خلف القواطع العلوية.'
+                  ? translateSoftTissueDiagnosisAr(plan.diagnosisSummary?.softTissue)
                   : plan.diagnosisSummary?.softTissue}
               </div>
             </div>
@@ -1236,19 +1319,12 @@ Mandibular: ${plan.retentionProtocol?.mandibular}
               {t.objectivesTitle}
             </h4>
             <ul className={`text-xs space-y-1 text-slate-700 list-disc ${isAr ? 'pr-4' : 'pl-4'}`}>
-              {isAr ? [
-                'تصحيح التباين الهيكلي والسني السهمي للوصول لعلاقة صنف أول للأنياب والأضراس.',
-                'تقليل البروز الأفقي من 8.0 مم إلى المعدل المثالي (2.0 مم) لإلغاء انحصار الشفة وتقليل خطر الرضوض.',
-                'تعديل منحنى سبي وتسوية العضة العميقة للوصول إلى تراكب رأسي 2.0 مم.',
-                'فك التزاحم الأمامي للفك العلوي بالكامل دون إمالة القواطع للدهليز.',
-                'تحقيق التوازن التجميلي للأنسجة الرخوة والوصول لكفاءة وإغلاق طبيعي للشفاه عند الراحة.'
-              ].map((obj, i) => (
+              {(isAr 
+                ? translateObjectivesAr(plan.objectives, plan.diagnosisSummary?.angleClass)
+                : (plan.objectives || [])
+              ).map((obj, i) => (
                 <li key={i}>{obj}</li>
-              )) : (
-                plan.objectives?.map((obj, i) => (
-                  <li key={i}>{obj}</li>
-                ))
-              )}
+              ))}
             </ul>
           </div>
         </div>
