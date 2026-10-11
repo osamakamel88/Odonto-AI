@@ -268,13 +268,13 @@ function GeneratePlanContent() {
         </div>
 
         {/* Compact, Organized Action Cluster */}
-        <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+        <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto shrink-0">
           {/* Language Switcher Pill */}
-          <div className="flex items-center p-0.5 bg-slate-100 rounded-full border border-slate-200">
+          <div className="flex items-center p-0.5 bg-slate-100 rounded-full border border-slate-200 shrink-0">
             <button
               type="button"
               onClick={() => switchLanguage('en')}
-              className={`px-3 py-1 text-xs font-bold rounded-full transition-all cursor-pointer ${
+              className={`px-3 py-1 text-xs font-bold rounded-full transition-all cursor-pointer whitespace-nowrap ${
                 lang === 'en'
                   ? 'bg-white text-blue-700 shadow-xs'
                   : 'text-slate-600 hover:text-slate-900'
@@ -285,7 +285,7 @@ function GeneratePlanContent() {
             <button
               type="button"
               onClick={() => switchLanguage('ar')}
-              className={`px-3 py-1 text-xs font-bold rounded-full transition-all cursor-pointer ${
+              className={`px-3 py-1 text-xs font-bold rounded-full transition-all cursor-pointer whitespace-nowrap ${
                 lang === 'ar'
                   ? 'bg-blue-600 text-white shadow-xs'
                   : 'text-slate-600 hover:text-slate-900'
@@ -300,17 +300,17 @@ function GeneratePlanContent() {
             variant="outline" 
             size="sm"
             onClick={() => setShowTour(true)} 
-            className="h-8 px-3 text-xs font-semibold rounded-full border-blue-200 text-blue-700 bg-blue-50/60 hover:bg-blue-100/80 cursor-pointer shadow-2xs gap-1.5"
+            className="h-8 px-3 text-xs font-semibold rounded-full border-blue-200 text-blue-700 bg-blue-50/60 hover:bg-blue-100/80 cursor-pointer shadow-2xs gap-1.5 whitespace-nowrap shrink-0 flex items-center"
           >
-            <Compass className="w-3.5 h-3.5 text-blue-600" />
-            <span>{t.tourBtn}</span>
+            <Compass className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+            <span className="whitespace-nowrap">{t.tourBtn}</span>
           </Button>
 
           {/* Patient Intake Button */}
-          <Link href="/patients/new">
-            <Button variant="outline" size="sm" className="h-8 px-3 text-xs font-semibold rounded-full border-slate-200 text-slate-700 hover:bg-slate-50 cursor-pointer gap-1.5">
-              <Plus className="w-3.5 h-3.5 text-slate-600" />
-              <span>{t.intakeBtn}</span>
+          <Link href="/patients/new" className="shrink-0">
+            <Button variant="outline" size="sm" className="h-8 px-3 text-xs font-semibold rounded-full border-slate-200 text-slate-700 hover:bg-slate-50 cursor-pointer gap-1.5 whitespace-nowrap shrink-0 flex items-center">
+              <Plus className="w-3.5 h-3.5 text-slate-600 shrink-0" />
+              <span className="whitespace-nowrap">{t.intakeBtn}</span>
             </Button>
           </Link>
 
@@ -320,17 +320,17 @@ function GeneratePlanContent() {
             size="sm"
             onClick={() => handleGenerate(true)} 
             disabled={isGenerating}
-            className="h-9 px-5 bg-slate-950 hover:bg-blue-600 text-white font-bold rounded-full gap-2 shadow-sm transition-all cursor-pointer"
+            className="h-9 px-5 bg-slate-950 hover:bg-blue-600 text-white font-bold rounded-full gap-2 shadow-sm transition-all cursor-pointer whitespace-nowrap shrink-0 flex items-center"
           >
             {isGenerating ? (
               <>
-                <RefreshCw className="w-3.5 h-3.5 animate-spin text-white" />
-                <span>{t.synthesizingText.replace('{X}', String(currentStep || 1))}</span>
+                <RefreshCw className="w-3.5 h-3.5 animate-spin text-white shrink-0" />
+                <span className="whitespace-nowrap">{t.synthesizingText.replace('{X}', String(currentStep || 1))}</span>
               </>
             ) : (
               <>
-                <Sparkles className="w-3.5 h-3.5 text-blue-300" />
-                <span>{t.synthesizeBtn}</span>
+                <Sparkles className="w-3.5 h-3.5 text-blue-300 shrink-0" />
+                <span className="whitespace-nowrap">{t.synthesizeBtn}</span>
               </>
             )}
           </Button>
@@ -702,7 +702,7 @@ function GeneratePlanContent() {
                 >
                   <span className="text-base leading-none mb-1">📐</span>
                   <span className="text-xs font-bold leading-tight">{t.tabCephShort}</span>
-                  <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded-full mt-1 bg-blue-50 text-blue-700 uppercase tracking-wider" dir="ltr">
+                  <span className="text-[9px] font-semibold px-2 py-0.5 rounded-md mt-1 bg-blue-50 text-blue-700 uppercase tracking-wider max-w-[84px] truncate" dir="ltr">
                     {cephPresetCase}
                   </span>
                 </button>
@@ -719,7 +719,7 @@ function GeneratePlanContent() {
                 >
                   <span className="text-base leading-none mb-1">🦷</span>
                   <span className="text-xs font-bold leading-tight">{t.tabOdontogramShort}</span>
-                  <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded-full mt-1 bg-slate-100 text-slate-700">
+                  <span className="text-[9px] font-semibold px-2 py-0.5 rounded-md mt-1 bg-slate-100 text-slate-700 max-w-[84px] truncate">
                     {isAr ? '32 سناً' : '32 Teeth'}
                   </span>
                 </button>
@@ -736,7 +736,7 @@ function GeneratePlanContent() {
                 >
                   <span className="text-base leading-none mb-1">🩻</span>
                   <span className="text-xs font-bold leading-tight">{t.tabPanoramicShort}</span>
-                  <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded-full mt-1 bg-emerald-50 text-emerald-700">
+                  <span className="text-[9px] font-semibold px-2 py-0.5 rounded-md mt-1 bg-emerald-50 text-emerald-700 max-w-[84px] truncate">
                     {isAr ? 'أمان تام' : 'HD Clear'}
                   </span>
                 </button>
@@ -753,7 +753,7 @@ function GeneratePlanContent() {
                 >
                   <span className="text-base leading-none mb-1">📊</span>
                   <span className="text-xs font-bold leading-tight">{t.tabBoltonShort}</span>
-                  <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded-full mt-1 bg-teal-50 text-teal-700" dir="ltr">
+                  <span className="text-[9px] font-semibold px-2 py-0.5 rounded-md mt-1 bg-teal-50 text-teal-700 max-w-[84px] truncate" dir="ltr">
                     77.2% Norm
                   </span>
                 </button>
@@ -772,7 +772,7 @@ function GeneratePlanContent() {
                   <span className="text-xs font-bold leading-tight flex items-center gap-0.5">
                     {t.tabModel3dShort}
                   </span>
-                  <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full mt-1 bg-indigo-600 text-white flex items-center gap-0.5">
+                  <span className="text-[9px] font-bold px-2 py-0.5 rounded-md mt-1 bg-indigo-600 text-white flex items-center gap-0.5">
                     <Sparkles className="w-2.5 h-2.5" />
                     WebGL
                   </span>

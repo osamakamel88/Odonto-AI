@@ -83,22 +83,22 @@ export default function LandingPage() {
             {/* High-Contrast CTA Buttons */}
             <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3.5">
               {/* Primary CTA button: Launches the tool */}
-              <Link href="/plans/generate" className="w-full sm:w-auto">
-                <Button className="w-full sm:w-auto h-12 px-8 text-sm font-bold bg-slate-950 text-white hover:bg-blue-600 rounded-full shadow-lg shadow-slate-950/15 hover:shadow-blue-600/25 transition-all duration-200 cursor-pointer group flex items-center justify-center gap-2">
-                  <Sparkles className="w-4 h-4 text-blue-400 group-hover:text-white transition-colors" />
-                  <span>{t.hero.launchStudioBtn}</span>
-                  <ChevronRight className={`w-4 h-4 text-slate-400 group-hover:text-white transition-transform ${isAr ? 'group-hover:-translate-x-1 rotate-180' : 'group-hover:translate-x-1'}`} />
+              <Link href="/plans/generate" className="w-full sm:w-auto shrink-0">
+                <Button className="w-full sm:w-auto h-12 px-8 text-sm font-bold bg-slate-950 text-white hover:bg-blue-600 rounded-full shadow-lg shadow-slate-950/15 hover:shadow-blue-600/25 transition-all duration-200 cursor-pointer group flex items-center justify-center gap-2 whitespace-nowrap shrink-0">
+                  <Sparkles className="w-4 h-4 text-blue-400 group-hover:text-white transition-colors shrink-0" />
+                  <span className="whitespace-nowrap">{t.hero.launchStudioBtn}</span>
+                  <ChevronRight className={`w-4 h-4 text-slate-400 group-hover:text-white transition-transform shrink-0 ${isAr ? 'group-hover:-translate-x-1 rotate-180' : 'group-hover:translate-x-1'}`} />
                 </Button>
               </Link>
 
               {/* Secondary CTA button: Launches the implant tool */}
-              <Link href="/implants" className="w-full sm:w-auto">
+              <Link href="/implants" className="w-full sm:w-auto shrink-0">
                 <Button 
                   variant="outline"
-                  className="w-full sm:w-auto h-12 px-7 text-sm font-semibold text-slate-700 border-slate-200 bg-white hover:bg-slate-50 hover:text-blue-600 rounded-full shadow-xs transition-all cursor-pointer flex items-center justify-center gap-2"
+                  className="w-full sm:w-auto h-12 px-7 text-sm font-semibold text-slate-700 border-slate-200 bg-white hover:bg-slate-50 hover:text-blue-600 rounded-full shadow-xs transition-all cursor-pointer flex items-center justify-center gap-2 whitespace-nowrap shrink-0"
                 >
-                  <Drill className="w-4 h-4 text-teal-600" />
-                  <span>{t.hero.exploreImplantsBtn}</span>
+                  <Drill className="w-4 h-4 text-teal-600 shrink-0" />
+                  <span className="whitespace-nowrap">{t.hero.exploreImplantsBtn}</span>
                 </Button>
               </Link>
             </div>
@@ -497,20 +497,20 @@ export default function LandingPage() {
             {t.finalCta.subtitle}
           </p>
           <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/plans/generate" className="w-full sm:w-auto">
-              <Button className="w-full sm:w-auto h-13 px-9 text-base font-bold bg-slate-950 text-white hover:bg-blue-600 rounded-full shadow-xl shadow-slate-950/15 hover:shadow-blue-600/25 transition-all cursor-pointer group flex items-center justify-center gap-2">
-                <Sparkles className="w-5 h-5 text-blue-400 group-hover:text-white transition-colors" />
-                <span>{t.finalCta.launchStudioBtn}</span>
-                <ChevronRight className={`w-5 h-5 text-slate-400 group-hover:text-white transition-transform ${isAr ? 'group-hover:-translate-x-1 rotate-180' : 'group-hover:translate-x-1'}`} />
+            <Link href="/plans/generate" className="w-full sm:w-auto shrink-0">
+              <Button className="w-full sm:w-auto h-13 px-9 text-base font-bold bg-slate-950 text-white hover:bg-blue-600 rounded-full shadow-xl shadow-slate-950/15 hover:shadow-blue-600/25 transition-all cursor-pointer group flex items-center justify-center gap-2 whitespace-nowrap shrink-0">
+                <Sparkles className="w-5 h-5 text-blue-400 group-hover:text-white transition-colors shrink-0" />
+                <span className="whitespace-nowrap">{t.finalCta.launchStudioBtn}</span>
+                <ChevronRight className={`w-5 h-5 text-slate-400 group-hover:text-white transition-transform shrink-0 ${isAr ? 'group-hover:-translate-x-1 rotate-180' : 'group-hover:translate-x-1'}`} />
               </Button>
             </Link>
-            <Link href="/implants" className="w-full sm:w-auto">
+            <Link href="/implants" className="w-full sm:w-auto shrink-0">
               <Button 
                 variant="outline"
-                className="w-full sm:w-auto h-13 px-8 text-base font-semibold text-slate-700 border-slate-300 bg-white hover:bg-slate-50 hover:text-slate-900 rounded-full shadow-xs cursor-pointer flex items-center justify-center gap-2"
+                className="w-full sm:w-auto h-13 px-8 text-base font-semibold text-slate-700 border-slate-300 bg-white hover:bg-slate-50 hover:text-slate-900 rounded-full shadow-xs cursor-pointer flex items-center justify-center gap-2 whitespace-nowrap shrink-0"
               >
-                <Drill className="w-5 h-5 text-teal-600" />
-                <span>{t.finalCta.exploreImplantsBtn}</span>
+                <Drill className="w-5 h-5 text-teal-600 shrink-0" />
+                <span className="whitespace-nowrap">{t.finalCta.exploreImplantsBtn}</span>
               </Button>
             </Link>
           </div>

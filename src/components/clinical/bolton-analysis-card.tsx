@@ -77,7 +77,7 @@ export function BoltonAnalysisCard({
               <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">
                 {t.anteriorRatio}
               </span>
-              <span className={`text-xs font-black px-2 py-0.5 rounded-full ${
+              <span className={`text-xs font-black px-2.5 py-0.5 rounded-lg shrink-0 whitespace-nowrap ${
                 Math.abs(Number(anteriorDiscrepancy)) <= 1.5 
                   ? 'bg-emerald-100 text-emerald-800' 
                   : 'bg-amber-100 text-amber-800'
@@ -122,7 +122,7 @@ export function BoltonAnalysisCard({
               <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">
                 {t.overallRatio}
               </span>
-              <span className={`text-xs font-black px-2 py-0.5 rounded-full ${
+              <span className={`text-xs font-black px-2.5 py-0.5 rounded-lg shrink-0 whitespace-nowrap ${
                 Math.abs(Number(overallDiscrepancy)) <= 1.9 
                   ? 'bg-emerald-100 text-emerald-800' 
                   : 'bg-amber-100 text-amber-800'

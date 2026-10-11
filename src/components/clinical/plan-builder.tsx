@@ -348,6 +348,23 @@ const DEFAULT_PLAN: TreatmentPlanData = {
   estimatedDuration: '20–24 Months'
 };
 
+function formatEstimatedDuration(duration: string | undefined, isAr: boolean): string {
+  if (!duration) {
+    return isAr ? '٢٠–٢٤ شهراً' : '20–24 Months';
+  }
+  if (!isAr) {
+    return duration;
+  }
+  let ar = duration;
+  ar = ar.replace(/months?/gi, 'شهراً');
+  ar = ar.replace(/Phase 1,?\s*followed by Phase 2 alignment/gi, 'مرحلة 1 تليها مرحلة الرصف 2');
+  ar = ar.replace(/Phase 1,?\s*followed by Phase 2/gi, 'مرحلة 1 تليها مرحلة 2');
+  ar = ar.replace(/Phase 1/gi, 'المرحلة 1');
+  ar = ar.replace(/Phase 2/gi, 'المرحلة 2');
+  ar = ar.replace(/followed by/gi, 'تليها');
+  return ar;
+}
+
 export function PlanBuilder({ 
   plan = DEFAULT_PLAN, 
   isGenerating = false,
@@ -460,12 +477,12 @@ Mandibular: ${plan.retentionProtocol?.mandibular}
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
+              <span className="w-2.5 h-2.5 rounded-full bg-blue-600 shrink-0"></span>
               <CardTitle className="text-base font-bold text-slate-900">
                 {t.planTitle}
               </CardTitle>
-              <Badge variant="outline" className="text-[10px] bg-blue-50 text-blue-700 border-blue-200 font-bold gap-1">
-                <Sparkles className="w-3 h-3 text-blue-500" />
+              <Badge variant="outline" className="text-[10px] bg-blue-50 text-blue-700 border-blue-200 font-bold gap-1 rounded-md px-2 py-0.5 shrink-0 whitespace-nowrap">
+                <Sparkles className="w-3 h-3 text-blue-500 shrink-0" />
                 {t.engineBadge}
               </Badge>
             </div>
@@ -474,28 +491,28 @@ Mandibular: ${plan.retentionProtocol?.mandibular}
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 shrink-0">
             <Button 
               size="sm" 
               variant={educationMode ? "default" : "outline"}
-              className={`text-xs h-8 gap-1.5 cursor-pointer font-medium ${
+              className={`text-xs h-8 gap-1.5 cursor-pointer font-medium whitespace-nowrap shrink-0 rounded-lg ${
                 educationMode ? 'bg-indigo-600 hover:bg-indigo-700 text-white' : 'border-slate-300 text-slate-700 bg-white'
               }`}
               onClick={() => setEducationMode(!educationMode)}
               title="Toggle detailed clinical rationale explanations"
             >
-              {educationMode ? <GraduationCap className="w-3.5 h-3.5 text-indigo-200" /> : <Briefcase className="w-3.5 h-3.5 text-slate-500" />}
-              {educationMode ? t.juniorModeToggle : t.consultantModeToggle}
+              {educationMode ? <GraduationCap className="w-3.5 h-3.5 text-indigo-200 shrink-0" /> : <Briefcase className="w-3.5 h-3.5 text-slate-500 shrink-0" />}
+              <span>{educationMode ? t.juniorModeToggle : t.consultantModeToggle}</span>
             </Button>
 
             <Button 
               size="sm" 
               variant="outline" 
-              className="text-xs h-8 gap-1.5 bg-white hover:bg-slate-50 border-slate-300 text-slate-800 font-semibold cursor-pointer shadow-xs"
+              className="text-xs h-8 gap-1.5 bg-white hover:bg-slate-50 border-slate-300 text-slate-800 font-semibold cursor-pointer shadow-xs whitespace-nowrap shrink-0 rounded-lg"
               onClick={handleExportClick}
             >
-              <FileDown className="w-3.5 h-3.5 text-blue-600" />
-              {t.exportSummaryBtn}
+              <FileDown className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+              <span>{t.exportSummaryBtn}</span>
             </Button>
           </div>
         </div>
@@ -505,14 +522,14 @@ Mandibular: ${plan.retentionProtocol?.mandibular}
         {/* Active Patient & AI Verification Banner */}
         <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 bg-slate-900 text-white rounded-xl shadow-sm">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-teal-400 text-white font-black flex items-center justify-center text-xs shadow-md">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-teal-400 text-white font-black flex items-center justify-center text-xs shadow-md shrink-0">
               {(plan.patientName || 'P')[0]}
             </div>
             <div>
               <div className="flex items-center gap-2">
                 <span className="font-bold text-sm text-white">{plan.patientName || 'John Doe'}</span>
                 <span className="text-[11px] text-slate-400">({plan.patientAge || 15} {isAr ? 'سنة' : 'yrs'})</span>
-                <span className="px-2 py-0.5 bg-blue-500/30 text-blue-300 border border-blue-400/40 rounded font-semibold text-[10px]">
+                <span className="px-2 py-0.5 bg-blue-500/30 text-blue-300 border border-blue-400/40 rounded-md font-semibold text-[10px] whitespace-nowrap shrink-0">
                   {plan.diagnosisSummary?.angleClass || 'Class I'}
                 </span>
               </div>
@@ -523,8 +540,8 @@ Mandibular: ${plan.retentionProtocol?.mandibular}
           </div>
 
           <div className={`flex items-center gap-2 ${isAr ? 'text-left' : 'text-right'}`}>
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-slate-800/80 rounded-lg border border-slate-700 text-[11px]">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-slate-800/80 rounded-lg border border-slate-700 text-[11px] whitespace-nowrap shrink-0">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
               <span className="font-semibold text-slate-200">
                 {isAr ? 'المحرك البيوميكانيكي المزدوج' : (plan.aiEngineSource || 'Biomechanical Dual-Engine')}
               </span>
@@ -609,17 +626,20 @@ Mandibular: ${plan.retentionProtocol?.mandibular}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Card 1: Prescription & Modality */}
           <div className="p-4 rounded-xl border border-blue-200/80 bg-blue-50/40 space-y-2.5">
-            <div className="flex items-center justify-between">
-              <span className="text-[11px] font-bold text-blue-900 uppercase tracking-wider flex items-center gap-1.5">
-                <CircleDot className="w-3.5 h-3.5 text-blue-600" />
-                {t.modalityTitle}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-1.5 border-b border-blue-200/60">
+              <span className="text-[11px] font-bold text-blue-900 uppercase tracking-wider flex items-center gap-1.5 shrink-0">
+                <CircleDot className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+                {isAr ? 'نظام وتقنية العلاج ووصفة البراكتات' : 'Modality & Prescription'}
               </span>
-              <Badge className="bg-blue-600 text-white font-bold text-[10px] px-2 py-0.5">
-                {isAr ? (plan.estimatedDuration ? plan.estimatedDuration.replace(/months?/gi, 'شهراً') : '٢٠–٢٤ شهراً') : (plan.estimatedDuration || '20–24 Months')}
-              </Badge>
+              <div className="shrink-0 self-start sm:self-auto">
+                <span className="inline-flex items-center gap-1.5 bg-blue-600 text-white font-bold text-[11px] px-2.5 py-1 rounded-lg shadow-2xs leading-normal whitespace-nowrap">
+                  <Clock className="w-3 h-3 shrink-0" />
+                  <span>{formatEstimatedDuration(plan.estimatedDuration, isAr)}</span>
+                </span>
+              </div>
             </div>
 
-            <h3 className="text-sm font-bold text-slate-900">
+            <h3 className="text-sm font-bold text-slate-900 leading-snug">
               {isAr 
                 ? (plan.treatmentModality?.primary?.toLowerCase().includes('aligner')
                     ? 'تقويم شفاف غير مرئي (قوالب Clear Aligners متتابعة مع ملحقات تثبيت)'
@@ -652,33 +672,38 @@ Mandibular: ${plan.retentionProtocol?.mandibular}
               ? 'border-amber-300 bg-amber-50/50' 
               : 'border-emerald-300 bg-emerald-50/50'
           }`}>
-            <div className="flex items-center justify-between">
-              <span className="text-[11px] font-bold uppercase tracking-wider flex items-center gap-1.5 text-slate-800">
-                <AlertTriangle className={`w-3.5 h-3.5 ${plan.extractionDecision?.decision === 'Extraction' ? 'text-amber-600' : 'text-emerald-600'}`} />
-                {t.extractionTitle}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-1.5 border-b border-slate-200/60">
+              <span className="text-[11px] font-bold uppercase tracking-wider flex items-center gap-1.5 text-slate-800 shrink-0">
+                <AlertTriangle className={`w-3.5 h-3.5 shrink-0 ${plan.extractionDecision?.decision === 'Extraction' ? 'text-amber-600' : 'text-emerald-600'}`} />
+                {isAr ? 'قرار الخلع العلاجي مقابل المحافظة' : 'Extraction Decision'}
               </span>
-              <span className={`text-xs font-black px-2.5 py-0.5 rounded-full border ${
-                plan.extractionDecision?.decision === 'Extraction'
-                  ? 'bg-amber-200 text-amber-900 border-amber-300'
-                  : 'bg-emerald-200 text-emerald-900 border-emerald-300'
-              }`}>
-                {plan.extractionDecision?.decision === 'Extraction' 
-                  ? t.extractionIndicated 
-                  : t.nonExtractionIndicated}
-              </span>
+              <div className="shrink-0 self-start sm:self-auto">
+                <span className={`inline-flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded-lg border shadow-2xs leading-normal ${
+                  plan.extractionDecision?.decision === 'Extraction'
+                    ? 'bg-amber-200/90 text-amber-950 border-amber-300'
+                    : 'bg-emerald-200/90 text-emerald-950 border-emerald-300'
+                }`}>
+                  <span className="shrink-0">{plan.extractionDecision?.decision === 'Extraction' ? '⚠️' : '✓'}</span>
+                  <span className="whitespace-nowrap">
+                    {plan.extractionDecision?.decision === 'Extraction' 
+                      ? (isAr ? 'خلع علاجي مطلوب حتمياً' : 'Extraction Indicated') 
+                      : (isAr ? 'علاج تحفظي بدون خلع' : 'Non-Extraction Protocol')}
+                  </span>
+                </span>
+              </div>
             </div>
 
             {plan.extractionDecision?.decision === 'Extraction' && plan.extractionDecision?.teeth && plan.extractionDecision.teeth.length > 0 ? (
               <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
-                <span className="text-xs font-semibold text-slate-700">{t.teethToExtract}</span>
+                <span className="text-xs font-semibold text-slate-700 shrink-0">{t.teethToExtract}</span>
                 {plan.extractionDecision.teeth.map((tUnit, idx) => (
-                  <span key={idx} className="px-2 py-0.5 bg-amber-200 text-amber-950 font-bold text-[11px] rounded-md border border-amber-300 shadow-2xs">
+                  <span key={idx} className="px-2 py-0.5 bg-amber-200 text-amber-950 font-bold text-[11px] rounded-md border border-amber-300 shadow-2xs whitespace-nowrap">
                     {isAr ? formatToothNameAr(tUnit) : tUnit}
                   </span>
                 ))}
               </div>
             ) : (
-              <div className="text-xs font-semibold text-emerald-800">
+              <div className="text-xs font-semibold text-emerald-800 leading-relaxed">
                 ✓ {isAr ? 'علاج تحفظي بدون خلع: المحافظة على كامل محيط القوس السنخي ورصف الأسنان ضمن حدود العظم القشري' : 'Non-Extraction Protocol: Preservation of full arch perimeter'}
               </div>
             )}
@@ -794,7 +819,7 @@ Mandibular: ${plan.retentionProtocol?.mandibular}
             >
               <Sparkles className="w-3.5 h-3.5 shrink-0" />
               <span>{t.tabs.protocols}</span>
-              <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold leading-tight ${
+              <span className={`text-[10px] px-1.5 py-0.5 rounded-md font-bold leading-none shrink-0 ${
                 activeTab === 'protocols' 
                   ? 'bg-white/20 text-white' 
                   : 'bg-amber-100 text-amber-900 border border-amber-300'

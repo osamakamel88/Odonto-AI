@@ -58,13 +58,13 @@ export function LandingHeader() {
         <Logo href="/" size="md" subtitle="Clinical SaaS" variant="light" />
 
         {/* Desktop Nav Links */}
-        <nav className="hidden md:flex items-center space-x-7 text-xs font-semibold text-slate-600">
+        <nav className="hidden xl:flex items-center gap-6 text-xs font-semibold text-slate-600">
           {navLinks.map((link) => (
             <a
               key={link.label}
               href={link.href}
               {...(link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-              className={`transition-colors duration-150 tracking-tight ${
+              className={`transition-colors duration-150 tracking-tight whitespace-nowrap shrink-0 ${
                 link.external 
                   ? 'text-teal-700 hover:text-teal-800 font-bold bg-teal-50 hover:bg-teal-100/70 px-2.5 py-1 rounded-full border border-teal-200/80' 
                   : 'hover:text-blue-600'
@@ -76,48 +76,48 @@ export function LandingHeader() {
         </nav>
 
         {/* Desktop Actions & Primary CTA */}
-        <div className="hidden md:flex items-center space-x-3">
+        <div className="hidden lg:flex items-center gap-2.5 shrink-0">
           <LanguageSwitcher />
 
-          <Link href="/implants">
+          <Link href="/implants" className="shrink-0">
             <Button
               variant="outline"
               size="sm"
-              className="h-9 px-3.5 text-xs font-semibold text-slate-700 border-slate-200 bg-white hover:bg-slate-50 hover:text-blue-600 rounded-full shadow-xs transition-all cursor-pointer"
+              className="h-9 px-3.5 text-xs font-semibold text-slate-700 border-slate-200 bg-white hover:bg-slate-50 hover:text-blue-600 rounded-full shadow-xs transition-all cursor-pointer whitespace-nowrap shrink-0 flex items-center"
             >
-              <Drill className="w-3.5 h-3.5 mr-1.5 text-teal-600" />
-              {t.implantsBtn}
+              <Drill className="w-3.5 h-3.5 mr-1.5 text-teal-600 shrink-0" />
+              <span className="whitespace-nowrap">{t.implantsBtn}</span>
             </Button>
           </Link>
 
           {/* Primary Apple-style Pill CTA */}
-          <Link href="/plans/generate">
+          <Link href="/plans/generate" className="shrink-0">
             <Button
               size="sm"
-              className="h-9 px-5 text-xs font-semibold bg-slate-950 text-white hover:bg-blue-600 rounded-full shadow-md shadow-slate-950/10 hover:shadow-blue-600/20 transition-all duration-200 cursor-pointer group flex items-center gap-1.5"
+              className="h-9 px-4 text-xs font-semibold bg-slate-950 text-white hover:bg-blue-600 rounded-full shadow-md shadow-slate-950/10 hover:shadow-blue-600/20 transition-all duration-200 cursor-pointer group flex items-center gap-1.5 whitespace-nowrap shrink-0"
             >
-              <Sparkles className="w-3.5 h-3.5 text-blue-400 group-hover:text-white transition-colors" />
-              <span>{t.launchStudioBtn}</span>
-              <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-white group-hover:translate-x-0.5 transition-all" />
+              <Sparkles className="w-3.5 h-3.5 text-blue-400 group-hover:text-white transition-colors shrink-0" />
+              <span className="whitespace-nowrap">{t.launchStudioBtn}</span>
+              <ChevronRight className={`w-3.5 h-3.5 text-slate-400 group-hover:text-white transition-all shrink-0 ${isAr ? 'group-hover:-translate-x-0.5 rotate-180' : 'group-hover:translate-x-0.5'}`} />
             </Button>
           </Link>
         </div>
 
         {/* Mobile Hamburger Button */}
-        <div className="flex md:hidden items-center space-x-2">
+        <div className="flex lg:hidden items-center gap-2 shrink-0">
           <LanguageSwitcher />
-          <Link href="/plans/generate">
+          <Link href="/plans/generate" className="shrink-0">
             <Button
               size="sm"
-              className="h-8 px-3 text-xs font-semibold bg-slate-950 text-white hover:bg-blue-600 rounded-full cursor-pointer"
+              className="h-8 px-3 text-xs font-semibold bg-slate-950 text-white hover:bg-blue-600 rounded-full cursor-pointer whitespace-nowrap shrink-0 flex items-center"
             >
-              <span>{isAr ? 'الاستوديو' : 'Studio'}</span>
+              <span className="whitespace-nowrap">{isAr ? 'الاستوديو' : 'Studio'}</span>
             </Button>
           </Link>
           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 rounded-lg text-slate-700 hover:text-slate-950 hover:bg-slate-100 transition-colors"
+            className="p-2 rounded-lg text-slate-700 hover:text-slate-950 hover:bg-slate-100 transition-colors cursor-pointer"
             aria-label="Toggle navigation menu"
           >
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
