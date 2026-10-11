@@ -7,6 +7,7 @@ export interface LandingTranslations {
     implants: string;
     comparison: string;
     evidence: string;
+    manual: string;
     resources: string;
     faq: string;
     implantsBtn: string;
@@ -96,7 +97,8 @@ export const LANDING_DICTIONARY: Record<'en' | 'ar', LandingTranslations> = {
       implants: 'Implant Studio',
       comparison: 'Comparison',
       evidence: 'Evidence Base',
-      resources: 'Resources & References',
+      manual: 'Training Manual 📖',
+      resources: 'Resources & PubMed 🔬',
       faq: 'Clinical FAQ',
       implantsBtn: 'Implants',
       launchStudioBtn: 'Launch Studio'
@@ -253,7 +255,8 @@ export const LANDING_DICTIONARY: Record<'en' | 'ar', LandingTranslations> = {
       implants: 'استوديو الزراعة',
       comparison: 'مقارنة المنظومة بالمنافسين',
       evidence: 'الأدلة ومكتبة PubMed',
-      resources: 'الدليل التشغيلي والشروحات',
+      manual: 'دليل التدريب والتشغيل 📖',
+      resources: 'المصادر والمراجع 🔬',
       faq: 'الأسئلة السريرية الشائعة',
       implantsBtn: 'زراعة الأسنان',
       launchStudioBtn: 'دخول استوديو العلاج'

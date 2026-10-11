@@ -40,6 +40,7 @@ export function LandingHeader() {
     { label: t.implants, href: '#implants' },
     { label: t.comparison, href: '#comparison' },
     { label: t.evidence, href: '#evidence' },
+    { label: t.manual, href: '/manual.html', external: true },
     { label: t.resources, href: '/resources.html', external: true },
     { label: t.faq, href: '#faq' },
   ];

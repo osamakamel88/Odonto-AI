@@ -119,6 +119,17 @@ export function LandingFooter() {
             <ul className="space-y-2 text-xs">
               <li>
                 <a
+                  href="/manual.html"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:text-blue-700 font-bold flex items-center gap-1 transition-colors"
+                >
+                  <span>{lang === 'ar' ? 'دليل التدريب والتشغيل الشامل 📖' : 'Clinical Training Manual 📖'}</span>
+                  <ExternalLink className="w-3 h-3" />
+                </a>
+              </li>
+              <li>
+                <a
                   href="/resources.html"
                   target="_blank"
                   rel="noopener noreferrer"
